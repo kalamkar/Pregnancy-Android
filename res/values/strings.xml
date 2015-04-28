@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Dovetail</string>
+    <string name="home">Home</string>
+    <string name="mom">Mom</string>
+    <string name="baby">Baby</string>
+    <string name="messages">Messages</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
