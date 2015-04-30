@@ -2,16 +2,20 @@ package care.dovetail;
 
 import java.util.Locale;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import care.dovetail.fragments.BabyFragment;
+import care.dovetail.fragments.HomeFragment;
+import care.dovetail.fragments.MessagesFragment;
+import care.dovetail.fragments.MomFragment;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
 	SectionsPagerAdapter adapter;
 	ViewPager pager;
@@ -21,7 +25,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		adapter = new SectionsPagerAdapter(getFragmentManager());
+		adapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		pager = (ViewPager) findViewById(R.id.pager);
