@@ -1,5 +1,6 @@
 package care.dovetail;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -7,11 +8,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.DatePicker;
+import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TextView;
 import care.dovetail.common.Config;
 import care.dovetail.model.Mother;
 
-public class ProfileActivity extends FragmentActivity {
+public class ProfileActivity extends FragmentActivity implements OnDateChangedListener {
 
 	private App app;
 
@@ -33,6 +36,12 @@ public class ProfileActivity extends FragmentActivity {
 
 		fullName.addTextChangedListener(new ProfileTextWatcher(fullName));
 		email.addTextChangedListener(new ProfileTextWatcher(email));
+
+		Calendar dueDate = Calendar.getInstance();
+		dueDate.setTimeInMillis(mother.dueDateMillis);
+		DatePicker dueDatePicker = (DatePicker) findViewById(R.id.dueDate);
+		dueDatePicker.init(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH),
+				dueDate.get(Calendar.DAY_OF_MONTH), this);
 	}
 
 	private class ProfileTextWatcher  implements TextWatcher {
@@ -70,5 +79,16 @@ public class ProfileActivity extends FragmentActivity {
 				}
 			}, Config.TEXTBOX_EDIT_DELAY_MS);
 		}
+	}
+
+	@Override
+	public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+		Calendar dueDate = Calendar.getInstance();
+		dueDate.set(Calendar.YEAR, year);
+		dueDate.set(Calendar.MONTH, monthOfYear);
+		dueDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		Mother mother = app.getMother();
+		mother.dueDateMillis = dueDate.getTimeInMillis();
+		app.setMother(mother);
 	}
 }

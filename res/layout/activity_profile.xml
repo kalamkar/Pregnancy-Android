@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/full_name"
-        android:inputType="textPersonName" >
+        android:inputType="textPersonName|textCapWords" >
 
         <requestFocus />
     </EditText>
@@ -28,5 +28,18 @@
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress" />
-    
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/due_date"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <DatePicker
+        android:id="@+id/dueDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"/>    
 </LinearLayout>
