@@ -15,36 +15,29 @@
     tools:context="care.dovetail.MainActivity" >
 
     <TextView
+        android:id="@+id/hello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello Jennifer!"
         android:textSize="30sp" />
     
     <TextView
+        android:id="@+id/tip1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Y weeks Z days"
         android:textSize="20sp"
         android:textStyle="bold" />
     
     <TextView
+        android:id="@+id/tip2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2nd Trimester"
         android:textSize="20sp" />
     
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:gravity="center"
-        android:text="X weeks and Z days to go!"
-        android:textSize="10sp" />
-    <TextView
+        android:id="@+id/tip3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Your baby is A inches and B lbs now. Roughly the size of a DDDD."
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
 </LinearLayout>

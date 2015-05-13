@@ -23,7 +23,7 @@ public class App extends Application {
 		super.onCreate();
 	}
 
-	Mother getMother() {
+	public Mother getMother() {
 		String profile = getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
 				.getString(USER_PROFILE, null);
 		return profile == null ? getFakeData() : Mother.fromUser(profile);
