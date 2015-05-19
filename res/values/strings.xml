@@ -11,7 +11,15 @@
     <string name="email">E-Mail</string>
     
     <string name="hello_text">Hello %s!</string>
+    <string name="baby_text">Baby %s</string>
     
     <string name="due_date">Due Date</string>
+    <string name="add_baby">Add baby</string>
+    
+    <string-array name="baby_genders">
+        <item>Unknown</item>
+        <item>Girl</item>
+        <item>Boy</item>
+    </string-array>
 
 </resources>

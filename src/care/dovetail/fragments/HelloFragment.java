@@ -4,10 +4,14 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import care.dovetail.App;
@@ -21,6 +25,14 @@ public class HelloFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		app = (App) activity.getApplication();
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+					@Override
+					public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+						fillNameEmail(getView());
+						fillTips(getView());
+					}
+				});
 	}
 
 	@Override
@@ -33,12 +45,32 @@ public class HelloFragment extends Fragment {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		view.findViewById(R.id.edit).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new NameEmailFragment().show(getChildFragmentManager(), null);
+			}
+		});
+		view.findViewById(R.id.dueDate).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new DatePickerFragment().show(getChildFragmentManager(), null);
+			}
+		});
+
+		fillNameEmail(view);
+		fillTips(view);
+	}
+
+	private void fillNameEmail(View view) {
 		String firstName = app.getMother().fullName != null
 				? app.getMother().fullName.split(" ")[0] : "";
 		((TextView) view.findViewById(R.id.hello)).setText(String.format(
 				getResources().getString(R.string.hello_text), firstName));
+	}
 
-		Tip sortedTips[] = app.getTips().toArray(new Tip[0]);
+	private void fillTips(View view) {
+		Tip sortedTips[] = app.getTips("mother").toArray(new Tip[0]);
 		Arrays.sort(sortedTips, new Comparator<Tip>() {
 			@Override
 			public int compare(Tip lhs, Tip rhs) {

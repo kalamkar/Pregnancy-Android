@@ -1,6 +1,7 @@
 package care.dovetail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Application;
@@ -17,10 +18,12 @@ import care.dovetail.model.Mother.Baby;
 public class App extends Application {
 
 	public static final String USER_PROFILE = "USER_PROFILE";
+	private final List<Tip> tips = new ArrayList<Tip>();
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		makeTips();
 	}
 
 	public Mother getMother() {
@@ -33,12 +36,14 @@ public class App extends Application {
 		setStringPref(USER_PROFILE, Config.GSON.toJson(mother.toUser()));
 	}
 
-	public List<Tip> getTips() {
+	public List<Tip> getTips(String tag) {
 		List<Tip> tips = new ArrayList<Tip>();
-		tips.add(new Tip("Eat 1/2 apple everyday.", new String[] {}, 1));
-		tips.add(new Tip("X weeks Y days to go!", new String[] {}, 2));
-		tips.add(new Tip("Your baby is A inches and B lbs now. Roughly the size of a DDDD",
-				new String[] {"image:eggplant"}, 3));
+		for (Tip tip : this.tips) {
+			List<String> tags = Arrays.asList(tip.tags);
+			if (tag == null || tags.contains(tag.toLowerCase())) {
+				tips.add(tip);
+			}
+		}
 		return tips;
 	}
 
@@ -55,6 +60,14 @@ public class App extends Application {
 				return null;
 			}
 		}.execute(value);
+	}
+
+	private void makeTips() {
+		tips.add(new Tip("Eat 1/2 apple everyday.", new String[] {"mother"}, 1));
+		tips.add(new Tip("X weeks Y days to go!", new String[] {"mother"}, 2));
+		tips.add(new Tip("Your baby is A inches and B lbs now. Roughly the size of a DDDD",
+				new String[] {"image:eggplant", "mother"}, 3));
+		tips.add(new Tip("Expected birthdate is XXXX.", new String[] {"baby"}, 2));
 	}
 
 	private Mother getFakeData() {

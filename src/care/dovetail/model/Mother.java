@@ -15,6 +15,8 @@ public class Mother extends User {
 		public String name;
 		public Gender gender;
 
+		public Baby() {}
+
 		public Baby(String name, Gender gender) {
 			this.name = name;
 			this.gender = gender;
@@ -24,6 +26,8 @@ public class Mother extends User {
 	public User toUser() {
 		if (data == null) {
 			data = new HashMap<String, String>();
+		} else {
+			data.clear();
 		}
 		data.put("DUE_DATE_MILLIS", Long.toString(dueDateMillis));
 		for (int i = 0; babies != null && i < babies.size(); i++) {

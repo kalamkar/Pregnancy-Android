@@ -2,7 +2,6 @@ package care.dovetail;
 
 import java.util.Locale;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -43,7 +42,6 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			startActivity(new Intent(this, ProfileActivity.class));
 		}
 		return super.onOptionsItemSelected(item);
 	}
