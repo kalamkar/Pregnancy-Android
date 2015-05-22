@@ -11,7 +11,7 @@ import android.widget.DatePicker;
 import care.dovetail.App;
 import care.dovetail.model.Mother;
 
-public class DatePickerFragment extends DialogFragment
+public class DueDateFragment extends DialogFragment
 		implements DatePickerDialog.OnDateSetListener {
 	private App app;
 

@@ -25,15 +25,28 @@ public class HelloFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		app = (App) activity.getApplication();
-		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
-				.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
-					@Override
-					public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-						fillNameEmail(getView());
-						fillTips(getView());
-					}
-				});
 	}
+
+	@Override
+	public void onResume() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.registerOnSharedPreferenceChangeListener(listener);
+		super.onResume();
+	}
+	@Override
+	public void onPause() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.unregisterOnSharedPreferenceChangeListener(listener);
+		super.onPause();
+	}
+
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			fillNameEmail(getView());
+			fillTips(getView());
+		}
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +67,7 @@ public class HelloFragment extends Fragment {
 		view.findViewById(R.id.dueDate).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new DatePickerFragment().show(getChildFragmentManager(), null);
+				new DueDateFragment().show(getChildFragmentManager(), null);
 			}
 		});
 

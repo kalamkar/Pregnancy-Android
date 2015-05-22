@@ -1,11 +1,15 @@
 package care.dovetail;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import care.dovetail.common.Config;
 import care.dovetail.common.model.Goal;
@@ -18,12 +22,24 @@ import care.dovetail.model.Mother.Baby;
 public class App extends Application {
 
 	public static final String USER_PROFILE = "USER_PROFILE";
+
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
+
 	private final List<Tip> tips = new ArrayList<Tip>();
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		makeTips();
+		getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
+			.registerOnSharedPreferenceChangeListener(listener);
+	}
+
+	@Override
+	public void onTerminate() {
+		getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
+			.unregisterOnSharedPreferenceChangeListener(listener);
+		super.onTerminate();
 	}
 
 	public Mother getMother() {
@@ -35,6 +51,13 @@ public class App extends Application {
 	public void setMother(Mother mother) {
 		setStringPref(USER_PROFILE, Config.GSON.toJson(mother.toUser()));
 	}
+
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			makeTips();
+		}
+	};
 
 	public List<Tip> getTips(String tag) {
 		List<Tip> tips = new ArrayList<Tip>();
@@ -63,11 +86,23 @@ public class App extends Application {
 	}
 
 	private void makeTips() {
-		tips.add(new Tip("Eat 1/2 apple everyday.", new String[] {"mother"}, 1));
-		tips.add(new Tip("X weeks Y days to go!", new String[] {"mother"}, 2));
-		tips.add(new Tip("Your baby is A inches and B lbs now. Roughly the size of a DDDD",
+		Mother mother = getMother();
+		tips.clear();
+		int daysToGo = (int) ((mother.dueDateMillis - new Date().getTime()) / (1000*60*60*24));
+		if (daysToGo < 0) {
+			tips.add(new Tip("Congratulations!", new String[] {"mother"}, 2));
+		} else if (daysToGo < 7) {
+			tips.add(new Tip(String.format("%d days to go!", daysToGo), new String[] {"mother"}, 2));
+		} else if (daysToGo < 275) {
+			tips.add(new Tip(String.format("%d weeks %d days to go!", daysToGo / 7, daysToGo % 7),
+					new String[] {"mother"}, 2));
+		}
+
+		tips.add(new Tip("Your baby is A inches and B lbs now. Roughly the size of a DDDD.",
 				new String[] {"image:eggplant", "mother"}, 3));
-		tips.add(new Tip("Expected birthdate is XXXX.", new String[] {"baby"}, 2));
+		tips.add(new Tip(String.format("Expected birthdate is %s.",
+				DATE_FORMAT.format(new Date(mother.dueDateMillis))), new String[] {"baby"}, 2));
+		tips.add(new Tip("Eat 1/2 apple everyday.", new String[] {"mother"}, 1));
 	}
 
 	private Mother getFakeData() {

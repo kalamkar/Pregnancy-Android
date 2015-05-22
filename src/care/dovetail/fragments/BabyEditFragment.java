@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import care.dovetail.App;
@@ -43,6 +44,10 @@ public class BabyEditFragment extends DialogFragment {
 		Baby baby = mother.babies.get(babyNumber);
 		((TextView) view.findViewById(R.id.babyName)).setText(baby.name);
 		Spinner gender = (Spinner) view.findViewById(R.id.gender);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(app,
+		        R.array.baby_genders, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		gender.setAdapter(adapter);
 		gender.setSelection(
 				baby.gender == Gender.FEMALE ? 1 : baby.gender == Gender.MALE ? 2 : 0);
 	}
