@@ -10,10 +10,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import care.dovetail.api.GroupsGet;
 import care.dovetail.api.UserGet;
 import care.dovetail.fragments.BabyFragment;
+import care.dovetail.fragments.GroupsFragment;
 import care.dovetail.fragments.HomeFragment;
-import care.dovetail.fragments.MessagesFragment;
 import care.dovetail.fragments.MomFragment;
 import care.dovetail.messaging.GCMUtils;
 
@@ -42,6 +43,7 @@ public class MainActivity extends FragmentActivity {
 		pager.setCurrentItem(1);
 
 		new UserGet(app).execute();
+		new GroupsGet(app).execute();
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
-		private Fragment fragments[] = { new MessagesFragment(), new HomeFragment(),
+		private Fragment fragments[] = { new GroupsFragment(), new HomeFragment(),
 				new MomFragment(), new BabyFragment() };
 		private int titles[] = {R.string.messages, R.string.home, R.string.mom, R.string.baby};
 

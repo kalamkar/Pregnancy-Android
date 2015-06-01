@@ -16,6 +16,7 @@ import android.util.Pair;
 import care.dovetail.api.UserUpdate;
 import care.dovetail.common.model.Goal;
 import care.dovetail.common.model.Goal.Aggregation;
+import care.dovetail.common.model.Group;
 import care.dovetail.common.model.Tip;
 import care.dovetail.common.model.User;
 import care.dovetail.messaging.GCMUtils;
@@ -34,7 +35,7 @@ public class App extends Application {
 	private GoogleCloudMessaging gcm;
 
 	private Mother mother;
-
+	public List<Group> groups = new ArrayList<Group>();
 	private final List<Tip> tips = new ArrayList<Tip>();
 
 	@Override
