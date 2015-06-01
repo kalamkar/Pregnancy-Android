@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
+import care.dovetail.api.UserUpdate;
+import care.dovetail.common.Config;
 import care.dovetail.common.model.User.Gender;
 import care.dovetail.model.Mother;
 import care.dovetail.model.Mother.Baby;
@@ -52,20 +55,16 @@ public class BabyEditFragment extends DialogFragment {
 				baby.gender == Gender.FEMALE ? 1 : baby.gender == Gender.MALE ? 2 : 0);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		Mother mother = app.getMother();
 		int babyNumber = getArguments().getInt(BABY_NUMBER);
-		if (mother.babies == null || mother.babies.size() < babyNumber - 1) {
-			return;
-		}
-		Baby baby = mother.babies.get(babyNumber);
-		baby.name = ((TextView) getView().findViewById(R.id.babyName)).getText().toString();
+		Baby baby = new Baby();
 		Spinner gender = (Spinner) getView().findViewById(R.id.gender);
+		baby.name = ((TextView) getView().findViewById(R.id.babyName)).getText().toString();
 		baby.gender = Gender.values()[gender.getSelectedItemPosition()];
-		// TODO(abhi): Replace baby in the babies list here.
-		app.setMother(mother);
+		new UserUpdate(app).execute(Pair.create(UserUpdate.PARAM_FEATURE,
+				String.format("BABY_%d=%s", babyNumber, Config.GSON.toJson(baby))));
 		super.onDismiss(dialog);
 	}
-
 }

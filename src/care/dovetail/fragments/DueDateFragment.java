@@ -7,8 +7,10 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Pair;
 import android.widget.DatePicker;
 import care.dovetail.App;
+import care.dovetail.api.UserUpdate;
 import care.dovetail.model.Mother;
 
 public class DueDateFragment extends DialogFragment
@@ -30,14 +32,15 @@ public class DueDateFragment extends DialogFragment
         		dueDate.get(Calendar.MONTH), dueDate.get(Calendar.DAY_OF_MONTH));
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
 		Calendar dueDate = Calendar.getInstance();
 		dueDate.set(Calendar.YEAR, year);
 		dueDate.set(Calendar.MONTH, month);
 		dueDate.set(Calendar.DAY_OF_MONTH, day);
-		Mother mother = app.getMother();
-		mother.dueDateMillis = dueDate.getTimeInMillis();
-		app.setMother(mother);
+		new UserUpdate(app).execute(Pair.create(UserUpdate.PARAM_FEATURE,
+				String.format("%s=%s", Mother.FEATURE_DUE_DATE_MILLIS,
+						Long.toString(dueDate.getTimeInMillis()))));
     }
 }

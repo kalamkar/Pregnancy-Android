@@ -10,16 +10,21 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import care.dovetail.api.UserGet;
 import care.dovetail.fragments.BabyFragment;
 import care.dovetail.fragments.HomeFragment;
 import care.dovetail.fragments.MessagesFragment;
 import care.dovetail.fragments.MomFragment;
+import care.dovetail.messaging.GCMUtils;
 
 public class MainActivity extends FragmentActivity {
+	private static final String TAG = "MainActivity";
 
+	private App app;
 	SectionsPagerAdapter adapter;
 	ViewPager pager;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,9 +32,16 @@ public class MainActivity extends FragmentActivity {
 
 		adapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-		// Set up the ViewPager with the sections adapter.
+		app = (App) getApplication();
+		if (GCMUtils.checkPlayServices(this)) {
+			app.requestPushToken();
+		}
+
 		pager = (ViewPager) findViewById(R.id.pager);
 		pager.setAdapter(adapter);
+		pager.setCurrentItem(1);
+
+		new UserGet(app).execute();
 	}
 
 	@Override
@@ -41,15 +53,13 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
-		private Fragment fragments[] = { new HomeFragment(), new MomFragment(), new BabyFragment(),
-				new MessagesFragment() };
-		private int titles[] = {R.string.home, R.string.mom, R.string.baby, R.string.messages};
+		private Fragment fragments[] = { new MessagesFragment(), new HomeFragment(),
+				new MomFragment(), new BabyFragment() };
+		private int titles[] = {R.string.messages, R.string.home, R.string.mom, R.string.baby};
 
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);

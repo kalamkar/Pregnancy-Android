@@ -76,8 +76,8 @@ public class HelloFragment extends Fragment {
 	}
 
 	private void fillNameEmail(View view) {
-		String firstName = app.getMother().fullName != null
-				? app.getMother().fullName.split(" ")[0] : "";
+		String firstName = app.getMother().name != null
+				? app.getMother().name.split(" ")[0] : "";
 		((TextView) view.findViewById(R.id.hello)).setText(String.format(
 				getResources().getString(R.string.hello_text), firstName));
 	}

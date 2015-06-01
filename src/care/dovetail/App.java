@@ -1,6 +1,6 @@
 package care.dovetail;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,25 +11,39 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
-import care.dovetail.common.Config;
+import android.util.Log;
+import android.util.Pair;
+import care.dovetail.api.UserUpdate;
 import care.dovetail.common.model.Goal;
 import care.dovetail.common.model.Goal.Aggregation;
 import care.dovetail.common.model.Tip;
 import care.dovetail.common.model.User;
+import care.dovetail.messaging.GCMUtils;
 import care.dovetail.model.Mother;
-import care.dovetail.model.Mother.Baby;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class App extends Application {
+	static final String TAG = "App";
 
-	public static final String USER_PROFILE = "USER_PROFILE";
+	private static final String USER_ID = "USER_ID";
+	private static final String USER_PROFILE = "USER_PROFILE";
+	private static final String LAST_SYNC_TIME = "LAST_SYNC_TIME";
 
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
+	private String pushToken;
+	private GoogleCloudMessaging gcm;
+
+	private Mother mother;
 
 	private final List<Tip> tips = new ArrayList<Tip>();
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		String profile =
+				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);
+		mother = profile != null ? Mother.fromUser(profile) : new Mother();
+		requestPushToken();
 		makeTips();
 		getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
 			.registerOnSharedPreferenceChangeListener(listener);
@@ -42,14 +56,76 @@ public class App extends Application {
 		super.onTerminate();
 	}
 
-	public Mother getMother() {
-		String profile = getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
-				.getString(USER_PROFILE, null);
-		return profile == null ? getFakeData() : Mother.fromUser(profile);
+	public void setLastSyncTime(long timeMillis) {
+		final Editor editor = getSharedPreferences(getPackageName(), MODE_PRIVATE).edit();
+		new AsyncTask<Long, Void, Void>() {
+			@Override
+			protected Void doInBackground(Long... timeMillis) {
+				if (timeMillis != null && timeMillis.length > 0) {
+					editor.putLong(LAST_SYNC_TIME, timeMillis[0]);
+					editor.commit();
+				}
+				return null;
+			}
+		}.execute(timeMillis);
 	}
 
-	public void setMother(Mother mother) {
-		setStringPref(USER_PROFILE, Config.GSON.toJson(mother.toUser()));
+	public long getLastSyncTime() {
+		return getSharedPreferences(
+				getPackageName(), MODE_PRIVATE).getLong(LAST_SYNC_TIME, 0);
+	}
+
+	public String getUserId() {
+		return getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_ID, null);
+	}
+
+	public void setUser(User user) {
+		if (user != null && user.id != null) {
+			setStringPref(USER_ID, user.id);
+		}
+		mother = Mother.fromUser(Config.GSON.toJson(user));
+
+		// TODO(abhi): remove this once we have real goals.
+		mother.goals = new ArrayList<Goal>();
+		mother.goals.add(Goal.repeated("Walk 10,000 steps everyday", 1430505891000L, 86400000L)
+				.aggregate(Aggregation.SUM).target(10000, "STEP"));
+		setStringPref(USER_PROFILE, Config.GSON.toJson(user));
+	}
+
+	public Mother getMother() {
+		return mother;
+	}
+
+	public String getPushToken() {
+		return pushToken;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void requestPushToken() {
+		if (pushToken != null) {
+			Log.i(TAG, "Device already registered, registration ID = " + pushToken);
+			new UserUpdate(this).execute(Pair.create(UserUpdate.PARAM_TYPE, "GOOGLE"),
+					Pair.create(UserUpdate.PARAM_TOKEN, pushToken));
+			return;
+		}
+	    new AsyncTask<Void, Void, Void>() {
+			@Override
+	        protected Void doInBackground(Void... params) {
+	            try {
+	            	if (gcm == null) {
+	                    gcm = GoogleCloudMessaging.getInstance(App.this);
+	                }
+	                pushToken = gcm.register(Config.GCM_SENDER_ID);
+	                Log.i(TAG, "Device registered, registration ID = " + pushToken);
+	                new UserUpdate(App.this).execute(Pair.create(UserUpdate.PARAM_TYPE, "GOOGLE"),
+	    					Pair.create(UserUpdate.PARAM_TOKEN, pushToken));
+	                GCMUtils.storeRegistrationId(App.this, pushToken);
+	            } catch (IOException ex) {
+	                Log.w(TAG, ex);
+	            }
+	            return null;
+	        }
+	    }.execute(null, null, null);
 	}
 
 	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
@@ -86,7 +162,6 @@ public class App extends Application {
 	}
 
 	private void makeTips() {
-		Mother mother = getMother();
 		tips.clear();
 		int daysToGo = (int) ((mother.dueDateMillis - new Date().getTime()) / (1000*60*60*24));
 		if (daysToGo < 0) {
@@ -101,20 +176,8 @@ public class App extends Application {
 		tips.add(new Tip("Your baby is A inches and B lbs now. Roughly the size of a DDDD.",
 				new String[] {"image:eggplant", "mother"}, 3));
 		tips.add(new Tip(String.format("Expected birthdate is %s.",
-				DATE_FORMAT.format(new Date(mother.dueDateMillis))), new String[] {"baby"}, 2));
+				Config.DATE_FORMAT.format(new Date(mother.dueDateMillis))),
+				new String[] {"baby"}, 2));
 		tips.add(new Tip("Eat 1/2 apple everyday.", new String[] {"mother"}, 1));
-	}
-
-	private Mother getFakeData() {
-		Mother mother = new Mother();
-		mother.fullName = "Jennifer Doe";
-		mother.email = "jennifer.doe@gmail.com";
-		mother.dueDateMillis = 1436985891000L;
-		mother.babies = new ArrayList<Baby>();
-		mother.babies.add(new Baby("Mia", User.Gender.FEMALE));
-		mother.goals = new ArrayList<Goal>();
-		mother.goals.add(Goal.repeated("Walk 10,000 steps everyday", 1430505891000L, 86400000L)
-				.aggregate(Aggregation.SUM).target(10000, "STEP"));
-		return mother;
 	}
 }

@@ -8,6 +8,8 @@ import care.dovetail.common.Config;
 import care.dovetail.common.model.User;
 
 public class Mother extends User {
+	public static final String  FEATURE_DUE_DATE_MILLIS = "DUE_DATE_MILLIS";
+
 	public long dueDateMillis;
 	public List<Baby> babies;
 
@@ -24,28 +26,28 @@ public class Mother extends User {
 	}
 
 	public User toUser() {
-		if (data == null) {
-			data = new HashMap<String, String>();
+		if (features == null) {
+			features = new HashMap<String, String>();
 		} else {
-			data.clear();
+			features.clear();
 		}
-		data.put("DUE_DATE_MILLIS", Long.toString(dueDateMillis));
+		features.put("DUE_DATE_MILLIS", Long.toString(dueDateMillis));
 		for (int i = 0; babies != null && i < babies.size(); i++) {
-			data.put("BABY_" + i, Config.GSON.toJson(babies.get(i)));
+			features.put("BABY_" + i, Config.GSON.toJson(babies.get(i)));
 		}
 		return this;
 	}
 
 	public static Mother fromUser(String user) {
 		Mother mother = Config.GSON.fromJson(user, Mother.class);
-		if (mother == null || mother.data == null) {
+		if (mother == null || mother.features == null) {
 			return mother;
 		}
-		mother.dueDateMillis = Long.parseLong(mother.data.get("DUE_DATE_MILLIS"));
+		mother.dueDateMillis = Long.parseLong(mother.features.get("DUE_DATE_MILLIS"));
 		mother.babies = new ArrayList<Baby>();
-		for (String key : mother.data.keySet()) {
+		for (String key : mother.features.keySet()) {
 			if (key.startsWith("BABY_")) {
-				Baby baby = Config.GSON.fromJson(mother.data.get(key), Baby.class);
+				Baby baby = Config.GSON.fromJson(mother.features.get(key), Baby.class);
 				mother.babies.add(Integer.parseInt(key.replace("BABY_", "")), baby);
 			}
 		}
