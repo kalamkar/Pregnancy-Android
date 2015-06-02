@@ -55,6 +55,9 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		if (id == R.id.action_message) {
+
+		}
 		return super.onOptionsItemSelected(item);
 	}
 

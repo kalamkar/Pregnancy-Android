@@ -2,13 +2,19 @@
 <resources>
 
     <string name="app_name">Dovetail</string>
+    <string name="action_settings">About Me</string>
+    <string name="action_message">Message</string>
+    <string name="action_edit_name">Edit Name</string>
+    <string name="action_add_user">Add User</string>
+    
     <string name="home">Home</string>
     <string name="mom">Mom</string>
     <string name="baby">Baby</string>
     <string name="messages">Messages</string>
-    <string name="action_settings">About Me</string>
+    
     <string name="full_name">Full name</string>
     <string name="email">E-Mail</string>
+    <string name="group_name">Group name</string>
     
     <string name="hello_text">Hello %s!</string>
     <string name="baby_text">Baby %s</string>

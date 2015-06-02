@@ -1,5 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="care.dovetail.MainActivity" >
+    
+    <item
+        android:id="@+id/action_message"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_message"
+        android:title="@string/action_message"/>
 
 </menu>

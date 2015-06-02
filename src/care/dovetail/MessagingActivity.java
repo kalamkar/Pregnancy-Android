@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -20,10 +23,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.api.MessagePost;
 import care.dovetail.common.model.ApiResponse.Message;
+import care.dovetail.fragments.GroupNameFragment;
 
-public class MessagingActivity extends Activity implements OnClickListener {
+public class MessagingActivity extends FragmentActivity implements OnClickListener {
 
-	private static final String TAG = "MainActivity";
+	private static final String TAG = "MessagingActivity";
 
 	public static final String GROUP_ID = "GROUP_ID";
 
@@ -73,6 +77,28 @@ public class MessagingActivity extends Activity implements OnClickListener {
 			}
 		}
 	};
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.group, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.action_add_user:
+			break;
+		case R.id.action_edit_name:
+			DialogFragment fragment = new GroupNameFragment();
+			Bundle args = new Bundle();
+			args.putString(GroupNameFragment.GROUP_ID, groupId);
+			fragment.setArguments(args);
+			fragment.show(getSupportFragmentManager(), null);
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

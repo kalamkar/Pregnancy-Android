@@ -51,6 +51,8 @@ public class GroupsFragment extends Fragment {
 	public void onResume() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.registerOnSharedPreferenceChangeListener(listener);
+		((BaseAdapter) ((ListView) getView().findViewById(R.id.groups)).getAdapter())
+				.notifyDataSetChanged();
 		super.onResume();
 	}
 
