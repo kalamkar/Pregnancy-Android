@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -14,6 +16,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
 import care.dovetail.api.UserUpdate;
+import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.Goal;
 import care.dovetail.common.model.Goal.Aggregation;
 import care.dovetail.common.model.Group;
@@ -36,6 +39,7 @@ public class App extends Application {
 
 	private Mother mother;
 	public List<Group> groups = new ArrayList<Group>();
+	public Map<String, List<Message>> messages = new HashMap<String, List<Message>>();
 	private final List<Tip> tips = new ArrayList<Tip>();
 
 	@Override
@@ -43,7 +47,11 @@ public class App extends Application {
 		super.onCreate();
 		String profile =
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);
-		mother = profile != null ? Mother.fromUser(profile) : new Mother();
+		try {
+			mother = Mother.fromUser(profile);
+		} catch(Exception ex) {
+			mother = new Mother();
+		}
 		requestPushToken();
 		makeTips();
 		getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)

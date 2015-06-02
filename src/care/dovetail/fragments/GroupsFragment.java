@@ -1,20 +1,23 @@
 package care.dovetail.fragments;
 
-import java.text.ParseException;
+import java.util.Date;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
+import care.dovetail.MessagingActivity;
 import care.dovetail.R;
+import care.dovetail.api.MessagesGet;
 import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 
@@ -70,23 +73,31 @@ public class GroupsFragment extends Fragment {
 			view.setTag(group.uuid);
 			if (group.name != null) {
 				((TextView) view.findViewById(R.id.title)).setText(group.name);
+				((TextView) view.findViewById(R.id.hint)).setText(getMembers(group));
 			} else {
-				((TextView) view.findViewById(R.id.title)).setText(getMembers(group.members));
-			}
-			try {
+				((TextView) view.findViewById(R.id.title)).setText(getMembers(group));
 				((TextView) view.findViewById(R.id.hint)).setText(Config.DATE_FORMAT.format(
-						Config.JSON_DATE_FORMAT.parse(group.update_time)));
-			} catch (ParseException e) {
-				Log.w(TAG, e);
+							new Date(group.update_time)));
 			}
+
+			view.setOnClickListener(new OnClickListener() {
+				@SuppressWarnings("unchecked")
+				@Override
+				public void onClick(View v) {
+					String groupId = (String) v.getTag();
+					new MessagesGet(app, groupId).execute();
+					startActivity(new Intent(app, MessagingActivity.class)
+							.putExtra(MessagingActivity.GROUP_ID, groupId));
+				}
+			});
 			return view;
 		}
 
 	}
 
-	private static String getMembers(User members[]) {
+	private static String getMembers(Group group) {
 		StringBuilder builder = new StringBuilder();
-		for (User member : members) {
+		for (User member : group.members) {
 			if (member.name != null) {
 				String name = member.name.split(" ")[0];
 				builder.append(name.length() > 10 ? name.substring(0, 10) : name);

@@ -37,5 +37,6 @@ public class Config extends care.dovetail.common.Config {
 	public static final SimpleDateFormat JSON_DATE_FORMAT =
 			new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS", Locale.US);
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
-
+	public static final SimpleDateFormat MESSAGE_DATE_FORMAT =
+			new SimpleDateFormat("MMM dd, hh:mmaa");
 }
