@@ -42,6 +42,7 @@ public class GroupsGet extends ApiResponseTask {
 					app.groups.add(group);
 				}
 			}
+			app.setGroupSyncTime(System.currentTimeMillis());
 		}
 	}
 }

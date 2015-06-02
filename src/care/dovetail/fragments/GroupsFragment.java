@@ -3,7 +3,10 @@ package care.dovetail.fragments;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -43,6 +46,30 @@ public class GroupsFragment extends Fragment {
 
 		((ListView) view.findViewById(R.id.groups)).setAdapter(new GroupsAdapter());
 	}
+
+	@Override
+	public void onResume() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.registerOnSharedPreferenceChangeListener(listener);
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.unregisterOnSharedPreferenceChangeListener(listener);
+		super.onPause();
+	}
+
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			if (App.GROUP_SYNC_TIME.equalsIgnoreCase(key)) {
+				((BaseAdapter) ((ListView) getView().findViewById(R.id.groups)).getAdapter())
+						.notifyDataSetChanged();
+			}
+		}
+	};
 
 	private class GroupsAdapter extends BaseAdapter {
 		@Override

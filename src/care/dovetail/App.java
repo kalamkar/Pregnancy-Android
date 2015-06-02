@@ -30,9 +30,11 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 public class App extends Application {
 	static final String TAG = "App";
 
-	private static final String USER_ID = "USER_ID";
-	private static final String USER_PROFILE = "USER_PROFILE";
-	private static final String LAST_SYNC_TIME = "LAST_SYNC_TIME";
+	public static final String USER_ID = "USER_ID";
+	public static final String USER_PROFILE = "USER_PROFILE";
+	public static final String EVENT_SYNC_TIME = "EVENT_SYNC_TIME";
+	public static final String MESSAGE_SYNC_TIME = "MESSAGE_SYNC_TIME";
+	public static final String GROUP_SYNC_TIME = "GROUP_SYNC_TIME";
 
 	private String pushToken;
 	private GoogleCloudMessaging gcm;
@@ -65,23 +67,31 @@ public class App extends Application {
 		super.onTerminate();
 	}
 
-	public void setLastSyncTime(long timeMillis) {
-		final Editor editor = getSharedPreferences(getPackageName(), MODE_PRIVATE).edit();
-		new AsyncTask<Long, Void, Void>() {
-			@Override
-			protected Void doInBackground(Long... timeMillis) {
-				if (timeMillis != null && timeMillis.length > 0) {
-					editor.putLong(LAST_SYNC_TIME, timeMillis[0]);
-					editor.commit();
-				}
-				return null;
-			}
-		}.execute(timeMillis);
+	public void setEventSyncTime(long timeMillis) {
+		setLongPref(EVENT_SYNC_TIME, timeMillis);
 	}
 
-	public long getLastSyncTime() {
+	public long getEventSyncTime() {
 		return getSharedPreferences(
-				getPackageName(), MODE_PRIVATE).getLong(LAST_SYNC_TIME, 0);
+				getPackageName(), MODE_PRIVATE).getLong(EVENT_SYNC_TIME, 0);
+	}
+
+	public void setMessageSyncTime(long timeMillis) {
+		setLongPref(MESSAGE_SYNC_TIME, timeMillis);
+	}
+
+	public long getMessageSyncTime() {
+		return getSharedPreferences(
+				getPackageName(), MODE_PRIVATE).getLong(MESSAGE_SYNC_TIME, 0);
+	}
+
+	public void setGroupSyncTime(long timeMillis) {
+		setLongPref(GROUP_SYNC_TIME, timeMillis);
+	}
+
+	public long getGroupSyncTime() {
+		return getSharedPreferences(
+				getPackageName(), MODE_PRIVATE).getLong(GROUP_SYNC_TIME, 0);
 	}
 
 	public String getUserId() {
@@ -163,6 +173,21 @@ public class App extends Application {
 			protected Void doInBackground(String... values) {
 				if (values != null && values.length > 0) {
 					editor.putString(pref, values[0]);
+					editor.commit();
+				}
+				return null;
+			}
+		}.execute(value);
+	}
+
+	private void setLongPref(final String pref, long value) {
+		final Editor editor = getSharedPreferences(
+				getPackageName(), Application.MODE_PRIVATE).edit();
+		new AsyncTask<Long, Void, Void>() {
+			@Override
+			protected Void doInBackground(Long... values) {
+				if (values != null && values.length > 0) {
+					editor.putLong(pref, values[0]);
 					editor.commit();
 				}
 				return null;

@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -43,6 +46,33 @@ public class MessagingActivity extends Activity implements OnClickListener {
 		((ListView) findViewById(R.id.messages)).setAdapter(new MessagesAdapter());
 		findViewById(R.id.send).setOnClickListener(this);
 	}
+
+	@Override
+	public void onResume() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.registerOnSharedPreferenceChangeListener(listener);
+		super.onResume();
+	}
+	@Override
+	public void onPause() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.unregisterOnSharedPreferenceChangeListener(listener);
+		super.onPause();
+	}
+
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			if (App.MESSAGE_SYNC_TIME.equalsIgnoreCase(key)) {
+				messages = app.messages.get(groupId);
+				if (messages == null) {
+					messages = new ArrayList<Message>();
+				}
+				((BaseAdapter) ((ListView) findViewById(R.id.messages)).getAdapter())
+						.notifyDataSetChanged();
+			}
+		}
+	};
 
 	@SuppressWarnings("unchecked")
 	@Override

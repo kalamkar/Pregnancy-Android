@@ -47,6 +47,7 @@ public class MessagesGet extends ApiResponseTask {
 				messages.add(0, message);
 			}
 			app.messages.put(groupId, messages);
+			app.setMessageSyncTime(System.currentTimeMillis());
 		}
 	}
 }
