@@ -35,9 +35,9 @@ public class GroupNameFragment extends DialogFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		groupId = this.getArguments().getString(GROUP_ID);
+		groupId = getArguments() == null ? null : getArguments().getString(GROUP_ID);
 		if (groupId == null) {
-			dismiss();
+			return;
 		}
 		for (Group group : app.groups) {
 			if (groupId.equalsIgnoreCase(group.uuid)) {
@@ -49,9 +49,6 @@ public class GroupNameFragment extends DialogFragment {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onDismiss(DialogInterface dialog) {
-		if (groupId == null) {
-			return;
-		}
 		String name = ((TextView) getView().findViewById(R.id.name)).getText().toString();
 		new GroupUpdate(app, groupId).execute(Pair.create(GroupUpdate.PARAM_NAME, name));
 		super.onDismiss(dialog);
