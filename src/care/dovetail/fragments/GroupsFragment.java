@@ -99,7 +99,7 @@ public class GroupsFragment extends Fragment {
 
 			Group group = getItem(position);
 			view.setTag(group.uuid);
-			if (group.name != null) {
+			if (group.name != null && !group.name.isEmpty()) {
 				((TextView) view.findViewById(R.id.title)).setText(group.name);
 				((TextView) view.findViewById(R.id.hint)).setText(group.getMemberString());
 			} else {
