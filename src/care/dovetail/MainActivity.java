@@ -2,6 +2,7 @@ package care.dovetail;
 
 import java.util.Locale;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -57,6 +58,7 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.action_message:
+			startActivity(new Intent(this, ContactsActivity.class));
 			break;
 		case R.id.action_add_group:
 			new GroupNameFragment().show(getSupportFragmentManager(), null);

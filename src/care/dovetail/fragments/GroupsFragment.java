@@ -22,7 +22,6 @@ import care.dovetail.MessagingActivity;
 import care.dovetail.R;
 import care.dovetail.api.MessagesGet;
 import care.dovetail.common.model.Group;
-import care.dovetail.common.model.User;
 
 public class GroupsFragment extends Fragment {
 	private static final String TAG = "GroupsFragment";
@@ -102,9 +101,9 @@ public class GroupsFragment extends Fragment {
 			view.setTag(group.uuid);
 			if (group.name != null) {
 				((TextView) view.findViewById(R.id.title)).setText(group.name);
-				((TextView) view.findViewById(R.id.hint)).setText(getMembers(group));
+				((TextView) view.findViewById(R.id.hint)).setText(group.getMemberString());
 			} else {
-				((TextView) view.findViewById(R.id.title)).setText(getMembers(group));
+				((TextView) view.findViewById(R.id.title)).setText(group.toString());
 				((TextView) view.findViewById(R.id.hint)).setText(Config.DATE_FORMAT.format(
 							new Date(group.update_time)));
 			}
@@ -122,16 +121,5 @@ public class GroupsFragment extends Fragment {
 			return view;
 		}
 
-	}
-
-	private static String getMembers(Group group) {
-		StringBuilder builder = new StringBuilder();
-		for (User member : group.members) {
-			if (member.name != null) {
-				String name = member.name.split(" ")[0];
-				builder.append(name.length() > 10 ? name.substring(0, 10) : name);
-			}
-		}
-		return builder.toString();
 	}
 }

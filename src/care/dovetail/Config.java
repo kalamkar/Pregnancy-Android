@@ -23,6 +23,7 @@ public class Config extends care.dovetail.common.Config {
 	public static final String EVENT_URL  = API_URL + "/event";
 	public static final String GROUP_URL = API_URL + "/group";
 	public static final String MESSAGE_URL  = API_URL + "/message";
+	public static final String SEARCH_URL = API_URL + "/search";
 
 	public static final String GCM_SENDER_ID = "209668780940";
 

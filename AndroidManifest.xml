@@ -37,6 +37,9 @@
         <activity
             android:name=".MessagingActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ContactsActivity"
+            android:windowSoftInputMode="stateHidden" />
         
         <receiver
             android:name=".messaging.GCMBroadcastReceiver"
