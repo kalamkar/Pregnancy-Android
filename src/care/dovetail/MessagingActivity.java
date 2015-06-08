@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.api.MessagePost;
 import care.dovetail.common.model.ApiResponse.Message;
+import care.dovetail.common.model.Group;
 import care.dovetail.fragments.GroupNameFragment;
 
 public class MessagingActivity extends FragmentActivity implements OnClickListener {
@@ -45,6 +46,10 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 		if (messages == null) {
 			messages = new ArrayList<Message>();
 		}
+
+		Group group = findGroup(groupId);
+		MessagingActivity.this.setTitle(group != null ? group.toString() :
+			getResources().getString(R.string.app_name));
 
 		((ListView) findViewById(R.id.messages)).setAdapter(new MessagesAdapter());
 		findViewById(R.id.send).setOnClickListener(this);
@@ -74,7 +79,9 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 				((BaseAdapter) ((ListView) findViewById(R.id.messages)).getAdapter())
 						.notifyDataSetChanged();
 			} else if (App.GROUP_SYNC_TIME.equalsIgnoreCase(key)) {
-				// TODO(abhi): Update the title with group name or title.
+				Group group = findGroup(groupId);
+				MessagingActivity.this.setTitle(group != null ? group.toString() :
+					getResources().getString(R.string.app_name));
 			}
 		}
 	};
@@ -158,5 +165,17 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 
 	private String getDisplayTime(long time) {
 		return Config.MESSAGE_DATE_FORMAT.format(new Date(time));
+	}
+
+	private Group findGroup(String groupId) {
+		if (groupId == null) {
+			return null;
+		}
+		for (Group group : app.groups) {
+			if (group != null && groupId.equalsIgnoreCase(group.uuid)) {
+				return group;
+			}
+		}
+		return null;
 	}
 }
