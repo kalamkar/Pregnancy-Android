@@ -29,7 +29,7 @@ public class GroupsFragment extends Fragment {
 	private static final String TAG = "GroupsFragment";
 	private App app;
 
-	private Group groups[];
+	private Group groups[] = new Group[0];
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -83,7 +83,7 @@ public class GroupsFragment extends Fragment {
 		Arrays.sort(groups, new Comparator<Group>() {
 			@Override
 			public int compare(Group lhs, Group rhs) {
-				return (int) (lhs.update_time - rhs.update_time);
+				return (int) (rhs.update_time - lhs.update_time);
 			}
 		});
 	}
@@ -91,12 +91,12 @@ public class GroupsFragment extends Fragment {
 	private class GroupsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
-			return app.groups.size();
+			return groups.length;
 		}
 
 		@Override
 		public Group getItem(int position) {
-			return app.groups.get(position);
+			return groups[position];
 		}
 
 		@Override
