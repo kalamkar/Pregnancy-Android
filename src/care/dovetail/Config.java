@@ -40,4 +40,6 @@ public class Config extends care.dovetail.common.Config {
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
 	public static final SimpleDateFormat MESSAGE_DATE_FORMAT =
 			new SimpleDateFormat("MMM dd, hh:mmaa");
+
+	public static final String GROUP_ID = "group_uuid";
 }

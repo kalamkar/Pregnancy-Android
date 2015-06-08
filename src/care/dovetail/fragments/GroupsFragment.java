@@ -1,5 +1,7 @@
 package care.dovetail.fragments;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 
 import android.app.Activity;
@@ -27,6 +29,8 @@ public class GroupsFragment extends Fragment {
 	private static final String TAG = "GroupsFragment";
 	private App app;
 
+	private Group groups[];
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -50,6 +54,7 @@ public class GroupsFragment extends Fragment {
 	public void onResume() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.registerOnSharedPreferenceChangeListener(listener);
+		loadGroups();
 		((BaseAdapter) ((ListView) getView().findViewById(R.id.groups)).getAdapter())
 				.notifyDataSetChanged();
 		super.onResume();
@@ -66,11 +71,22 @@ public class GroupsFragment extends Fragment {
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 			if (App.GROUP_SYNC_TIME.equalsIgnoreCase(key)) {
+				loadGroups();
 				((BaseAdapter) ((ListView) getView().findViewById(R.id.groups)).getAdapter())
 						.notifyDataSetChanged();
 			}
 		}
 	};
+
+	private void loadGroups() {
+		groups = app.groups.toArray(new Group[0]);
+		Arrays.sort(groups, new Comparator<Group>() {
+			@Override
+			public int compare(Group lhs, Group rhs) {
+				return (int) (lhs.update_time - rhs.update_time);
+			}
+		});
+	}
 
 	private class GroupsAdapter extends BaseAdapter {
 		@Override
@@ -101,12 +117,11 @@ public class GroupsFragment extends Fragment {
 			view.setTag(group.uuid);
 			if (group.name != null && !group.name.isEmpty()) {
 				((TextView) view.findViewById(R.id.title)).setText(group.name);
-				((TextView) view.findViewById(R.id.hint)).setText(group.getMemberString());
 			} else {
 				((TextView) view.findViewById(R.id.title)).setText(group.toString());
-				((TextView) view.findViewById(R.id.hint)).setText(Config.DATE_FORMAT.format(
-							new Date(group.update_time)));
 			}
+			((TextView) view.findViewById(R.id.hint)).setText(Config.DATE_FORMAT.format(
+					new Date(group.update_time)));
 
 			view.setOnClickListener(new OnClickListener() {
 				@SuppressWarnings("unchecked")
@@ -115,7 +130,7 @@ public class GroupsFragment extends Fragment {
 					String groupId = (String) v.getTag();
 					new MessagesGet(app, groupId).execute();
 					startActivity(new Intent(app, MessagingActivity.class)
-							.putExtra(MessagingActivity.GROUP_ID, groupId));
+							.putExtra(Config.GROUP_ID, groupId));
 				}
 			});
 			return view;

@@ -29,9 +29,8 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 		OnEditorActionListener {
 	private static final String TAG = "ContactsActivity";
 
-	public static final String GROUP_ID = "GROUP_ID";
-
 	private App app;
+	private String groupId;
 	private final List<Result> results = new ArrayList<Result>();
 
 	@Override
@@ -40,6 +39,7 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 		setContentView(R.layout.activity_contacts);
 
 		app = (App) getApplication();
+		groupId = this.getIntent().getStringExtra(Config.GROUP_ID);
 		reloadContacts();
 		((ListView) findViewById(R.id.messages)).setAdapter(new UsersAdapter());
 		((TextView) findViewById(R.id.search)).setOnEditorActionListener(this);
@@ -50,7 +50,15 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 	public void onClick(View view) {
 		final Result result = (Result) view.getTag();
 		if (result.user != null) {
-			if (!findUserGroupAndOpen(result.user)) {
+			if (groupId != null) {
+				new GroupUpdate(app, groupId) {
+					@Override
+					protected void onPostExecute(ApiResponse response) {
+						super.onPostExecute(response);
+						finish();
+					}
+				}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, result.user.uuid));
+			} else if (!findUserGroupAndOpen(result.user)) {
 				new GroupUpdate(app, null) {
 					@Override
 					protected void onPostExecute(ApiResponse response) {
@@ -62,7 +70,7 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 		} else if (result.group != null) {
 			new MessagesGet(app, result.group.uuid).execute();
 			startActivity(new Intent(app, MessagingActivity.class)
-					.putExtra(MessagingActivity.GROUP_ID, result.group.uuid));
+					.putExtra(Config.GROUP_ID, result.group.uuid));
 			finish();
 		}
 	}
@@ -74,7 +82,7 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 					(user.equals(group.members[0]) || user.equals(group.members[1]))) {
 				new MessagesGet(app, group.uuid).execute();
 				startActivity(new Intent(app, MessagingActivity.class)
-						.putExtra(MessagingActivity.GROUP_ID, group.uuid));
+						.putExtra(Config.GROUP_ID, group.uuid));
 				finish();
 				return true;
 			}

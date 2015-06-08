@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -29,8 +30,6 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 
 	private static final String TAG = "MessagingActivity";
 
-	public static final String GROUP_ID = "GROUP_ID";
-
 	private App app;
 	private String groupId;
 	private List<Message> messages;
@@ -41,7 +40,7 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 		setContentView(R.layout.activity_messaging);
 
 		app = (App) getApplication();
-		groupId = this.getIntent().getStringExtra(GROUP_ID);
+		groupId = this.getIntent().getStringExtra(Config.GROUP_ID);
 		messages = app.messages.get(groupId);
 		if (messages == null) {
 			messages = new ArrayList<Message>();
@@ -74,6 +73,8 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 				}
 				((BaseAdapter) ((ListView) findViewById(R.id.messages)).getAdapter())
 						.notifyDataSetChanged();
+			} else if (App.GROUP_SYNC_TIME.equalsIgnoreCase(key)) {
+				// TODO(abhi): Update the title with group name or title.
 			}
 		}
 	};
@@ -88,6 +89,8 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.action_add_user:
+			startActivity(
+					new Intent(this, ContactsActivity.class).putExtra(Config.GROUP_ID, groupId));
 			break;
 		case R.id.action_edit_name:
 			DialogFragment fragment = new GroupNameFragment();
