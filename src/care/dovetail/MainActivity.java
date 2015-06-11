@@ -57,8 +57,11 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
-		case R.id.action_message:
-			startActivity(new Intent(this, ContactsActivity.class));
+		case R.id.action_profile:
+			startActivity(new Intent(this, ProfileActivity.class));
+			break;
+		case R.id.action_search:
+			startActivity(new Intent(this, SearchActivity.class));
 			break;
 		case R.id.action_add_group:
 			new GroupNameFragment().show(getSupportFragmentManager(), null);

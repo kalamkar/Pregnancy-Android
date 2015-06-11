@@ -4,6 +4,7 @@
     <string name="app_name">Dovetail</string>
     <string name="action_settings">About Me</string>
     <string name="action_message">Message</string>
+    <string name="action_search">Search</string>
     <string name="action_edit_name">Edit Name</string>
     <string name="action_add_user">Add User</string>
     <string name="action_add_group">Add Group</string>
@@ -28,5 +29,7 @@
         <item>Girl</item>
         <item>Boy</item>
     </string-array>
+        <string name="appointments">Appointments</string>
+        <string name="new_appt_slot">Create appointment slot</string>
 
 </resources>

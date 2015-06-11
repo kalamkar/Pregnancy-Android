@@ -97,7 +97,7 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 		switch(item.getItemId()) {
 		case R.id.action_add_user:
 			startActivity(
-					new Intent(this, ContactsActivity.class).putExtra(Config.GROUP_ID, groupId));
+					new Intent(this, SearchActivity.class).putExtra(Config.GROUP_ID, groupId));
 			break;
 		case R.id.action_edit_name:
 			DialogFragment fragment = new GroupNameFragment();

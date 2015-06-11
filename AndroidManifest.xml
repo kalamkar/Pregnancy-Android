@@ -37,8 +37,9 @@
         <activity
             android:name=".MessagingActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".ProfileActivity" />
         <activity
-            android:name=".ContactsActivity"
+            android:name=".SearchActivity"
             android:windowSoftInputMode="stateHidden" />
         
         <receiver

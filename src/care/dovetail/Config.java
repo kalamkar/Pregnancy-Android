@@ -20,6 +20,7 @@ public class Config extends care.dovetail.common.Config {
 
 	public static final String API_URL = "https://dovetail-api1.appspot.com";
 	public static final String USER_URL = API_URL + "/user";
+	public static final String APPOINTMENT_URL = API_URL + "/appointment";
 	public static final String EVENT_URL  = API_URL + "/event";
 	public static final String GROUP_URL = API_URL + "/group";
 	public static final String MESSAGE_URL  = API_URL + "/message";
@@ -38,8 +39,10 @@ public class Config extends care.dovetail.common.Config {
 	public static final SimpleDateFormat JSON_DATE_FORMAT =
 			new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS", Locale.US);
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
+	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh:mm");
 	public static final SimpleDateFormat MESSAGE_DATE_FORMAT =
 			new SimpleDateFormat("MMM dd, hh:mmaa");
 
 	public static final String GROUP_ID = "group_uuid";
+	public static final String USER_ID = "uuid";
 }

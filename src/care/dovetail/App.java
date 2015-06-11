@@ -35,6 +35,7 @@ public class App extends Application {
 	public static final String EVENT_SYNC_TIME = "EVENT_SYNC_TIME";
 	public static final String MESSAGE_SYNC_TIME = "MESSAGE_SYNC_TIME";
 	public static final String GROUP_SYNC_TIME = "GROUP_SYNC_TIME";
+	public static final String APPOINTMENT_SYNC_TIME = "APPOINTMENT_SYNC_TIME";
 
 	private String pushToken;
 	private GoogleCloudMessaging gcm;
@@ -42,6 +43,7 @@ public class App extends Application {
 	private Mother mother;
 	public List<Group> groups = new ArrayList<Group>();
 	public Map<String, List<Message>> messages = new HashMap<String, List<Message>>();
+	public List<User> contacts = new ArrayList<User>();
 	private final List<Tip> tips = new ArrayList<Tip>();
 
 	@Override
@@ -49,11 +51,7 @@ public class App extends Application {
 		super.onCreate();
 		String profile =
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);
-		try {
-			mother = Mother.fromUser(profile);
-		} catch(Exception ex) {
-			mother = new Mother();
-		}
+		mother = profile != null ? Mother.fromUser(profile) : new Mother();
 		requestPushToken();
 		makeTips();
 		getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
@@ -87,11 +85,21 @@ public class App extends Application {
 
 	public void setGroupSyncTime(long timeMillis) {
 		setLongPref(GROUP_SYNC_TIME, timeMillis);
+		updateContacts();
 	}
 
 	public long getGroupSyncTime() {
 		return getSharedPreferences(
 				getPackageName(), MODE_PRIVATE).getLong(GROUP_SYNC_TIME, 0);
+	}
+
+	public void setAppointmentSyncTime(long timeMillis) {
+		setLongPref(APPOINTMENT_SYNC_TIME, timeMillis);
+	}
+
+	public long getAppointmentSyncTime() {
+		return getSharedPreferences(
+				getPackageName(), MODE_PRIVATE).getLong(APPOINTMENT_SYNC_TIME, 0);
 	}
 
 	public String getUserId() {
@@ -113,6 +121,28 @@ public class App extends Application {
 
 	public Mother getMother() {
 		return mother;
+	}
+
+	public User getUser(String userId) {
+		if (userId == null) {
+			return null;
+		}
+		for (User user : contacts) {
+			if (userId.equalsIgnoreCase(user.uuid)) {
+				return user;
+			}
+		}
+		return null;
+	}
+
+	public Group findUserGroup(User user) {
+		for (Group group : groups) {
+			if (group != null && group.members != null && group.members.length == 2 &&
+					(user.equals(group.members[0]) || user.equals(group.members[1]))) {
+				return group;
+			}
+		}
+		return null;
 	}
 
 	public String getPushToken() {
@@ -213,5 +243,20 @@ public class App extends Application {
 				Config.DATE_FORMAT.format(new Date(mother.dueDateMillis))),
 				new String[] {"baby"}, 2));
 		tips.add(new Tip("Eat 1/2 apple everyday.", new String[] {"mother"}, 1));
+	}
+
+	public void updateContacts() {
+		for (Group group : groups) {
+			for (User member : group.members) {
+				if (!contacts.contains(member) && !member.equals(mother)) {
+					contacts.add(member);
+				}
+			}
+			for (User admin : group.admins) {
+				if (!contacts.contains(admin) && !admin.equals(mother)) {
+					contacts.add(admin);
+				}
+			}
+		}
 	}
 }

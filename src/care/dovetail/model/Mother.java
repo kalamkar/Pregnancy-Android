@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.util.Log;
 import care.dovetail.common.Config;
 import care.dovetail.common.model.User;
 
 public class Mother extends User {
+	private static final String TAG = "Mother";
 	public static final String  FEATURE_DUE_DATE_MILLIS = "DUE_DATE_MILLIS";
 
 	public long dueDateMillis;
@@ -43,7 +45,11 @@ public class Mother extends User {
 		if (mother == null || mother.features == null) {
 			return mother;
 		}
-		mother.dueDateMillis = Long.parseLong(mother.features.get("DUE_DATE_MILLIS"));
+		try {
+			mother.dueDateMillis = Long.parseLong(mother.features.get("DUE_DATE_MILLIS"));
+		} catch (Exception ex) {
+			Log.w(TAG, ex);
+		}
 		mother.babies = new ArrayList<Baby>();
 		for (String key : mother.features.keySet()) {
 			if (key.startsWith("BABY_")) {

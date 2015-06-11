@@ -22,10 +22,9 @@ import care.dovetail.api.MessagesGet;
 import care.dovetail.api.Search;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.ApiResponse.Result;
-import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 
-public class ContactsActivity extends FragmentActivity implements OnClickListener,
+public class SearchActivity extends FragmentActivity implements OnClickListener,
 		OnEditorActionListener {
 	private static final String TAG = "ContactsActivity";
 
@@ -45,6 +44,12 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 		((TextView) findViewById(R.id.search)).setOnEditorActionListener(this);
 	}
 
+	@Override
+	protected void onDestroy() {
+		app.updateContacts();
+		super.onDestroy();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onClick(View view) {
@@ -58,14 +63,10 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 						finish();
 					}
 				}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, result.user.uuid));
-			} else if (!findUserGroupAndOpen(result.user)) {
-				new GroupUpdate(app, null) {
-					@Override
-					protected void onPostExecute(ApiResponse response) {
-						super.onPostExecute(response);
-						findUserGroupAndOpen(result.user);
-					}
-				}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, result.user.uuid));
+			} else {
+				startActivity(new Intent(app, ProfileActivity.class)
+						.putExtra(Config.USER_ID, result.user.uuid));
+				finish();
 			}
 		} else if (result.group != null) {
 			new MessagesGet(app, result.group.uuid).execute();
@@ -76,30 +77,18 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean findUserGroupAndOpen(User user) {
-		for (Group group : app.groups) {
-			if (group != null && group.members != null && group.members.length == 2 &&
-					(user.equals(group.members[0]) || user.equals(group.members[1]))) {
-				new MessagesGet(app, group.uuid).execute();
-				startActivity(new Intent(app, MessagingActivity.class)
-						.putExtra(Config.GROUP_ID, group.uuid));
-				finish();
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		new Search(app) {
 			@Override
 			public void onResult(Result[] results) {
-				ContactsActivity.this.results.clear();
+				SearchActivity.this.results.clear();
 				for (Result result : results) {
 					if (result != null && (result.user != null || result.group != null)) {
-						ContactsActivity.this.results.add(result);
+						SearchActivity.this.results.add(result);
+						if (result.user != null) {
+							app.contacts.add(result.user);
+						}
 					}
 				}
 				((BaseAdapter) ((ListView) findViewById(R.id.messages)).getAdapter()).notifyDataSetChanged();
@@ -113,25 +102,10 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 	}
 
 	private void reloadContacts() {
-		List<User> contacts = new ArrayList<User>();
-		User user = app.getMother();
-		for (Group group : app.groups) {
-			for (User member : group.members) {
-				if (!contacts.contains(member) && !member.equals(user)) {
-					contacts.add(member);
-					Result result = new Result();
-					result.user = member;
-					results.add(result);
-				}
-			}
-			for (User admin : group.admins) {
-				if (!contacts.contains(admin) && !admin.equals(user)) {
-					contacts.add(admin);
-					Result result = new Result();
-					result.user = admin;
-					results.add(result);
-				}
-			}
+		for (User user : app.contacts) {
+			Result result = new Result();
+			result.user = user;
+			results.add(result);
 		}
 	}
 
@@ -170,7 +144,7 @@ public class ContactsActivity extends FragmentActivity implements OnClickListene
 				((TextView) view.findViewById(R.id.title)).setText("");
 			}
 			((TextView) view.findViewById(R.id.hint)).setText("");
-			view.setOnClickListener(ContactsActivity.this);
+			view.setOnClickListener(SearchActivity.this);
 			view.setTag(result);
 			return view;
 		}

@@ -57,13 +57,6 @@ public class HelloFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-		view.findViewById(R.id.edit).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new NameEmailFragment().show(getChildFragmentManager(), null);
-			}
-		});
 		view.findViewById(R.id.dueDate).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

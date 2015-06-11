@@ -12,22 +12,21 @@ import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.common.ApiResponseTask;
 import care.dovetail.common.model.ApiResponse;
-import care.dovetail.common.model.Group;
 
 @SuppressWarnings("deprecation")
-public class GroupsGet extends ApiResponseTask {
-	private static final String TAG = "GroupsGet";
+public class AppointmentsGet extends ApiResponseTask {
+	private static final String TAG = "AppointmentsGet";
 
 	private final App app;
 
-	public GroupsGet(App app) {
+	public AppointmentsGet(App app) {
 		this.app = app;
 	}
 
 	@Override
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
-		return new HttpGet(String.format("%s?user_id=%s", Config.GROUP_URL, app.getUserId()));
+		return new HttpGet(String.format("%s?user_id=%s", Config.APPOINTMENT_URL, app.getUserId()));
 	}
 
 	@Override
@@ -36,13 +35,6 @@ public class GroupsGet extends ApiResponseTask {
 		if (result != null && !"OK".equalsIgnoreCase(result.code)) {
 			Log.e(TAG, result.message);
 			Toast.makeText(app, result.message, Toast.LENGTH_LONG).show();
-		} else if (result != null && result.groups != null) {
-			for (Group group : result.groups) {
-				if (group != null && group.uuid != null && !app.groups.contains(group)) {
-					app.groups.add(group);
-				}
-			}
-			app.setGroupSyncTime(System.currentTimeMillis());
 		}
 	}
 }
