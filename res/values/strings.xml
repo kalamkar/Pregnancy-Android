@@ -29,7 +29,7 @@
         <item>Girl</item>
         <item>Boy</item>
     </string-array>
-        <string name="appointments">Appointments</string>
-        <string name="new_appt_slot">Create appointment slot</string>
+    <string name="appointments">Appointments</string>
+    <string name="new_appt_slot">Create appointment slot</string>
 
 </resources>

@@ -6,7 +6,6 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
@@ -23,6 +22,7 @@ import care.dovetail.common.model.Appointment;
 import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 import care.dovetail.fragments.NameEmailFragment;
+import care.dovetail.fragments.NewAppointmentlFragment;
 
 public class ProfileActivity extends FragmentActivity implements OnClickListener {
 	private static final String TAG = "ProfileActivity";
@@ -43,14 +43,15 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		if (user == null) {
 			user = app.getMother();
 			isOwner = true;
-
-			@SuppressWarnings("deprecation")
-			Drawable edit = this.getResources().getDrawable(android.R.drawable.ic_menu_edit);
-			((TextView) findViewById(R.id.name)).setCompoundDrawables(null, null, edit, null);
-			((TextView) findViewById(R.id.roles)).setCompoundDrawables(null, null, edit, null);
-
 			findViewById(R.id.name).setOnClickListener(this);
 			findViewById(R.id.roles).setOnClickListener(this);
+			findViewById(R.id.newAppointment).setOnClickListener(this);
+		} else {
+			((TextView) findViewById(R.id.name)).setCompoundDrawablesWithIntrinsicBounds(
+					null, null, null, null);
+			((TextView) findViewById(R.id.roles)).setCompoundDrawablesWithIntrinsicBounds(
+					null, null, null, null);
+			findViewById(R.id.newAppointment).setVisibility(View.GONE);
 		}
 		findViewById(R.id.message).setOnClickListener(this);
 		((ListView) findViewById(R.id.appointments)).setAdapter(new AppointmentsAdapter());
@@ -62,6 +63,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 			protected void onPostExecute(ApiResponse result) {
 				super.onPostExecute(result);
 				appointments = result != null ? result.appointments : null;
+				app.setAppointmentSyncTime(System.currentTimeMillis());
 			}
 		}.execute();
 	}
@@ -76,6 +78,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 				.registerOnSharedPreferenceChangeListener(listener);
 		super.onResume();
 	}
+
 	@Override
 	public void onPause() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
@@ -87,6 +90,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 			updateUi();
+			((BaseAdapter) ((ListView) findViewById(R.id.appointments)).getAdapter()).notifyDataSetChanged();
 		}
 	};
 
@@ -116,7 +120,8 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		} else if (id == R.id.name) {
 			new NameEmailFragment().show(getSupportFragmentManager(), null);
 		} else if (id == R.id.roles) {
-
+		} else if (id == R.id.newAppointment) {
+			new NewAppointmentlFragment().show(getSupportFragmentManager(), null);
 		}
 	}
 
@@ -140,7 +145,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view;
 			if (convertView == null) {
-				view = getLayoutInflater().inflate(R.layout.list_item_contact, null);
+				view = getLayoutInflater().inflate(R.layout.list_item_appointment, null);
 			} else {
 				view = convertView;
 			}
