@@ -18,15 +18,23 @@ public class AppointmentsGet extends ApiResponseTask {
 	private static final String TAG = "AppointmentsGet";
 
 	private final App app;
+	private final String uuid;
 
-	public AppointmentsGet(App app) {
+	public AppointmentsGet(App app, String uuid) {
 		this.app = app;
+		this.uuid = uuid;
 	}
 
 	@Override
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
-		return new HttpGet(String.format("%s?user_id=%s", Config.APPOINTMENT_URL, app.getUserId()));
+		if (uuid != null) {
+			return new HttpGet(String.format("%s?user_id=%s&uuid=%s",
+					Config.APPOINTMENT_URL, app.getUserId(), uuid));
+		} else {
+			return new HttpGet(
+					String.format("%s?user_id=%s", Config.APPOINTMENT_URL, app.getUserId()));
+		}
 	}
 
 	@Override

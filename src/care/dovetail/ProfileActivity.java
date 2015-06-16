@@ -2,7 +2,9 @@ package care.dovetail;
 
 import java.util.Date;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import care.dovetail.api.AppointmentUpdate;
 import care.dovetail.api.AppointmentsGet;
 import care.dovetail.api.GroupUpdate;
 import care.dovetail.common.model.ApiResponse;
@@ -58,7 +61,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 
 		updateUi();
 
-		new AppointmentsGet(app) {
+		new AppointmentsGet(app, isOwner ? null : user.uuid) {
 			@Override
 			protected void onPostExecute(ApiResponse result) {
 				super.onPostExecute(result);
@@ -98,6 +101,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 	@Override
 	public void onClick(View view) {
 		int id = view.getId();
+		Object tag = view.getTag();
 		if (id == R.id.message) {
 			Group group = app.findUserGroup(user);
 			if (group == null) {
@@ -122,6 +126,24 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		} else if (id == R.id.roles) {
 		} else if (id == R.id.newAppointment) {
 			new NewAppointmentlFragment().show(getSupportFragmentManager(), null);
+		} else if (tag != null && tag instanceof Appointment) {
+			final Appointment appointment = (Appointment) tag;
+			if (appointment.consumer == null && !appointment.provider.equals(app.getMother())) {
+				// Pop up a dialog to confirm appointment booking.
+				new AlertDialog.Builder(this)
+		        	.setIcon(android.R.drawable.ic_dialog_info)
+		        	.setMessage(R.string.continue_booking_appointment)
+		        	.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+		        		@Override
+		        		public void onClick(DialogInterface dialog, int which) {
+		        			new AppointmentUpdate(app, appointment.id)
+		        				.execute(Pair.create(AppointmentUpdate.PARAM_CONSUMER,
+		        						app.getMother().uuid));
+		        		}
+		        	})
+		        	.setNegativeButton(android.R.string.cancel, null)
+		        	.show();
+			}
 		}
 	}
 
@@ -155,6 +177,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 				Date date = new Date(appointment.time);
 				((TextView) view.findViewById(R.id.date)).setText(Config.DATE_FORMAT.format(date));
 				((TextView) view.findViewById(R.id.time)).setText(Config.TIME_FORMAT.format(date));
+				((TextView) view.findViewById(R.id.provider)).setText(appointment.provider.name);
 				if (appointment.consumer != null) {
 					((TextView) view.findViewById(R.id.consumer)).setText(appointment.consumer.name);
 				}

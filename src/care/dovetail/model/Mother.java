@@ -45,10 +45,13 @@ public class Mother extends User {
 		if (mother == null || mother.features == null) {
 			return mother;
 		}
-		try {
-			mother.dueDateMillis = Long.parseLong(mother.features.get("DUE_DATE_MILLIS"));
-		} catch (Exception ex) {
-			Log.w(TAG, ex);
+		String dueDate = mother.features.get("DUE_DATE_MILLIS");
+		if (dueDate != null) {
+			try {
+				mother.dueDateMillis = Long.parseLong(dueDate);
+			} catch (Exception ex) {
+				Log.w(TAG, ex);
+			}
 		}
 		mother.babies = new ArrayList<Baby>();
 		for (String key : mother.features.keySet()) {

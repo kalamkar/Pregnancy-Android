@@ -24,6 +24,8 @@
     <string name="due_date">Due Date</string>
     <string name="add_baby">Add baby</string>
     
+    <string name="continue_booking_appointment">Continue booking this appointment?</string>
+    
     <string-array name="baby_genders">
         <item>Unknown</item>
         <item>Girl</item>
