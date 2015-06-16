@@ -4,7 +4,7 @@
     tools:context="care.dovetail.monitor.PairingActivity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/small_margin"
+    android:padding="@dimen/small_margin"
     android:orientation="vertical" >
     
     <TextView
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/small_margin"
         android:textColor="@android:color/primary_text_light" />
     
     <TextView
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/small_margin"
         android:textColor="@android:color/primary_text_light" />
 
     <TextView
@@ -40,5 +42,13 @@
         android:layout_alignParentRight="true"
         android:textSize="12sp"
         android:textColor="@android:color/secondary_text_light" />
+
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:src="@android:drawable/ic_menu_delete" />
 
 </RelativeLayout>

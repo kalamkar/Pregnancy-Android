@@ -25,6 +25,7 @@
     <string name="add_baby">Add baby</string>
     
     <string name="continue_booking_appointment">Continue booking this appointment?</string>
+    <string name="continue_remove_appointment">Continue removing this appointment?</string>
     
     <string-array name="baby_genders">
         <item>Unknown</item>

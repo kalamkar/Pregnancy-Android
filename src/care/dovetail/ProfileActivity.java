@@ -13,10 +13,12 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import care.dovetail.api.AppointmentDelete;
 import care.dovetail.api.AppointmentUpdate;
 import care.dovetail.api.AppointmentsGet;
 import care.dovetail.api.GroupUpdate;
@@ -126,6 +128,25 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		} else if (id == R.id.roles) {
 		} else if (id == R.id.newAppointment) {
 			new NewAppointmentlFragment().show(getSupportFragmentManager(), null);
+		} else if (id == R.id.delete && tag != null && tag instanceof Appointment) {
+			final Appointment appointment = (Appointment) tag;
+			new AlertDialog.Builder(this)
+        		.setIcon(android.R.drawable.ic_dialog_info)
+        		.setMessage(R.string.continue_remove_appointment)
+        		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        			@Override
+        			public void onClick(DialogInterface dialog, int which) {
+        				User user = app.getMother();
+        				if (user.equals(appointment.consumer)) {
+        					new AppointmentUpdate(app, appointment.id)
+        						.execute(Pair.create(AppointmentUpdate.PARAM_CONSUMER, "-"));
+        				} else if (user.equals(appointment.provider)) {
+        					new AppointmentDelete(app, appointment.id).execute();
+        				}
+        			}
+        		})
+        		.setNegativeButton(android.R.string.cancel, null)
+        		.show();
 		} else if (tag != null && tag instanceof Appointment) {
 			final Appointment appointment = (Appointment) tag;
 			if (appointment.consumer == null && !appointment.provider.equals(app.getMother())) {
@@ -173,17 +194,30 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 			}
 
 			Appointment appointment = getItem(position);
-			if (appointment != null) {
-				Date date = new Date(appointment.time);
-				((TextView) view.findViewById(R.id.date)).setText(Config.DATE_FORMAT.format(date));
-				((TextView) view.findViewById(R.id.time)).setText(Config.TIME_FORMAT.format(date));
-				((TextView) view.findViewById(R.id.provider)).setText(appointment.provider.name);
-				if (appointment.consumer != null) {
-					((TextView) view.findViewById(R.id.consumer)).setText(appointment.consumer.name);
-				}
+			if (appointment == null) {
+				return view;
 			}
-			view.setOnClickListener(ProfileActivity.this);
+			Date date = new Date(appointment.time);
+			((TextView) view.findViewById(R.id.date)).setText(Config.DATE_FORMAT.format(date));
+			((TextView) view.findViewById(R.id.time)).setText(Config.TIME_FORMAT.format(date));
+			((TextView) view.findViewById(R.id.provider)).setText(appointment.provider.name);
+			((TextView) view.findViewById(R.id.consumer)).setText(
+					appointment.consumer != null ? appointment.consumer.name : null);
 			view.setTag(appointment);
+			if (appointment.consumer == null && !appointment.provider.equals(app.getMother())) {
+				view.setOnClickListener(ProfileActivity.this);
+			}
+			view.findViewById(R.id.delete).setOnClickListener(ProfileActivity.this);
+			view.findViewById(R.id.delete).setTag(appointment);
+			view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					View deleteBtn = v.findViewById(R.id.delete);
+					deleteBtn.setVisibility(
+							deleteBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+					return true;
+				}
+			});
 			return view;
 		}
 	}

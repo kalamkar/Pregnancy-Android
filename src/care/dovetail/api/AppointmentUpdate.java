@@ -22,7 +22,7 @@ import care.dovetail.common.model.ApiResponse;
 
 @SuppressWarnings("deprecation")
 public class AppointmentUpdate extends ApiResponseTask {
-	private static final String TAG = "GroupUpdate";
+	private static final String TAG = "AppointmentUpdate";
 
 	public static final String PARAM_TIME = "time";
 	public static final String PARAM_MINUTES = "minutes";
