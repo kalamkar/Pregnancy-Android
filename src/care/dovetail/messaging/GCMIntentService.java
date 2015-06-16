@@ -1,5 +1,6 @@
 package care.dovetail.messaging;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.IntentService;
@@ -58,6 +59,9 @@ public class GCMIntentService extends IntentService {
     	App app = (App) getApplication();
     	if (app != null) {
     		List<Message> messages = app.messages.get(data.getString(Config.GROUP_ID));
+    		if (messages == null) {
+    			messages = new ArrayList<Message>(1);
+    		}
     		messages.add(message);
     		app.messages.put(data.getString(Config.GROUP_ID), messages);
     	}
