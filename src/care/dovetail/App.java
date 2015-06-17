@@ -3,15 +3,12 @@ package care.dovetail;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
@@ -53,16 +50,6 @@ public class App extends Application {
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);
 		mother = profile != null ? Mother.fromUser(profile) : new Mother();
 		requestPushToken();
-		makeTips();
-		getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
-			.registerOnSharedPreferenceChangeListener(listener);
-	}
-
-	@Override
-	public void onTerminate() {
-		getSharedPreferences(getPackageName(), Application.MODE_PRIVATE)
-			.unregisterOnSharedPreferenceChangeListener(listener);
-		super.onTerminate();
 	}
 
 	public void setEventSyncTime(long timeMillis) {
@@ -177,16 +164,12 @@ public class App extends Application {
 	    }.execute(null, null, null);
 	}
 
-	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
-		@Override
-		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			makeTips();
-		}
-	};
-
 	public List<Tip> getTips(String tag) {
 		List<Tip> tips = new ArrayList<Tip>();
-		for (Tip tip : this.tips) {
+		if (mother == null || mother.insights == null) {
+			return tips;
+		}
+		for (Tip tip : mother.insights) {
 			List<String> tags = Arrays.asList(tip.tags);
 			if (tag == null || tags.contains(tag.toLowerCase())) {
 				tips.add(tip);
@@ -223,26 +206,6 @@ public class App extends Application {
 				return null;
 			}
 		}.execute(value);
-	}
-
-	private void makeTips() {
-		tips.clear();
-		int daysToGo = (int) ((mother.dueDateMillis - new Date().getTime()) / (1000*60*60*24));
-		if (daysToGo < 0) {
-			tips.add(new Tip("Congratulations!", new String[] {"mother"}, 2));
-		} else if (daysToGo < 7) {
-			tips.add(new Tip(String.format("%d days to go!", daysToGo), new String[] {"mother"}, 2));
-		} else if (daysToGo < 275) {
-			tips.add(new Tip(String.format("%d weeks %d days to go!", daysToGo / 7, daysToGo % 7),
-					new String[] {"mother"}, 2));
-		}
-
-		tips.add(new Tip("Your baby is A inches and B lbs now. Roughly the size of a DDDD.",
-				new String[] {"image:eggplant", "mother"}, 3));
-		tips.add(new Tip(String.format("Expected birthdate is %s.",
-				Config.DATE_FORMAT.format(new Date(mother.dueDateMillis))),
-				new String[] {"baby"}, 2));
-		tips.add(new Tip("Eat 1/2 apple everyday.", new String[] {"mother"}, 1));
 	}
 
 	public void updateContacts() {
