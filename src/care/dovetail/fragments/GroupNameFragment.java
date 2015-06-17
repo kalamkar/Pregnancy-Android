@@ -1,6 +1,7 @@
 package care.dovetail.fragments;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -8,6 +9,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
@@ -44,6 +46,13 @@ public class GroupNameFragment extends DialogFragment {
 				((TextView) view.findViewById(R.id.name)).setText(group.name);
 			}
 		}
+	}
+
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+	  Dialog dialog = super.onCreateDialog(savedInstanceState);
+	  dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+	  return dialog;
 	}
 
 	@SuppressWarnings("unchecked")

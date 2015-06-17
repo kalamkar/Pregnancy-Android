@@ -3,6 +3,7 @@ package care.dovetail.fragments;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Pair;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import care.dovetail.App;
@@ -40,6 +42,16 @@ public class NewAppointmentlFragment extends DialogFragment implements OnClickLi
 		view.findViewById(R.id.create).setOnClickListener(this);
 		date = (DatePicker) view.findViewById(R.id.date);
 		time = (TimePicker) view.findViewById(R.id.time);
+		time.setCurrentMinute(0);
+		int currentHour = time.getCurrentHour() + 2;
+		time.setCurrentHour(currentHour > 23 ? currentHour - 23 : currentHour );
+	}
+
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+	  Dialog dialog = super.onCreateDialog(savedInstanceState);
+	  dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+	  return dialog;
 	}
 
 	@SuppressWarnings("unchecked")

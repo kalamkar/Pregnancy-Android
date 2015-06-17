@@ -11,6 +11,8 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -58,7 +60,6 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 					null, null, null, null);
 			findViewById(R.id.newAppointment).setVisibility(View.GONE);
 		}
-		findViewById(R.id.message).setOnClickListener(this);
 		((ListView) findViewById(R.id.appointments)).setAdapter(new AppointmentsAdapter());
 
 		updateUi();
@@ -72,6 +73,41 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 			}
 		}.execute();
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.profile, menu);
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.action_message:
+			Group group = app.findUserGroup(user);
+			if (group == null) {
+				new GroupUpdate(app, null) {
+					@Override
+					protected void onPostExecute(ApiResponse response) {
+						super.onPostExecute(response);
+						Group group = app.findUserGroup(user);
+						if (group != null) {
+							startActivity(new Intent(ProfileActivity.this, MessagingActivity.class)
+									.putExtra(Config.GROUP_ID, group.uuid));
+							finish();
+						}
+					}
+				}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, user.uuid));
+			} else {
+				startActivity(new Intent(ProfileActivity.this, MessagingActivity.class)
+					.putExtra(Config.GROUP_ID, group.uuid));
+			}
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 
 	private void updateUi() {
 		((TextView) findViewById(R.id.name)).setText(user.name);
@@ -99,31 +135,11 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		}
 	};
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onClick(View view) {
 		int id = view.getId();
 		Object tag = view.getTag();
-		if (id == R.id.message) {
-			Group group = app.findUserGroup(user);
-			if (group == null) {
-				new GroupUpdate(app, null) {
-					@Override
-					protected void onPostExecute(ApiResponse response) {
-						super.onPostExecute(response);
-						Group group = app.findUserGroup(user);
-						if (group != null) {
-							startActivity(new Intent(ProfileActivity.this, MessagingActivity.class)
-									.putExtra(Config.GROUP_ID, group.uuid));
-							finish();
-						}
-					}
-				}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, user.uuid));
-			} else {
-				startActivity(new Intent(ProfileActivity.this, MessagingActivity.class)
-					.putExtra(Config.GROUP_ID, group.uuid));
-			}
-		} else if (id == R.id.name) {
+		if (id == R.id.name) {
 			new NameEmailFragment().show(getSupportFragmentManager(), null);
 		} else if (id == R.id.roles) {
 		} else if (id == R.id.newAppointment) {
