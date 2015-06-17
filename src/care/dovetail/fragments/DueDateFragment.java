@@ -25,9 +25,14 @@ public class DueDateFragment extends DialogFragment
 
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Mother mother = app.getMother();
         Calendar dueDate = Calendar.getInstance();
-		dueDate.setTimeInMillis(mother.dueDateMillis);
+		Mother mother = app.getMother();
+		if (mother.dueDateMillis <= 0) {
+			// Set default date for 2 months in future
+			dueDate.setTimeInMillis(System.currentTimeMillis() + 60L * 86400L * 1000L);
+		} else {
+			dueDate.setTimeInMillis(mother.dueDateMillis);
+		}
         return new DatePickerDialog(getActivity(), this, dueDate.get(Calendar.YEAR),
         		dueDate.get(Calendar.MONTH), dueDate.get(Calendar.DAY_OF_MONTH));
     }
