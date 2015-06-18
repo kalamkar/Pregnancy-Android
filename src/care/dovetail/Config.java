@@ -26,6 +26,9 @@ public class Config extends care.dovetail.common.Config {
 	public static final String MESSAGE_URL  = API_URL + "/message";
 	public static final String SEARCH_URL = API_URL + "/search";
 
+	public static final String PHOTO_URL =
+			"http://commondatastorage.googleapis.com/dovetail-profiles/";
+
 	public static final String GCM_SENDER_ID = "772594394845";
 
 	public static final int EVENT_SYNC_INTERVAL_MILLIS = 60 * 1000;
