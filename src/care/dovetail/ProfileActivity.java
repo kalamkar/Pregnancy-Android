@@ -30,6 +30,7 @@ import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 import care.dovetail.fragments.NameEmailFragment;
 import care.dovetail.fragments.NewAppointmentlFragment;
+import care.dovetail.fragments.RolesFragment;
 
 public class ProfileActivity extends FragmentActivity implements OnClickListener {
 	private static final String TAG = "ProfileActivity";
@@ -110,13 +111,18 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 
 
 	private void updateUi() {
+		if (isOwner) {
+			user = app.getMother();
+		}
 		((TextView) findViewById(R.id.name)).setText(user.name);
+		((TextView) findViewById(R.id.roles)).setText(user.features.get("ROLE"));
 	}
 
 	@Override
 	public void onResume() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.registerOnSharedPreferenceChangeListener(listener);
+		updateUi();
 		super.onResume();
 	}
 
@@ -142,6 +148,7 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		if (id == R.id.name) {
 			new NameEmailFragment().show(getSupportFragmentManager(), null);
 		} else if (id == R.id.roles) {
+			new RolesFragment().show(getSupportFragmentManager(), null);
 		} else if (id == R.id.newAppointment) {
 			new NewAppointmentlFragment().show(getSupportFragmentManager(), null);
 		} else if (id == R.id.delete && tag != null && tag instanceof Appointment) {
@@ -150,7 +157,8 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
         		.setIcon(android.R.drawable.ic_dialog_info)
         		.setMessage(R.string.continue_remove_appointment)
         		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-        			@Override
+        			@SuppressWarnings("unchecked")
+					@Override
         			public void onClick(DialogInterface dialog, int which) {
         				User user = app.getMother();
         				if (user.equals(appointment.consumer)) {

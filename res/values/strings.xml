@@ -34,5 +34,14 @@
     </string-array>
     <string name="appointments">Appointments</string>
     <string name="new_appt_slot">Create appointment slot</string>
+    
+    <string-array name="user_roles">
+        <item>Mom</item>
+        <item>Expectant Mom</item>
+        <item>Doula</item>
+        <item>Yoga Instructor</item>
+        <item>Nutritionist</item>
+        <item>Midwife</item>
+    </string-array>
 
 </resources>
