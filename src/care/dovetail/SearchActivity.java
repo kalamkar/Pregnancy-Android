@@ -1,5 +1,7 @@
 package care.dovetail;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.View;
@@ -79,6 +82,13 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		String query = v.getText().toString();
+		try {
+			query = URLEncoder.encode(query, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			Log.w(TAG, e);
+			query = query.replace(' ', '+');
+		}
 		new Search(app) {
 			@Override
 			public void onResult(Result[] results) {
@@ -91,9 +101,10 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 						}
 					}
 				}
-				((BaseAdapter) ((ListView) findViewById(R.id.messages)).getAdapter()).notifyDataSetChanged();
+				((BaseAdapter) ((ListView) findViewById(R.id.messages)).getAdapter())
+						.notifyDataSetChanged();
 			}
-		}.execute(Pair.create(Search.PARAM_QUERY, v.getText().toString()));
+		}.execute(Pair.create(Search.PARAM_QUERY, query));
 
 		v.setText("");
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))

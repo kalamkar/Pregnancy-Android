@@ -115,7 +115,9 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 			user = app.getMother();
 		}
 		((TextView) findViewById(R.id.name)).setText(user.name);
-		((TextView) findViewById(R.id.roles)).setText(user.features.get("ROLE"));
+		if (user.features != null) {
+			((TextView) findViewById(R.id.roles)).setText(user.features.get("ROLE"));
+		}
 	}
 
 	@Override
