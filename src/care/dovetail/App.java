@@ -49,7 +49,6 @@ public class App extends Application {
 		String profile =
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);
 		mother = profile != null ? Mother.fromUser(profile) : new Mother();
-		requestPushToken();
 	}
 
 	public void setEventSyncTime(long timeMillis) {
