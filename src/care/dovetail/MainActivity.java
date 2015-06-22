@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import care.dovetail.api.GroupsGet;
 import care.dovetail.api.UserGet;
 import care.dovetail.fragments.BabyFragment;
-import care.dovetail.fragments.GroupNameFragment;
 import care.dovetail.fragments.GroupsFragment;
 import care.dovetail.fragments.HomeFragment;
 import care.dovetail.messaging.GCMUtils;
@@ -60,9 +59,6 @@ public class MainActivity extends FragmentActivity {
 			break;
 		case R.id.action_search:
 			startActivity(new Intent(this, SearchActivity.class));
-			break;
-		case R.id.action_add_group:
-			new GroupNameFragment().show(getSupportFragmentManager(), null);
 			break;
 		}
 		return super.onOptionsItemSelected(item);

@@ -25,7 +25,7 @@ import care.dovetail.R;
 import care.dovetail.api.MessagesGet;
 import care.dovetail.common.model.Group;
 
-public class GroupsFragment extends Fragment {
+public class GroupsFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "GroupsFragment";
 	private App app;
 
@@ -88,20 +88,33 @@ public class GroupsFragment extends Fragment {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onClick(View v) {
+		Object tag = v.getTag();
+		if (tag != null && tag instanceof String) {
+			new MessagesGet(app, (String) tag).execute();
+			startActivity(new Intent(app, MessagingActivity.class)
+					.putExtra(Config.GROUP_ID, (String) tag));
+		} else {
+			new GroupNameFragment().show(getFragmentManager(), null);
+		}
+	}
+
 	private class GroupsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
-			return groups.length;
+			return groups.length + 1;
 		}
 
 		@Override
 		public Group getItem(int position) {
-			return groups[position];
+			return position == 0 ? null : groups[position -1];
 		}
 
 		@Override
 		public long getItemId(int position) {
-			return getItem(position).hashCode();
+			return position == 0 ? 0 : getItem(position).hashCode();
 		}
 
 		@Override
@@ -109,11 +122,17 @@ public class GroupsFragment extends Fragment {
 			View view;
 			if (convertView == null) {
 				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_group, null);
+				view.setOnClickListener(GroupsFragment.this);
 			} else {
 				view = convertView;
 			}
 
 			Group group = getItem(position);
+			if (group == null) {
+				((TextView) view.findViewById(R.id.title)).setText(R.string.create_new_group);
+				((TextView) view.findViewById(R.id.hint)).setText(null);
+				return view;
+			}
 			view.setTag(group.uuid);
 			if (group.name != null && !group.name.isEmpty()) {
 				((TextView) view.findViewById(R.id.title)).setText(group.name);
@@ -122,19 +141,7 @@ public class GroupsFragment extends Fragment {
 			}
 			((TextView) view.findViewById(R.id.hint)).setText(Config.DATE_FORMAT.format(
 					new Date(group.update_time)));
-
-			view.setOnClickListener(new OnClickListener() {
-				@SuppressWarnings("unchecked")
-				@Override
-				public void onClick(View v) {
-					String groupId = (String) v.getTag();
-					new MessagesGet(app, groupId).execute();
-					startActivity(new Intent(app, MessagingActivity.class)
-							.putExtra(Config.GROUP_ID, groupId));
-				}
-			});
 			return view;
 		}
-
 	}
 }

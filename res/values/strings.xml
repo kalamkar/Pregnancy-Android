@@ -7,7 +7,8 @@
     <string name="action_search">Search</string>
     <string name="action_edit_name">Edit Name</string>
     <string name="action_add_user">Add User</string>
-    <string name="action_add_group">Add Group</string>
+    
+    <string name="create_new_group">Create new Group</string>
     
     <string name="home">Home</string>
     <string name="mom">Mom</string>
