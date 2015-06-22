@@ -40,7 +40,6 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 	private boolean isOwner = false;
 	private Appointment appointments[];
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,17 +61,6 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 			findViewById(R.id.newAppointment).setVisibility(View.GONE);
 		}
 		((ListView) findViewById(R.id.appointments)).setAdapter(new AppointmentsAdapter());
-
-		updateUi();
-
-		new AppointmentsGet(app, isOwner ? null : user.uuid) {
-			@Override
-			protected void onPostExecute(ApiResponse result) {
-				super.onPostExecute(result);
-				appointments = result != null ? result.appointments : null;
-				app.setAppointmentSyncTime(System.currentTimeMillis());
-			}
-		}.execute();
 	}
 
 	@Override
@@ -120,11 +108,26 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private void getAppointments() {
+		new AppointmentsGet(app, isOwner ? null : user.uuid) {
+			@Override
+			protected void onPostExecute(ApiResponse result) {
+				super.onPostExecute(result);
+				appointments = result != null ? result.appointments : null;
+				app.setAppointmentSyncTime(System.currentTimeMillis());
+				((BaseAdapter) ((ListView) findViewById(R.id.appointments)).getAdapter())
+						.notifyDataSetChanged();
+			}
+		}.execute();
+	}
+
 	@Override
 	public void onResume() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.registerOnSharedPreferenceChangeListener(listener);
 		updateUi();
+		getAppointments();
 		super.onResume();
 	}
 
@@ -139,7 +142,8 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 			updateUi();
-			((BaseAdapter) ((ListView) findViewById(R.id.appointments)).getAdapter()).notifyDataSetChanged();
+			((BaseAdapter) ((ListView) findViewById(R.id.appointments)).getAdapter())
+					.notifyDataSetChanged();
 		}
 	};
 
@@ -164,10 +168,21 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
         			public void onClick(DialogInterface dialog, int which) {
         				User user = app.getMother();
         				if (user.equals(appointment.consumer)) {
-        					new AppointmentUpdate(app, appointment.id)
-        						.execute(Pair.create(AppointmentUpdate.PARAM_CONSUMER, "-"));
+        					new AppointmentUpdate(app, appointment.id) {
+								@Override
+								protected void onPostExecute(ApiResponse result) {
+									super.onPostExecute(result);
+									getAppointments();
+								}
+        					}.execute(Pair.create(AppointmentUpdate.PARAM_CONSUMER, "-"));
         				} else if (user.equals(appointment.provider)) {
-        					new AppointmentDelete(app, appointment.id).execute();
+        					new AppointmentDelete(app, appointment.id) {
+								@Override
+								protected void onPostExecute(ApiResponse result) {
+									super.onPostExecute(result);
+									getAppointments();
+								}
+        					}.execute();
         				}
         			}
         		})
@@ -181,11 +196,17 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 		        	.setIcon(android.R.drawable.ic_dialog_info)
 		        	.setMessage(R.string.continue_booking_appointment)
 		        	.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-		        		@Override
+		        		@SuppressWarnings("unchecked")
+						@Override
 		        		public void onClick(DialogInterface dialog, int which) {
-		        			new AppointmentUpdate(app, appointment.id)
-		        				.execute(Pair.create(AppointmentUpdate.PARAM_CONSUMER,
-		        						app.getMother().uuid));
+		        			new AppointmentUpdate(app, appointment.id) {
+								@Override
+								protected void onPostExecute(ApiResponse result) {
+									super.onPostExecute(result);
+									getAppointments();
+								}
+        					}.execute(Pair.create(AppointmentUpdate.PARAM_CONSUMER,
+        								app.getMother().uuid));
 		        		}
 		        	})
 		        	.setNegativeButton(android.R.string.cancel, null)
@@ -239,8 +260,8 @@ public class ProfileActivity extends FragmentActivity implements OnClickListener
 				@Override
 				public boolean onLongClick(View v) {
 					View deleteBtn = v.findViewById(R.id.delete);
-					deleteBtn.setVisibility(
-							deleteBtn.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+					deleteBtn.setVisibility(deleteBtn.getVisibility() == View.VISIBLE
+							? View.INVISIBLE : View.VISIBLE);
 					return true;
 				}
 			});
