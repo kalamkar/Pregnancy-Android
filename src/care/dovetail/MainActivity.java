@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,14 +17,13 @@ import care.dovetail.fragments.BabyFragment;
 import care.dovetail.fragments.GroupNameFragment;
 import care.dovetail.fragments.GroupsFragment;
 import care.dovetail.fragments.HomeFragment;
-import care.dovetail.fragments.MomFragment;
 import care.dovetail.messaging.GCMUtils;
 
 public class MainActivity extends FragmentActivity {
 	private static final String TAG = "MainActivity";
 
 	private App app;
-	SectionsPagerAdapter adapter;
+	PagerAdapter adapter;
 	ViewPager pager;
 
 	@SuppressWarnings("unchecked")
@@ -33,14 +32,13 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
 		app = (App) getApplication();
 		if (GCMUtils.checkPlayServices(this)) {
 			app.requestPushToken();
 		}
 
 		pager = (ViewPager) findViewById(R.id.pager);
+		adapter = new PagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(1);
 
@@ -70,12 +68,12 @@ public class MainActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+	public class PagerAdapter extends FragmentStatePagerAdapter {
 		private Fragment fragments[] = { new GroupsFragment(), new HomeFragment(),
-				new MomFragment(), new BabyFragment() };
-		private int titles[] = {R.string.messages, R.string.home, R.string.mom, R.string.baby};
+				new BabyFragment() };
+		private int titles[] = {R.string.messages, R.string.home, R.string.baby};
 
-		public SectionsPagerAdapter(FragmentManager fm) {
+		public PagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 

@@ -30,6 +30,8 @@ public class HomeFragment extends Fragment {
 		getChildFragmentManager().beginTransaction()
 			.add(R.id.hello, new HelloFragment())
 			.add(R.id.photos, new PhotosFragment())
-			.add(R.id.tips, new TipsFragment()).commit();
+			.add(R.id.tips, new TipsFragment())
+			.add(R.id.mom_goals, new MomGoalsFragment())
+			.add(R.id.mom_trends, new MomTrendsFragment()).commit();
 	}
 }

@@ -1,6 +1,15 @@
+<!-- Copyright 2013 TeddyTab llc. All rights reserved. -->
 <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="care.dovetail.MainActivity" />
+    android:layout_height="match_parent">
+    
+    <android.support.v4.view.PagerTitleStrip
+        android:id="@+id/pager_title_strip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:paddingTop="@dimen/small_margin"
+        android:paddingBottom="@dimen/small_margin" />
+</android.support.v4.view.ViewPager>
+    
