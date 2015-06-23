@@ -32,6 +32,7 @@ public class AppointmentUpdate extends ApiResponseTask {
 	private final String appointmentId;
 
 	public AppointmentUpdate(App app, String appointmentId) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 		this.appointmentId = appointmentId;
 	}
@@ -40,7 +41,6 @@ public class AppointmentUpdate extends ApiResponseTask {
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
 		List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
-		queryParams.add(new BasicNameValuePair("user_id", app.getUserId()));
 		HttpEntityEnclosingRequestBase request;
 		if (appointmentId == null) {
 			request = new HttpPost(Config.APPOINTMENT_URL);

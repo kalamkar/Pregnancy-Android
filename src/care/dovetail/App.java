@@ -27,7 +27,8 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 public class App extends Application {
 	static final String TAG = "App";
 
-	public static final String USER_ID = "USER_ID";
+	public static final String USER_UUID = "USER_UUID";
+	public static final String USER_AUTH = "USER_AUTH";
 	public static final String USER_PROFILE = "USER_PROFILE";
 	public static final String EVENT_SYNC_TIME = "EVENT_SYNC_TIME";
 	public static final String MESSAGE_SYNC_TIME = "MESSAGE_SYNC_TIME";
@@ -41,7 +42,6 @@ public class App extends Application {
 	public List<Group> groups = new ArrayList<Group>();
 	public Map<String, List<Message>> messages = new HashMap<String, List<Message>>();
 	public List<User> contacts = new ArrayList<User>();
-	private final List<Tip> tips = new ArrayList<Tip>();
 
 	@Override
 	public void onCreate() {
@@ -88,13 +88,22 @@ public class App extends Application {
 				getPackageName(), MODE_PRIVATE).getLong(APPOINTMENT_SYNC_TIME, 0);
 	}
 
-	public String getUserId() {
-		return getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_ID, null);
+	public String getUserUUID() {
+		return getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_UUID, null);
+	}
+
+	public String getUserAuth() {
+		return getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_AUTH, null);
 	}
 
 	public void setUser(User user) {
-		if (user != null && user.id != null) {
-			setStringPref(USER_ID, user.id);
+		if (user != null) {
+			if (user.uuid != null) {
+				setStringPref(USER_UUID, user.uuid);
+			}
+			if (user.auth != null) {
+				setStringPref(USER_AUTH, user.auth);
+			}
 		}
 		mother = Mother.fromUser(Config.GSON.toJson(user));
 

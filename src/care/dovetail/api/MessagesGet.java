@@ -24,6 +24,7 @@ public class MessagesGet extends ApiResponseTask {
 	private final String groupId;
 
 	public MessagesGet(App app, String groupId) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 		this.groupId = groupId;
 	}
@@ -31,8 +32,7 @@ public class MessagesGet extends ApiResponseTask {
 	@Override
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
-		return new HttpGet(String.format("%s?user_id=%s&group_uuid=%s", Config.MESSAGE_URL,
-				app.getUserId(), groupId));
+		return new HttpGet(String.format("%s?group_uuid=%s", Config.MESSAGE_URL, groupId));
 	}
 
 	@Override

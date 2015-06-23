@@ -19,14 +19,15 @@ public class AppointmentDelete extends ApiResponseTask {
 	private final String appointmentId;
 
 	public AppointmentDelete(App app, String appointmentId) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 		this.appointmentId = appointmentId;
 	}
 
 	@Override
 	protected HttpRequestBase makeRequest(Pair<String, String>... params) {
-		return new HttpDelete(String.format("%s?user_id=%s&appointment_id=%s",
-				Config.APPOINTMENT_URL, app.getUserId(), appointmentId));
+		return new HttpDelete(String.format("%s?appointment_id=%s", Config.APPOINTMENT_URL,
+				appointmentId));
 	}
 
 	@Override

@@ -33,6 +33,7 @@ public class UserUpdate extends ApiResponseTask {
 	private final App app;
 
 	public UserUpdate(App app) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 	}
 
@@ -41,11 +42,10 @@ public class UserUpdate extends ApiResponseTask {
 			throws UnsupportedEncodingException {
 		List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
 		HttpEntityEnclosingRequestBase request;
-		if (app.getUserId() == null) {
+		if (app.getUserUUID() == null) {
 			request = new HttpPost(Config.USER_URL);
 		} else {
 			request = new HttpPut(Config.USER_URL);
-			queryParams.add(new BasicNameValuePair("user_id", app.getUserId()));
 		}
 		for (Pair<String, String> param : params) {
 			queryParams.add(new BasicNameValuePair(param.first, param.second));

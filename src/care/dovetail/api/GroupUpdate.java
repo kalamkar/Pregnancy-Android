@@ -33,6 +33,7 @@ public class GroupUpdate extends ApiResponseTask {
 	private final String groupId;
 
 	public GroupUpdate(App app, String groupId) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 		this.groupId = groupId;
 	}
@@ -41,7 +42,6 @@ public class GroupUpdate extends ApiResponseTask {
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
 		List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
-		queryParams.add(new BasicNameValuePair("user_id", app.getUserId()));
 		HttpEntityEnclosingRequestBase request;
 		if (groupId == null) {
 			request = new HttpPost(Config.GROUP_URL);

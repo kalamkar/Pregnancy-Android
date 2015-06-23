@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 
+import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
@@ -24,18 +25,18 @@ public abstract class Search extends ApiResponseTask {
 	private final App app;
 
 	public Search(App app) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 	}
 
 	@Override
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
-		StringBuilder builder = new StringBuilder();
-		builder.append(String.format("%s?user_id=%s", Config.SEARCH_URL, app.getUserId()));
+		Uri.Builder builder = Uri.parse(Config.SEARCH_URL).buildUpon();
 		for (Pair<String, String> param : params) {
-			builder.append(String.format("&%s=%s", param.first, param.second));
+			builder.appendQueryParameter(param.first, param.second);
 		}
-		return new HttpGet(builder.toString());
+		return new HttpGet(builder.build().toString());
 	}
 
 	@Override

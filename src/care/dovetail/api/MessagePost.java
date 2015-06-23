@@ -29,6 +29,7 @@ public class MessagePost extends ApiResponseTask {
 	private final App app;
 
 	public MessagePost(App app) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 	}
 
@@ -37,7 +38,6 @@ public class MessagePost extends ApiResponseTask {
 			throws UnsupportedEncodingException {
 		List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
 		HttpEntityEnclosingRequestBase request = new HttpPost(Config.MESSAGE_URL);
-		queryParams.add(new BasicNameValuePair("user_id", app.getUserId()));
 		for (Pair<String, String> param : params) {
 			queryParams.add(new BasicNameValuePair(param.first, param.second));
 		}

@@ -20,13 +20,14 @@ public class UserGet extends ApiResponseTask {
 	private final App app;
 
 	public UserGet(App app) {
+		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 	}
 
 	@Override
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
-		return new HttpGet(String.format("%s?user_id=%s", Config.USER_URL, app.getUserId()));
+		return new HttpGet(Config.USER_URL);
 	}
 
 	@Override
