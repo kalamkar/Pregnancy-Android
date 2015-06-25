@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -20,18 +20,17 @@ import care.dovetail.common.ApiResponseTask;
 import care.dovetail.common.model.ApiResponse;
 
 @SuppressWarnings("deprecation")
-public class UserUpdate extends ApiResponseTask {
-	private static final String TAG = "UserUpdate";
+public class UserCreate extends ApiResponseTask {
+	private static final String TAG = "UserCreate";
 
 	public static final String PARAM_TYPE = "type";
 	public static final String PARAM_TOKEN = "token";
 	public static final String PARAM_NAME = "name";
 	public static final String PARAM_EMAIL = "email";
-	public static final String PARAM_FEATURE = "feature";
 
 	private final App app;
 
-	public UserUpdate(App app) {
+	public UserCreate(App app) {
 		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 	}
@@ -40,7 +39,7 @@ public class UserUpdate extends ApiResponseTask {
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
 		List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
-		HttpEntityEnclosingRequestBase request = new HttpPut(Config.USER_URL);
+		HttpEntityEnclosingRequestBase request = new HttpPost(Config.USER_URL);
 		for (Pair<String, String> param : params) {
 			queryParams.add(new BasicNameValuePair(param.first, param.second));
 		}

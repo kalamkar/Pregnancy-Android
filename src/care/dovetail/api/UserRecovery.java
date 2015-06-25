@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -20,18 +20,18 @@ import care.dovetail.common.ApiResponseTask;
 import care.dovetail.common.model.ApiResponse;
 
 @SuppressWarnings("deprecation")
-public class UserUpdate extends ApiResponseTask {
-	private static final String TAG = "UserUpdate";
+public class UserRecovery extends ApiResponseTask {
+	private static final String TAG = "UserRecovery";
 
 	public static final String PARAM_TYPE = "type";
 	public static final String PARAM_TOKEN = "token";
-	public static final String PARAM_NAME = "name";
 	public static final String PARAM_EMAIL = "email";
-	public static final String PARAM_FEATURE = "feature";
+	public static final String PARAM_UUID = "uuid";
+	public static final String PARAM_CODE = "code";
 
 	private final App app;
 
-	public UserUpdate(App app) {
+	public UserRecovery(App app) {
 		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
 	}
@@ -40,7 +40,7 @@ public class UserUpdate extends ApiResponseTask {
 	protected HttpRequestBase makeRequest(Pair<String, String>... params)
 			throws UnsupportedEncodingException {
 		List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
-		HttpEntityEnclosingRequestBase request = new HttpPut(Config.USER_URL);
+		HttpEntityEnclosingRequestBase request = new HttpPost(Config.RECOVERY_URL);
 		for (Pair<String, String> param : params) {
 			queryParams.add(new BasicNameValuePair(param.first, param.second));
 		}
@@ -54,8 +54,6 @@ public class UserUpdate extends ApiResponseTask {
 		if (result != null && !"OK".equalsIgnoreCase(result.code)) {
 			Log.e(TAG, result.message);
 			Toast.makeText(app, result.message, Toast.LENGTH_LONG).show();
-		} else if (result != null && result.users != null && result.users.length > 0) {
-			app.setUser(result.users[0]);
 		}
 	}
 }

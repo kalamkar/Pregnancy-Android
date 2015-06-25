@@ -20,6 +20,7 @@ public class Config extends care.dovetail.common.Config {
 
 	public static final String API_URL = "https://dovetail-api1.appspot.com";
 	public static final String USER_URL = API_URL + "/user";
+	public static final String RECOVERY_URL = USER_URL + "/recover";
 	public static final String APPOINTMENT_URL = API_URL + "/appointment";
 	public static final String EVENT_URL  = API_URL + "/event";
 	public static final String GROUP_URL = API_URL + "/group";

@@ -17,6 +17,7 @@ import care.dovetail.Config;
 import care.dovetail.MessagingActivity;
 import care.dovetail.R;
 import care.dovetail.common.model.ApiResponse.Message;
+import care.dovetail.common.model.User;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -48,9 +49,26 @@ public class GCMIntentService extends IntentService {
     }
 
     private void processData(Bundle data) {
-    	if (!data.containsKey("message") && !data.containsKey(Config.GROUP_ID)) {
-			return;
+    	if (data.containsKey("message") || data.containsKey(Config.GROUP_ID)) {
+    		processMessage(data);
+		} else if (data.containsKey("user")) {
+			processUser(data);
 		}
+    }
+
+    private void processUser(Bundle data) {
+    	User user = Config.GSON.fromJson(data.getString("user"), User.class);
+    	if (user == null || user.uuid == null || user.auth == null) {
+    		Log.w(TAG, String.format("Invalid push message: %s", data.getString("user")));
+    	}
+
+    	App app = (App) getApplication();
+    	if (app != null) {
+    		app.setUser(user);
+    	}
+    }
+
+    private void processMessage(Bundle data) {
     	Message message = Config.GSON.fromJson(data.getString("message"), Message.class);
     	if (message == null || message.text == null) {
     		Log.w(TAG, String.format("Invalid push message: %s", data.getString("message")));
@@ -64,6 +82,7 @@ public class GCMIntentService extends IntentService {
     		}
     		messages.add(message);
     		app.messages.put(data.getString(Config.GROUP_ID), messages);
+    		app.setMessageSyncTime(System.currentTimeMillis());
     	}
 
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,

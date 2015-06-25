@@ -1,0 +1,92 @@
+<!-- Copyright 2015 Dovetail Care inc. All rights reserved. -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="care.dovetail.SignUpActivity" >
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:ems="10"
+        android:hint="@string/full_name"
+        android:inputType="textPersonName|textCapWords" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress" />
+    
+    <EditText
+        android:id="@+id/code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/email_justification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/code"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:gravity="right"
+        android:text="@string/email_justification"
+        android:textColor="@android:color/tertiary_text_light" />
+
+    <Button
+        android:id="@+id/sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_justification"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/action_sign_up" />
+    
+    <Button
+        android:id="@+id/recover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_justification"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/action_recover"
+        android:visibility="gone" />
+    
+    <Button
+        android:id="@+id/submit_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_justification"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@string/action_submit"
+        android:visibility="gone" />
+    
+    <TextView
+        android:id="@+id/recover_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sign_up"
+        android:gravity="center_horizontal"
+        android:text="@string/recover_account"
+        android:textColor="@android:color/holo_blue_dark" />
+
+</RelativeLayout>

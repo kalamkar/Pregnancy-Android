@@ -148,8 +148,10 @@ public class App extends Application {
 	public void requestPushToken() {
 		if (pushToken != null) {
 			Log.i(TAG, "Device already registered, registration ID = " + pushToken);
-			new UserUpdate(this).execute(Pair.create(UserUpdate.PARAM_TYPE, "GOOGLE"),
-					Pair.create(UserUpdate.PARAM_TOKEN, pushToken));
+			if (getUserUUID() != null && getUserAuth() != null) {
+				new UserUpdate(this).execute(Pair.create(UserUpdate.PARAM_TYPE, "GOOGLE"),
+						Pair.create(UserUpdate.PARAM_TOKEN, pushToken));
+			}
 			return;
 		}
 	    new AsyncTask<Void, Void, Void>() {
@@ -161,8 +163,11 @@ public class App extends Application {
 	                }
 	                pushToken = gcm.register(Config.GCM_SENDER_ID);
 	                Log.i(TAG, "Device registered, registration ID = " + pushToken);
-	                new UserUpdate(App.this).execute(Pair.create(UserUpdate.PARAM_TYPE, "GOOGLE"),
-	    					Pair.create(UserUpdate.PARAM_TOKEN, pushToken));
+	                if (getUserUUID() != null && getUserAuth() != null) {
+	                	new UserUpdate(App.this).execute(
+	                			Pair.create(UserUpdate.PARAM_TYPE, "GOOGLE"),
+	                			Pair.create(UserUpdate.PARAM_TOKEN, pushToken));
+	                }
 	                GCMUtils.storeRegistrationId(App.this, pushToken);
 	            } catch (IOException ex) {
 	                Log.w(TAG, ex);

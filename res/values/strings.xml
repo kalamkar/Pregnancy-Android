@@ -7,6 +7,9 @@
     <string name="action_search">Search</string>
     <string name="action_edit_name">Edit Name</string>
     <string name="action_add_user">Add User</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_recover">Recover</string>
+    <string name="action_submit">Submit</string>
     
     <string name="create_new_group">Create new Group</string>
     
@@ -27,6 +30,9 @@
     
     <string name="continue_booking_appointment">Continue booking this appointment?</string>
     <string name="continue_remove_appointment">Continue removing this appointment?</string>
+    
+    <string name="email_justification">No spam! Email needed to recover password</string>
+    <string name="recover_account">Already signed up? Tap here to recover your account</string>
     
     <string-array name="baby_genders">
         <item>Unknown</item>
