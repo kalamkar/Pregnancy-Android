@@ -1,10 +1,10 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -15,6 +15,44 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:textColor">@color/text</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
+        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText</item>
+        <item name="android:actionMenuTextColor">@color/actionbar_text</item>
     </style>
+    
+    <style name="ActionBar"
+           parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/actionbar_background</item>
+    </style>
+    <style name="ActionBarTitleText"
+           parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/actionbar_text</item>
+    </style>
+    <style name="ActionBarTabText"
+           parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
+        <item name="android:textColor">@color/actionbar_text</item>
+    </style>
+    
+    <style name="Activity">
+        <item name="android:background">@color/background</item>
+    </style>
+    
+    <style name="Card">
+        <item name="android:background">@drawable/border</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:padding">@dimen/small_margin</item>
+    </style>
+    
+    <color name="background">#EEF0CC</color>
+    <color name="text">#5C5C5C</color>
+    <color name="card">#E6E8BE</color>
+    <color name="card_border">#D4D6A9</color>
+    <color name="actionbar_background">#CCC37E</color>
+    <color name="actionbar_text">#5C5C5C</color>
 
 </resources>
