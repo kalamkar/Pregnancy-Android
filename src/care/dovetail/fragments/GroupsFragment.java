@@ -130,8 +130,10 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 			Group group = getItem(position);
 			if (group == null) {
 				((TextView) view.findViewById(R.id.title)).setText(R.string.create_new_group);
-				((TextView) view.findViewById(R.id.hint)).setText(null);
+				view.findViewById(R.id.hint).setVisibility(View.GONE);
 				return view;
+			} else {
+				view.findViewById(R.id.hint).setVisibility(View.VISIBLE);
 			}
 			view.setTag(group.uuid);
 			if (group.name != null && !group.name.isEmpty()) {
