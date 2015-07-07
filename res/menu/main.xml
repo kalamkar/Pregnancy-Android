@@ -10,10 +10,10 @@
         android:title="@string/action_search"/>
     
     <item
-        android:id="@+id/action_profile"
+        android:id="@+id/action_drawer"
         android:orderInCategory="101"
         android:showAsAction="ifRoom"
-        android:icon="@drawable/ic_person"
-        android:title="@string/action_search"/>
+        android:icon="@drawable/ic_drawer"
+        android:title="@string/action_settings"/>
 
 </menu>
