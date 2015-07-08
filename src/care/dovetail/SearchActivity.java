@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -40,6 +42,9 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contacts);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
 		app = (App) getApplication();
 		groupId = this.getIntent().getStringExtra(Config.GROUP_ID);
 		reloadContacts();
@@ -51,6 +56,16 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 	protected void onDestroy() {
 		app.updateContacts();
 		super.onDestroy();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@SuppressWarnings("unchecked")

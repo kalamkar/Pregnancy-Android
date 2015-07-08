@@ -12,6 +12,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,9 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_messaging);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
 		app = (App) getApplication();
 		groupId = this.getIntent().getStringExtra(Config.GROUP_ID);
@@ -106,6 +110,9 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 			fragment.setArguments(args);
 			fragment.show(getSupportFragmentManager(), null);
 			break;
+		case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
