@@ -1,58 +1,76 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="care.dovetail.MainActivity" >
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/photo_width"
+        android:layout_height="@dimen/photo_height"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/small_margin"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="@android:drawable/sym_def_app_icon" />
-    
+
     <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/photo"
         android:layout_marginBottom="@dimen/small_margin"
-        android:drawableRight="@android:drawable/ic_menu_edit"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Jennifer Doe" />
 
     <TextView
         android:id="@+id/email"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/name"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:drawableRight="@android:drawable/ic_menu_edit"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/secondary_text_light" />
+        android:textColor="@android:color/secondary_text_light"
+        android:text="Jennifer.Doe@gmail.com" />
+
+    <ImageView
+        android:id="@+id/dueDateIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/email"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:src="@android:drawable/ic_menu_my_calendar" />
     
     <TextView
         android:id="@+id/dueDate"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@+id/dueDateIcon"
+        android:layout_alignBottom="@+id/dueDateIcon"
         android:text="@string/due_date" />
 
     <TextView
         android:id="@+id/history"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dueDate"
+        android:layout_below="@+id/dueDateIcon"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="@string/history" />
 
     <TextView
         android:id="@+id/about"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dueDate"
+        android:layout_below="@+id/history"
         android:text="@string/about" />
 
-</LinearLayout>
+</RelativeLayout>

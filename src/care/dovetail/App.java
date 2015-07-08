@@ -9,7 +9,9 @@ import java.util.Map;
 
 import android.app.Application;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.util.Pair;
 import care.dovetail.api.UserUpdate;
@@ -22,6 +24,9 @@ import care.dovetail.common.model.User;
 import care.dovetail.messaging.GCMUtils;
 import care.dovetail.model.Mother;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class App extends Application {
@@ -34,6 +39,9 @@ public class App extends Application {
 	public static final String MESSAGE_SYNC_TIME = "MESSAGE_SYNC_TIME";
 	public static final String GROUP_SYNC_TIME = "GROUP_SYNC_TIME";
 	public static final String APPOINTMENT_SYNC_TIME = "APPOINTMENT_SYNC_TIME";
+
+	private RequestQueue requestQueue;
+	public ImageLoader imageLoader;
 
 	private String pushToken;
 	private GoogleCloudMessaging gcm;
@@ -49,6 +57,19 @@ public class App extends Application {
 		String profile =
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);
 		mother = profile != null ? Mother.fromUser(profile) : new Mother();
+
+		requestQueue = Volley.newRequestQueue(this);
+		imageLoader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
+		    private final LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(10);
+		    @Override
+			public void putBitmap(String url, Bitmap bitmap) {
+		        cache.put(url, bitmap);
+		    }
+		    @Override
+			public Bitmap getBitmap(String url) {
+		        return cache.get(url);
+		    }
+		});
 	}
 
 	public void setEventSyncTime(long timeMillis) {

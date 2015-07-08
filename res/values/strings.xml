@@ -56,5 +56,11 @@
         <item>Nutritionist</item>
         <item>Midwife</item>
     </string-array>
+    
+    <string name="update_photo">Update photo</string>
+    <string-array name="photo_options">
+        <item>Take Photo</item>
+        <item>Choose from Library</item>
+    </string-array>
 
 </resources>
