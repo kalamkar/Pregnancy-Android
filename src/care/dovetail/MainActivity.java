@@ -2,7 +2,9 @@ package care.dovetail;
 
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -30,7 +32,9 @@ public class MainActivity extends FragmentActivity {
 
 	private DrawerLayout drawerLayout;
     private View drawer;
+    private ActionBarDrawerToggle drawerToggle;
 
+	@SuppressLint("NewApi")
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,8 @@ public class MainActivity extends FragmentActivity {
         drawer = findViewById(R.id.left_drawer);
 
         // Set the drawer toggle as the DrawerListener
-        drawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, drawerLayout,
-        		R.string.drawer_open, R.string.drawer_close) {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open,
+        		R.string.drawer_close) {
             @Override
 			public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
@@ -64,7 +68,13 @@ public class MainActivity extends FragmentActivity {
                 super.onDrawerOpened(drawerView);
                 invalidateOptionsMenu();
             }
-        });
+        };
+        drawerLayout.setDrawerListener(drawerToggle);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        	getActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
+        }
 
 		if (app.getUserUUID() == null || app.getUserAuth() == null) {
 			startActivity(new Intent(this, SignUpActivity.class));
@@ -83,15 +93,10 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+	    }
 		switch(item.getItemId()) {
-		case R.id.action_drawer:
-			// startActivity(new Intent(this, ProfileActivity.class));
-			if (drawerLayout.isDrawerOpen(drawer)) {
-				drawerLayout.closeDrawer(drawer);
-			} else {
-				drawerLayout.openDrawer(drawer);
-			}
-			break;
 		case R.id.action_search:
 			startActivity(new Intent(this, SearchActivity.class));
 			break;
