@@ -11,13 +11,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import care.dovetail.api.GroupsGet;
 import care.dovetail.api.UserGet;
 import care.dovetail.fragments.BabyFragment;
@@ -33,9 +29,7 @@ public class MainActivity extends FragmentActivity {
 	private ViewPager pager;
 
 	private DrawerLayout drawerLayout;
-    private ListView drawerList;
-    private ActionBarDrawerToggle drawerToggle;
-    private String drawerMenuTitles[];
+    private View drawer;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -53,30 +47,24 @@ public class MainActivity extends FragmentActivity {
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(1);
 
-		drawerMenuTitles = getResources().getStringArray(R.array.drawer_menu);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawer = findViewById(R.id.left_drawer);
 
-        drawerList.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, drawerMenuTitles));
-        drawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.string.drawer_open, R.string.drawer_close) {
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.setDrawerListener(new ActionBarDrawerToggle(this, drawerLayout,
+        		R.string.drawer_open, R.string.drawer_close) {
             @Override
 			public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
+
             @Override
 			public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
             }
-        };
-
-        // Set the drawer toggle as the DrawerListener
-        drawerLayout.setDrawerListener(drawerToggle);
+        });
 
 		if (app.getUserUUID() == null || app.getUserAuth() == null) {
 			startActivity(new Intent(this, SignUpActivity.class));
@@ -98,10 +86,10 @@ public class MainActivity extends FragmentActivity {
 		switch(item.getItemId()) {
 		case R.id.action_drawer:
 			// startActivity(new Intent(this, ProfileActivity.class));
-			if (drawerLayout.isDrawerOpen(drawerList)) {
-				drawerLayout.closeDrawer(drawerList);
+			if (drawerLayout.isDrawerOpen(drawer)) {
+				drawerLayout.closeDrawer(drawer);
 			} else {
-				drawerLayout.openDrawer(drawerList);
+				drawerLayout.openDrawer(drawer);
 			}
 			break;
 		case R.id.action_search:
@@ -114,17 +102,10 @@ public class MainActivity extends FragmentActivity {
 	@Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
+        boolean drawerOpen = drawerLayout.isDrawerOpen(drawer);
         menu.findItem(R.id.action_search).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
-
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
-	    @Override
-	    public void onItemClick(AdapterView parent, View view, int position, long id) {
-	        Log.i(TAG, String.format("Item no. %d clicked", position));
-	    }
-	}
 
 	public class PagerAdapter extends FragmentStatePagerAdapter {
 		private Fragment fragments[] = { new GroupsFragment(), new HomeFragment(),
@@ -150,5 +131,4 @@ public class MainActivity extends FragmentActivity {
 			return getString(titles[position]).toUpperCase(Locale.getDefault());
 		}
 	}
-
 }

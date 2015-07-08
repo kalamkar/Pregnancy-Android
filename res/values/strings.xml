@@ -30,6 +30,9 @@
     
     <string name="due_date">Due Date</string>
     <string name="add_baby">Add baby</string>
+    <string name="history">History</string>
+    <string name="about">About</string>
+    
     
     <string name="continue_booking_appointment">Continue booking this appointment?</string>
     <string name="continue_remove_appointment">Continue removing this appointment?</string>
@@ -52,12 +55,6 @@
         <item>Yoga Instructor</item>
         <item>Nutritionist</item>
         <item>Midwife</item>
-    </string-array>
-    
-    <string-array name="drawer_menu">
-        <item>Due Date</item>
-        <item>History</item>
-        <item>About</item>
     </string-array>
 
 </resources>
