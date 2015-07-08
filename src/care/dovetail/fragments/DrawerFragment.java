@@ -9,8 +9,11 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -66,6 +69,27 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 
 		updateUi(view);
 	}
+
+	@Override
+	public void onResume() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.registerOnSharedPreferenceChangeListener(listener);
+		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.unregisterOnSharedPreferenceChangeListener(listener);
+		super.onPause();
+	}
+
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			updateUi(getView());
+		}
+	};
 
 	private void updateUi(View view) {
 		User user = app.getMother();

@@ -27,6 +27,7 @@ import care.dovetail.api.MessagesGet;
 import care.dovetail.api.Search;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.ApiResponse.Result;
+import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 
 public class SearchActivity extends FragmentActivity implements OnClickListener,
@@ -74,17 +75,9 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 		final Result result = (Result) view.getTag();
 		if (result.user != null) {
 			if (groupId != null) {
-				new GroupUpdate(app, groupId) {
-					@Override
-					protected void onPostExecute(ApiResponse response) {
-						super.onPostExecute(response);
-						finish();
-					}
-				}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, result.user.uuid));
+				addUserToGroup(result.user, groupId);
 			} else {
-				startActivity(new Intent(app, ProfileActivity.class)
-						.putExtra(Config.USER_ID, result.user.uuid));
-				finish();
+				startMessagingWithUser(result.user);
 			}
 		} else if (result.group != null) {
 			new MessagesGet(app, result.group.uuid).execute();
@@ -173,6 +166,41 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 			view.setOnClickListener(SearchActivity.this);
 			view.setTag(result);
 			return view;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addUserToGroup(User user, String groupId) {
+		new GroupUpdate(app, groupId) {
+			@Override
+			protected void onPostExecute(ApiResponse response) {
+				super.onPostExecute(response);
+				finish();
+			}
+		}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, user.uuid));
+	}
+
+	@SuppressWarnings("unchecked")
+	private void startMessagingWithUser(final User user) {
+		Group group = app.findUserGroup(user);
+		if (group == null) {
+			new GroupUpdate(app, null) {
+				@Override
+				protected void onPostExecute(ApiResponse response) {
+					super.onPostExecute(response);
+					Group group = app.findUserGroup(user);
+					if (group != null) {
+						startActivity(
+								new Intent(SearchActivity.this, MessagingActivity.class)
+								.putExtra(Config.GROUP_ID, group.uuid));
+						finish();
+					}
+				}
+			}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, user.uuid));
+		} else {
+			startActivity(new Intent(this, MessagingActivity.class)
+				.putExtra(Config.GROUP_ID, group.uuid));
+			finish();
 		}
 	}
 }
