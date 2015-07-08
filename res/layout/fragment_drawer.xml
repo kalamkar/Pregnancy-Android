@@ -25,8 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/photo"
         android:layout_marginBottom="@dimen/small_margin"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Jennifer Doe" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/email"
@@ -36,8 +35,7 @@
         android:layout_below="@+id/name"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/secondary_text_light"
-        android:text="Jennifer.Doe@gmail.com" />
+        android:textColor="@android:color/secondary_text_light" />
 
     <ImageView
         android:id="@+id/dueDateIcon"
