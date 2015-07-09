@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -157,12 +158,19 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 			Result result = getItem(position);
 			if (result != null && result.user != null) {
 				((TextView) view.findViewById(R.id.title)).setText(result.user.name);
+				((TextView) view.findViewById(R.id.hint)).setText(
+						Utils.getDisplayTime(result.user.update_time));
+				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_user);
 			} else if (result != null && result.group != null) {
 				((TextView) view.findViewById(R.id.title)).setText(result.group.toString());
+				((TextView) view.findViewById(R.id.hint)).setText(
+						Utils.getDisplayTime(result.group.update_time));
+				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_group);
 			} else {
 				((TextView) view.findViewById(R.id.title)).setText("");
+				((TextView) view.findViewById(R.id.hint)).setText("");
+				((ImageView) view.findViewById(R.id.icon)).setImageDrawable(null);
 			}
-			((TextView) view.findViewById(R.id.hint)).setText("");
 			view.setOnClickListener(SearchActivity.this);
 			view.setTag(result);
 			return view;

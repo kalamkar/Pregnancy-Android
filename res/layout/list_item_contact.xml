@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="care.dovetail.monitor.PairingActivity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:orientation="vertical" >
+    android:padding="@dimen/small_margin"
+    tools:context="care.dovetail.SearchActivity" >
 
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/icon_width"
+        android:layout_height="@dimen/icon_width"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_action_add_user" />
+    
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/small_margin"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_marginLeft="@dimen/small_margin"
         android:layout_marginBottom="@dimen/small_margin"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Large Text" />
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/hint"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Small Text"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_below="@+id/title"
+        android:layout_alignLeft="@+id/title"
+        android:text="hint"
+        android:textSize="12sp"
+        android:textColor="@android:color/secondary_text_light" />
 
-</LinearLayout>
+</RelativeLayout>

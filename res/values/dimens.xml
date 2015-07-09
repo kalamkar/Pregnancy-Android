@@ -15,4 +15,7 @@
     
     <dimen name="photo_width">120dp</dimen>
     <dimen name="photo_height">120dp</dimen>
+    
+    <dimen name="icon_width">50dp</dimen>
+    <dimen name="icon_height">50dp</dimen>
 </resources>

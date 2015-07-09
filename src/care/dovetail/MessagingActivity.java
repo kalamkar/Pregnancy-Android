@@ -190,11 +190,9 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 			}
 			if (app.getMother().equals(message.sender)) {
 				params.leftMargin = getResources().getDimensionPixelOffset(R.dimen.message_indent);
-				params.rightMargin = getResources().getDimensionPixelOffset(R.dimen.small_margin);
 				params.gravity = Gravity.RIGHT;
 				bubble.setBackground(getResources().getDrawable(R.drawable.my_message));
 			} else {
-				params.leftMargin = getResources().getDimensionPixelOffset(R.dimen.small_margin);
 				params.rightMargin = getResources().getDimensionPixelOffset(R.dimen.message_indent);
 				params.gravity = Gravity.LEFT;
 				bubble.setBackground(getResources().getDrawable(R.drawable.message));

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
@@ -131,9 +132,14 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 			if (group == null) {
 				((TextView) view.findViewById(R.id.title)).setText(R.string.create_new_group);
 				view.findViewById(R.id.hint).setVisibility(View.GONE);
+				view.findViewById(R.id.time).setVisibility(View.GONE);
+				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_group);
 				return view;
 			} else {
 				view.findViewById(R.id.hint).setVisibility(View.VISIBLE);
+				view.findViewById(R.id.time).setVisibility(View.VISIBLE);
+				((ImageView) view.findViewById(R.id.icon)).setImageResource(
+						group.members.length > 2 ? R.drawable.ic_group : R.drawable.ic_user);
 			}
 			view.setTag(group.uuid);
 			if (group.name != null && !group.name.isEmpty()) {
@@ -141,7 +147,7 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 			} else {
 				((TextView) view.findViewById(R.id.title)).setText(group.toString());
 			}
-			((TextView) view.findViewById(R.id.hint)).setText(
+			((TextView) view.findViewById(R.id.time)).setText(
 					Utils.getDisplayTime(group.update_time));
 			return view;
 		}
