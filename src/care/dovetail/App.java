@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.util.Pair;
+import care.dovetail.api.EventUploadTask;
 import care.dovetail.api.UserUpdate;
 import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.Goal;
@@ -40,8 +41,11 @@ public class App extends Application {
 	public static final String GROUP_SYNC_TIME = "GROUP_SYNC_TIME";
 	public static final String APPOINTMENT_SYNC_TIME = "APPOINTMENT_SYNC_TIME";
 
-	private RequestQueue requestQueue;
+	public final EventDB events = new EventDB(this);
 	public ImageLoader imageLoader;
+
+	private final EventUploadTask syncTask = new EventUploadTask(this);
+	private RequestQueue requestQueue;
 
 	private String pushToken;
 	private GoogleCloudMessaging gcm;
