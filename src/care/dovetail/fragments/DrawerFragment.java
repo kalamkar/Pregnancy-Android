@@ -63,6 +63,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		view.findViewById(R.id.photo).setOnClickListener(this);
 		view.findViewById(R.id.name).setOnClickListener(this);
 		view.findViewById(R.id.email).setOnClickListener(this);
+		view.findViewById(R.id.edit).setOnClickListener(this);
 		view.findViewById(R.id.dueDate).setOnClickListener(this);
 		view.findViewById(R.id.history).setOnClickListener(this);
 		view.findViewById(R.id.about).setOnClickListener(this);
@@ -125,6 +126,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			break;
 		case R.id.name:
 		case R.id.email:
+		case R.id.edit:
 			new NameEmailFragment().show(getActivity().getSupportFragmentManager(), null);
 			break;
 		case R.id.dueDate:
