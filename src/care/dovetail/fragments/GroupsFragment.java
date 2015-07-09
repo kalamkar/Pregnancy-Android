@@ -2,6 +2,7 @@ package care.dovetail.fragments;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.Application;
@@ -24,6 +25,7 @@ import care.dovetail.MessagingActivity;
 import care.dovetail.R;
 import care.dovetail.Utils;
 import care.dovetail.api.MessagesGet;
+import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.Group;
 
 public class GroupsFragment extends Fragment implements OnClickListener {
@@ -146,6 +148,13 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 				((TextView) view.findViewById(R.id.title)).setText(group.name);
 			} else {
 				((TextView) view.findViewById(R.id.title)).setText(group.toString());
+			}
+			List<Message> messages = app.messages.get(group.uuid);
+			if (messages != null && messages.size() > 0) {
+				((TextView) view.findViewById(R.id.hint)).setText(
+						messages.get(messages.size() - 1).text);
+			} else {
+				((TextView) view.findViewById(R.id.hint)).setText("");
 			}
 			((TextView) view.findViewById(R.id.time)).setText(
 					Utils.getDisplayTime(group.update_time));
