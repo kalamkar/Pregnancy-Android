@@ -7,7 +7,7 @@
     </item>
     <item 
         android:top="1dp"
-        android:right="1dp"
+        android:right="2dp"
         android:bottom="3dp"
         android:left="1dp">
         <shape android:shape="rectangle" >

@@ -48,10 +48,10 @@
         <item name="android:padding">@dimen/activity_vertical_margin</item>
     </style>
     
-    <color name="background">#F3DEFF</color>
-    <color name="card">#F6E6FF</color>
-    <color name="card_border">#DBC7ED</color>
-    <color name="actionbar_background">#8D55AD</color>
+    <color name="background">#EDEDED</color>
+    <color name="card">#F5F5F5</color>
+    <color name="card_border">#E0E0E0</color>
+    <color name="actionbar_background">#560D80</color>
 
     <color name="text">#5C5C5C</color>
     <color name="actionbar_text">#FAFAFA</color>
