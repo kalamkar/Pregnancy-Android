@@ -9,7 +9,7 @@
         android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_margin" >
+        android:padding="@dimen/message_padding" >
 
         <TextView
             android:id="@+id/sender"

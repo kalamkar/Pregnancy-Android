@@ -6,7 +6,10 @@
     
     <dimen name="tiny_margin">1dp</dimen>
     <dimen name="small_margin">5dp</dimen>
+    
+    <dimen name="message_padding">8dp</dimen>
     <dimen name="message_indent">50dp</dimen>
+    <dimen name="message_radius">8dp</dimen>
     
     <dimen name="drawer_width">240dp</dimen>
     
