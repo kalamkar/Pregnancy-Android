@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -23,7 +23,7 @@
     </style>
     
     <style name="ActionBar"
-           parent="@android:style/Widget.Holo.Light.ActionBar">
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/actionbar_background</item>
     </style>
     <style name="ActionBarTitleText"
@@ -41,21 +41,22 @@
     
     <style name="Card">
         <item name="android:background">@drawable/card</item>
-        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
-        <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
-        <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
         <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
-        <item name="android:padding">@dimen/small_margin</item>
+        <item name="android:layout_marginRight">@dimen/medium_margin</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginLeft">@dimen/medium_margin</item>
+        <item name="android:padding">@dimen/activity_vertical_margin</item>
     </style>
     
-    <color name="background">#EEF0CC</color>
-    <color name="text">#5C5C5C</color>
-    <color name="card">#E6E8BE</color>
-    <color name="card_border">#D4D6A9</color>
-    <color name="actionbar_background">#CCC37E</color>
-    <color name="actionbar_text">#5C5C5C</color>
-    
-    <color name="my_message">#95CCA3</color>
-    <color name="message">#D9DBD7</color>
+    <color name="background">#F3DEFF</color>
+    <color name="card">#F6E6FF</color>
+    <color name="card_border">#DBC7ED</color>
+    <color name="actionbar_background">#8D55AD</color>
 
+    <color name="text">#5C5C5C</color>
+    <color name="actionbar_text">#FAFAFA</color>
+    
+    <color name="my_message">#CFC8FA</color>
+    <color name="message">#E8C8FA</color>
+    
 </resources>

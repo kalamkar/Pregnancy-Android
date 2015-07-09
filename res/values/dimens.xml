@@ -6,6 +6,7 @@
     
     <dimen name="tiny_margin">1dp</dimen>
     <dimen name="small_margin">5dp</dimen>
+    <dimen name="medium_margin">10dp</dimen>
     
     <dimen name="message_padding">8dp</dimen>
     <dimen name="message_indent">50dp</dimen>
