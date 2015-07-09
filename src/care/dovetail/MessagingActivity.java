@@ -1,7 +1,6 @@
 package care.dovetail;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Application;
@@ -172,7 +171,8 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 			Message prevMessage = getItem(position - 1);
 			((TextView) view.findViewById(R.id.text)).setText(message.text);
 			((TextView) view.findViewById(R.id.sender)).setText(message.sender.name);
-			((TextView) view.findViewById(R.id.time)).setText(getDisplayTime(message.create_time));
+			((TextView) view.findViewById(R.id.time)).setText(
+					Utils.getDisplayTime(message.create_time));
 
 			boolean sameSender = prevMessage != null && prevMessage.sender.equals(message.sender);
 			boolean continuedMessage = prevMessage != null
@@ -209,16 +209,6 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 
 			return view;
 		}
-	}
-
-	private String getDisplayTime(long messageTime) {
-		long currentTime = System.currentTimeMillis();
-		if (currentTime - messageTime < 24 * 60 * 60 * 1000) {
-			return Config.MESSAGE_TIME_FORMAT.format(new Date(messageTime));
-		} else if (currentTime - messageTime < 30 * 24 * 60 * 60 * 1000) {
-			return Config.MESSAGE_DATE_FORMAT.format(new Date(messageTime));
-		}
-		return Config.MESSAGE_DATE_TIME_FORMAT.format(new Date(messageTime));
 	}
 
 	private Group findGroup(String groupId) {

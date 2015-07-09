@@ -2,7 +2,6 @@ package care.dovetail.fragments;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.Application;
@@ -22,6 +21,7 @@ import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.MessagingActivity;
 import care.dovetail.R;
+import care.dovetail.Utils;
 import care.dovetail.api.MessagesGet;
 import care.dovetail.common.model.Group;
 
@@ -141,8 +141,8 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 			} else {
 				((TextView) view.findViewById(R.id.title)).setText(group.toString());
 			}
-			((TextView) view.findViewById(R.id.hint)).setText(Config.DATE_FORMAT.format(
-					new Date(group.update_time)));
+			((TextView) view.findViewById(R.id.hint)).setText(
+					Utils.getDisplayTime(group.update_time));
 			return view;
 		}
 	}
