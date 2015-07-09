@@ -45,8 +45,12 @@ public class Config extends care.dovetail.common.Config {
 			new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS", Locale.US);
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
 	public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh:mm");
+	public static final SimpleDateFormat MESSAGE_DATE_TIME_FORMAT =
+			new SimpleDateFormat("MMM dd, h:mmaa");
 	public static final SimpleDateFormat MESSAGE_DATE_FORMAT =
-			new SimpleDateFormat("MMM dd, hh:mmaa");
+			new SimpleDateFormat("MMM dd");
+	public static final SimpleDateFormat MESSAGE_TIME_FORMAT =
+			new SimpleDateFormat("h:mmaa");
 
 	public static final String GROUP_ID = "group_uuid";
 	public static final String USER_ID = "uuid";

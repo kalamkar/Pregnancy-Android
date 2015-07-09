@@ -33,7 +33,7 @@ public class Mother extends User {
 		} else {
 			features.clear();
 		}
-		features.put("DUE_DATE_MILLIS", Long.toString(dueDateMillis));
+		features.put(FEATURE_DUE_DATE_MILLIS, Long.toString(dueDateMillis));
 		for (int i = 0; babies != null && i < babies.size(); i++) {
 			features.put("BABY_" + i, Config.GSON.toJson(babies.get(i)));
 		}
@@ -45,7 +45,7 @@ public class Mother extends User {
 		if (mother == null || mother.features == null) {
 			return mother;
 		}
-		String dueDate = mother.features.get("DUE_DATE_MILLIS");
+		String dueDate = mother.features.get(FEATURE_DUE_DATE_MILLIS);
 		if (dueDate != null) {
 			try {
 				mother.dueDateMillis = Long.parseLong(dueDate);

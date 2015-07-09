@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/message" />
+        android:layout_above="@+id/message"
+        android:divider="@android:color/transparent" />
 
     <ImageView
         android:id="@+id/send"

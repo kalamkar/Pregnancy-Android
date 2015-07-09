@@ -3,6 +3,7 @@ package care.dovetail.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +28,12 @@ public class HomeFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		getChildFragmentManager().beginTransaction()
-			.add(R.id.hello, new HelloFragment())
-			.add(R.id.photos, new PhotosFragment())
-			.add(R.id.tips, new TipsFragment())
-			.add(R.id.mom_goals, new MomGoalsFragment())
-			.add(R.id.mom_trends, new MomTrendsFragment()).commit();
+		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+		transaction.add(R.id.hello, new HelloFragment());
+//		transaction.add(R.id.photos, new PhotosFragment());
+//		transaction.add(R.id.tips, new TipsFragment());
+//		transaction.add(R.id.mom_goals, new MomGoalsFragment());
+//		transaction.add(R.id.mom_trends, new MomTrendsFragment());
+		transaction.commit();
 	}
 }

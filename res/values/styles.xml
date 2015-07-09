@@ -40,7 +40,7 @@
     </style>
     
     <style name="Card">
-        <item name="android:background">@drawable/border</item>
+        <item name="android:background">@drawable/card</item>
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
         <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
         <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
@@ -54,5 +54,8 @@
     <color name="card_border">#D4D6A9</color>
     <color name="actionbar_background">#CCC37E</color>
     <color name="actionbar_text">#5C5C5C</color>
+    
+    <color name="my_message">#95CCA3</color>
+    <color name="message">#D9DBD7</color>
 
 </resources>

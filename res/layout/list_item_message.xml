@@ -1,46 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="care.dovetail.monitor.PairingActivity"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:orientation="vertical" >
+    tools:context="care.dovetail.MessagingActivity" >
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/small_margin"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:text="Message Text"
-        android:textColor="@android:color/primary_text_light" />
-
-    <TextView
-        android:id="@+id/sender"
+    <RelativeLayout
+        android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:text="Sender"
-        android:textSize="12sp"
-        android:textColor="@android:color/secondary_text_light" />
-    
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/small_margin"
-        android:text="Time"
-        android:textSize="12sp"
-        android:textColor="@android:color/secondary_text_light" />
+        android:padding="@dimen/small_margin" >
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/sender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Sender"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sender"
+            android:text="Message Text"
+            android:textColor="@android:color/primary_text_light" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/text"
+            android:text="Time"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+</FrameLayout>
