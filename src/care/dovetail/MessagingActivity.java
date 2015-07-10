@@ -172,7 +172,7 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 			((TextView) view.findViewById(R.id.text)).setText(message.text);
 			((TextView) view.findViewById(R.id.sender)).setText(message.sender.name);
 			((TextView) view.findViewById(R.id.time)).setText(
-					Utils.getDisplayTime(message.create_time));
+					Utils.getMessageDisplayTime(message.create_time));
 
 			boolean sameSender = prevMessage != null && prevMessage.sender.equals(message.sender);
 			boolean continuedMessage = prevMessage != null

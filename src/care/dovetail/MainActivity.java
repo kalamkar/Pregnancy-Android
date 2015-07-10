@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import care.dovetail.api.GroupsGet;
 import care.dovetail.api.UserGet;
-import care.dovetail.fragments.BabyFragment;
 import care.dovetail.fragments.GroupsFragment;
 import care.dovetail.fragments.HomeFragment;
 import care.dovetail.messaging.GCMUtils;
@@ -113,9 +112,8 @@ public class MainActivity extends FragmentActivity {
     }
 
 	public class PagerAdapter extends FragmentStatePagerAdapter {
-		private Fragment fragments[] = { new GroupsFragment(), new HomeFragment(),
-				new BabyFragment() };
-		private int titles[] = {R.string.messages, R.string.home, R.string.baby};
+		private Fragment fragments[] = { new GroupsFragment(), new HomeFragment() };
+		private int titles[] = {R.string.messages, R.string.home};
 
 		public PagerAdapter(FragmentManager fm) {
 			super(fm);
