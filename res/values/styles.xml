@@ -55,8 +55,8 @@
     <color name="text">#5C5C5C</color>
     <color name="actionbar_text">#FAFAFA</color>
     
-    <color name="my_message">#CFC8FA</color>
-    <color name="message">#E8C8FA</color>
+    <color name="my_message">#E0E0E0</color>
+    <color name="message">#dcedc8</color>
     
     <color name="background_green">#dcedc8</color>
     <color name="secondary_text_gray">#6c6c6c</color>
