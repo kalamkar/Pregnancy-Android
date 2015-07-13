@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,6 +83,35 @@ public class MainActivity extends FragmentActivity {
 			new UserGet(app).execute();
 			new GroupsGet(app).execute();
 		}
+
+		if (savedInstanceState != null) {
+	        app.authInProgress = savedInstanceState.getBoolean(FitnessPollTask.AUTH_PENDING);
+	    }
+
+		FitnessPollTask.buildFitnessClient(this, app);
+	}
+
+	@Override
+	protected void onStart() {
+	    super.onStart();
+	    Log.i(TAG, "Google API client connecting...");
+	    if (!app.apiClient.isConnecting() && !app.apiClient.isConnected()) {
+        	app.apiClient.connect();
+        }
+	}
+
+	@Override
+	protected void onStop() {
+	    super.onStop();
+	    if (app.apiClient.isConnected()) {
+	    	app.apiClient.disconnect();
+	    }
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+	    super.onSaveInstanceState(outState);
+	    outState.putBoolean(FitnessPollTask.AUTH_PENDING, app.authInProgress);
 	}
 
 	@Override
@@ -110,6 +140,19 @@ public class MainActivity extends FragmentActivity {
         menu.findItem(R.id.action_search).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (requestCode == Config.ACTIVITY_REQUEST_OAUTH) {
+	        app.authInProgress = false;
+	        if (resultCode == RESULT_OK) {
+	            // Make sure the app is not already connected or attempting to connect
+	            if (!app.apiClient.isConnecting() && !app.apiClient.isConnected()) {
+	            	app.apiClient.connect();
+	            }
+	        }
+	    }
+	}
 
 	public class PagerAdapter extends FragmentStatePagerAdapter {
 		private Fragment fragments[] = { new GroupsFragment(), new HomeFragment() };

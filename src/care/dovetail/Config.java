@@ -8,6 +8,8 @@ import android.annotation.SuppressLint;
 @SuppressLint("SimpleDateFormat")
 public class Config extends care.dovetail.common.Config {
 
+	public static final int ACTIVITY_REQUEST_OAUTH = 1;
+
 	public static final String SERVICE_EVENT = "care.dovetail.babymonitor.ServiceEvent";
 	public static final String SERVICE_DATA = "care.dovetail.babymonitor.ServiceData";
 

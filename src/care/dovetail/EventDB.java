@@ -9,9 +9,11 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import care.dovetail.common.model.Event;
 
 public class EventDB extends SQLiteOpenHelper {
+	private static final String TAG = "EventDB";
 
 	public static final String DATABASE_NAME = "Events.db";
 	public static final int VERSION = 1;
@@ -49,7 +51,11 @@ public class EventDB extends SQLiteOpenHelper {
 	    if (event.extra != null) {
 	    	contentValues.put(EVENTS_EXTRA, event.extra);
 	    }
-	    getWritableDatabase().insert(EVENTS_TABLE_NAME, null, contentValues);
+	    try {
+	    	getWritableDatabase().insert(EVENTS_TABLE_NAME, null, contentValues);
+	    } catch (Throwable t) {
+	    	Log.w(TAG, t);
+	    }
 	}
 
 	public int size() {

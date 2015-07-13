@@ -28,6 +28,7 @@ import care.dovetail.model.Mother;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class App extends Application {
@@ -36,11 +37,15 @@ public class App extends Application {
 	public static final String USER_UUID = "USER_UUID";
 	public static final String USER_AUTH = "USER_AUTH";
 	public static final String USER_PROFILE = "USER_PROFILE";
+	public static final String FITNESS_POLL_TIME = "FITNESS_POLL_TIME";
 	public static final String EVENT_SYNC_TIME = "EVENT_SYNC_TIME";
 	public static final String MESSAGE_SYNC_TIME = "MESSAGE_SYNC_TIME";
 	public static final String GROUP_SYNC_TIME = "GROUP_SYNC_TIME";
 	public static final String APPOINTMENT_SYNC_TIME = "APPOINTMENT_SYNC_TIME";
 
+	public boolean authInProgress = false;
+
+	public GoogleApiClient apiClient = null;
 	public final EventDB events = new EventDB(this);
 	public ImageLoader imageLoader;
 
@@ -74,6 +79,15 @@ public class App extends Application {
 		        return cache.get(url);
 		    }
 		});
+	}
+
+	public void setFitnessPollTime(long timeMillis) {
+		setLongPref(FITNESS_POLL_TIME, timeMillis);
+	}
+
+	public long getFitnessPollTime() {
+		return getSharedPreferences(
+				getPackageName(), MODE_PRIVATE).getLong(FITNESS_POLL_TIME, 0);
 	}
 
 	public void setEventSyncTime(long timeMillis) {

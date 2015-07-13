@@ -20,7 +20,7 @@ import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.Event;
 
 public class EventUploadTask extends TimerTask {
-	private static final String TAG = "SyncTask";
+	private static final String TAG = "EventUploadTask";
 
 	private final App app;
 
@@ -52,6 +52,9 @@ public class EventUploadTask extends TimerTask {
 			List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
 			queryParams.add(new BasicNameValuePair("type", event.type));
 			queryParams.add(new BasicNameValuePair("time", Long.toString(event.time)));
+			if (event.extra != null) {
+				queryParams.add(new BasicNameValuePair("extra", event.extra));
+			}
 			for (Pair<String, String> param : params) {
 				queryParams.add(new BasicNameValuePair(param.first, param.second));
 			}
