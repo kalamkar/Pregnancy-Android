@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import android.app.Application;
 import android.content.SharedPreferences.Editor;
@@ -49,7 +50,7 @@ public class App extends Application {
 	public final EventDB events = new EventDB(this);
 	public ImageLoader imageLoader;
 
-	private final EventUploadTask syncTask = new EventUploadTask(this);
+	private final EventUploadTask eventUploadTask = new EventUploadTask(this);
 	private RequestQueue requestQueue;
 
 	private String pushToken;
@@ -79,6 +80,9 @@ public class App extends Application {
 		        return cache.get(url);
 		    }
 		});
+
+		new Timer().scheduleAtFixedRate(eventUploadTask, Config.EVENT_SYNC_INTERVAL_MILLIS,
+				Config.EVENT_SYNC_INTERVAL_MILLIS);
 	}
 
 	public void setFitnessPollTime(long timeMillis) {
