@@ -47,10 +47,16 @@
         <item name="android:padding">@dimen/activity_vertical_margin</item>
     </style>
     
+    <style name="TextButton" parent ="@android:style/Widget.Button.Small">
+        <item name="android:background">@drawable/text_button</item>
+        <item name="android:textColor">@color/actionbar_background</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
     <color name="background">#EDEDED</color>
     <color name="card">#F5F5F5</color>
     <color name="card_border">#E0E0E0</color>
-    <color name="actionbar_background">#3A005C</color>
+    <color name="actionbar_background">#D2AEE8</color>
 
     <color name="text">#5C5C5C</color>
     <color name="actionbar_text">#FAFAFA</color>

@@ -6,6 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/background"
     tools:context="care.dovetail.MainActivity">
 
     <EditText
@@ -25,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@android:string/cancel" />
+        android:text="@android:string/cancel"
+        style="@style/TextButton" />
 
     <Button
         android:id="@+id/ok"
@@ -33,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@android:string/ok" />
+        android:text="@android:string/ok"
+        style="@style/TextButton" />
 
 </RelativeLayout>
