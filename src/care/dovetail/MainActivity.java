@@ -49,7 +49,6 @@ public class MainActivity extends FragmentActivity {
 		pager = (ViewPager) findViewById(R.id.pager);
 		adapter = new PagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
-		pager.setCurrentItem(1);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer = findViewById(R.id.left_drawer);
@@ -155,8 +154,8 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public class PagerAdapter extends FragmentStatePagerAdapter {
-		private Fragment fragments[] = { new GroupsFragment(), new HomeFragment() };
-		private int titles[] = {R.string.messages, R.string.home};
+		private Fragment fragments[] = { new HomeFragment(), new GroupsFragment() };
+		private int titles[] = {R.string.home, R.string.sharing};
 
 		public PagerAdapter(FragmentManager fm) {
 			super(fm);
