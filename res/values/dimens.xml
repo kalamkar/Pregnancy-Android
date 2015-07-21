@@ -12,7 +12,7 @@
     <dimen name="message_indent">50dp</dimen>
     <dimen name="message_radius">8dp</dimen>
 
-    <dimen name="card_radius">5dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
 
     <dimen name="drawer_width">280dp</dimen>
 

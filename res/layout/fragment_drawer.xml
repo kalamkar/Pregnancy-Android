@@ -17,17 +17,6 @@
         android:layout_marginBottom="@dimen/small_margin"
         android:scaleType="centerCrop"
         android:src="@android:drawable/sym_def_app_icon" />
-    
-    <ImageView 
-        android:id="@+id/circle"
-        android:layout_width="@dimen/photo_width"
-        android:layout_height="@dimen/photo_height"
-        android:layout_alignTop="@+id/photo"
-        android:layout_alignRight="@+id/photo"
-        android:layout_alignBottom="@+id/photo"
-        android:layout_alignLeft="@+id/photo"
-        android:scaleType="centerInside"
-        android:src="@drawable/circle" />
 
     <TextView
         android:id="@+id/name"

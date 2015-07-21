@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
@@ -27,6 +26,8 @@ import care.dovetail.Utils;
 import care.dovetail.api.MessagesGet;
 import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.Group;
+
+import com.android.volley.toolbox.NetworkImageView;
 
 public class GroupsFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "GroupsFragment";
@@ -135,13 +136,15 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 				((TextView) view.findViewById(R.id.title)).setText(R.string.create_new_group);
 				view.findViewById(R.id.hint).setVisibility(View.GONE);
 				view.findViewById(R.id.time).setVisibility(View.GONE);
-				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_group);
+				((NetworkImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_group);
 				return view;
 			} else {
 				view.findViewById(R.id.hint).setVisibility(View.VISIBLE);
 				view.findViewById(R.id.time).setVisibility(View.VISIBLE);
-				((ImageView) view.findViewById(R.id.icon)).setImageResource(
-						group.members.length > 2 ? R.drawable.ic_group : R.drawable.ic_user);
+				String photoUrl = String.format("%s%s&size=%d", Config.GROUP_PHOTO_URL, group.uuid,
+						(int) app.getResources().getDimension(R.dimen.icon_width));
+				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
+						photoUrl, app.imageLoader);
 			}
 			view.setTag(group.uuid);
 			if (group.name != null && !group.name.isEmpty()) {

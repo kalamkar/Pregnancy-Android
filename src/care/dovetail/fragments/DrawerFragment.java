@@ -97,7 +97,8 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		((TextView) view.findViewById(R.id.name)).setText(user.name);
 		((TextView) view.findViewById(R.id.email)).setText(user.email);
 
-		String photoUrl = String.format("%s%s", Config.PHOTO_URL, user.uuid);
+		String photoUrl = String.format("%s%s&size=%d", Config.USER_PHOTO_URL, user.uuid,
+				(int) app.getResources().getDimension(R.dimen.photo_width));
 		((NetworkImageView) view.findViewById(R.id.photo)).setImageUrl(photoUrl, app.imageLoader);
 	}
 

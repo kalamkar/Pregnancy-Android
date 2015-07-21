@@ -41,8 +41,8 @@
     
     <style name="Card">
         <item name="android:background">@drawable/card</item>
-        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
         <item name="android:layout_marginRight">@dimen/medium_margin</item>
+        <item name="android:layout_marginBottom">@dimen/medium_margin</item>
         <item name="android:layout_marginLeft">@dimen/medium_margin</item>
         <item name="android:padding">@dimen/activity_vertical_margin</item>
     </style>
@@ -53,15 +53,16 @@
         <item name="android:textStyle">bold</item>
     </style>
     
-    <color name="background">#EDEDED</color>
-    <color name="card">#F5F5F5</color>
-    <color name="card_border">#E0E0E0</color>
+    <color name="background">#E8E8E8</color>
+    <color name="card">#FFFFFF</color>
+    <color name="card_border_light">#C9C9C9</color>
+    <color name="card_border_dark">#B0B0B0</color>
     <color name="actionbar_background">#D2AEE8</color>
 
     <color name="text">#5C5C5C</color>
     <color name="actionbar_text">#FAFAFA</color>
     
-    <color name="my_message">#E0E0E0</color>
+    <color name="my_message">#EDEDED</color>
     <color name="message">#dcedc8</color>
     
     <color name="background_green">#dcedc8</color>

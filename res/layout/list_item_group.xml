@@ -6,14 +6,13 @@
     android:padding="@dimen/small_margin"
     tools:context="care.dovetail.MainActivity" >
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/icon"
         android:layout_width="@dimen/icon_width"
         android:layout_height="@dimen/icon_width"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_service" />
+        android:scaleType="centerInside" />
     
     <TextView
         android:id="@+id/time"

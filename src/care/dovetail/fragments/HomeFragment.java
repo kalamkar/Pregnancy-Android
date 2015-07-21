@@ -119,10 +119,10 @@ public class HomeFragment extends Fragment implements OnClickListener {
 				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
 				view.findViewById(R.id.hint).setVisibility(View.GONE);
 				view.findViewById(R.id.time).setVisibility(View.GONE);
-				view.setOnClickListener(new OnClickListener() {
+				view.findViewById(R.id.menu_button).setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						View menu = v.findViewById(R.id.menu);
+						View menu = ((View) v.getParent()).findViewById(R.id.menu);
 						menu.setVisibility(menu.getVisibility() == View.INVISIBLE ?
 								View.VISIBLE : View.INVISIBLE);
 					}
