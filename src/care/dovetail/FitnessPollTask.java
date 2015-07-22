@@ -12,6 +12,7 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 import care.dovetail.common.model.Event;
+import care.dovetail.common.model.Measurement;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -40,9 +41,8 @@ public class FitnessPollTask extends TimerTask {
 
 		long lastPollTime = app.getFitnessPollTime();
 		if (lastPollTime == 0) {
-			// if not polled ever, set poll time to 24 hours back
-			// TODO(abhi): Set poll time to start of pregnancy or 6 months back.
-			lastPollTime = midnightMillis - 24 * 60 * 60 * 1000;
+			// if not polled ever, set poll time to 90 days back
+			lastPollTime = midnightMillis - 90 * 24 * 60 * 60 * 1000;
 		}
 
 		if (lastPollTime > midnightMillis) {
@@ -77,13 +77,15 @@ public class FitnessPollTask extends TimerTask {
 		for (DataPoint data : dataPoints) {
 			try {
 				int stepCount = data.getValue(data.getDataType().getFields().get(0)).asInt();
-				Event.Metric steps = new Event.Metric(Event.MetricTypes.STEPS.name(),
-						Integer.toString(stepCount));
-				long eventTimeMillis = data.getEndTime(TimeUnit.MILLISECONDS);
-				app.events.add(new Event("METRIC", eventTimeMillis, Config.GSON.toJson(steps)));
+				Measurement steps = new Measurement();
+				steps.value = stepCount;
+				steps.unit = Measurement.Unit.STEPS.name();
+				steps.startMillis = data.getStartTime(TimeUnit.MILLISECONDS);
+				steps.endMillis = data.getEndTime(TimeUnit.MILLISECONDS);
+				app.events.add(new Event(Event.Type.STEPS.name(), steps.endMillis,
+						Config.GSON.toJson(steps)));
 				Log.v(TAG, String.format("Steps for %s %d",
-						Config.MESSAGE_DATE_FORMAT.format(data.getEndTime(TimeUnit.MILLISECONDS)),
-						stepCount));
+						Config.MESSAGE_DATE_FORMAT.format(steps.endMillis), stepCount));
 			} catch (Exception ex) {
 				Log.w(TAG, ex);
 			}
