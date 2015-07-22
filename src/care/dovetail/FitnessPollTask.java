@@ -3,7 +3,6 @@ package care.dovetail;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +18,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.request.DataReadRequest;
@@ -42,7 +42,8 @@ public class FitnessPollTask extends TimerTask {
 		long lastPollTime = app.getFitnessPollTime();
 		if (lastPollTime == 0) {
 			// if not polled ever, set poll time to 90 days back
-			lastPollTime = midnightMillis - 90 * 24 * 60 * 60 * 1000;
+			long backlogMillis = 90L * 24L * 60L * 60L * 1000L;
+			lastPollTime = midnightMillis - backlogMillis;
 		}
 
 		if (lastPollTime > midnightMillis) {
@@ -55,27 +56,15 @@ public class FitnessPollTask extends TimerTask {
 		DataReadRequest readRequest = makeDailyReadRequest(lastPollTime, midnightMillis);
 		DataReadResult result =
 		        Fitness.HistoryApi.readData(app.apiClient, readRequest).await(1, TimeUnit.MINUTES);
-		if (!result.getStatus().isSuccess()) {
+		if (result == null || !result.getStatus().isSuccess() || result.getBuckets() == null) {
 			Log.i(TAG, result.getStatus().getStatusMessage());
 			return;
 		}
-		List<DataPoint> dataPoints = null;
-		try {
-			dataPoints = result.getBuckets().get(0).getDataSet(DataType.TYPE_STEP_COUNT_DELTA)
-					.getDataPoints();
-		} catch (Exception ex) {
-			Log.w(TAG, ex);
-		}
 
-		if (dataPoints == null) {
-			SimpleDateFormat dateFormat = Config.MESSAGE_DATE_TIME_FORMAT;
-			Log.w(TAG, String.format("No data found for date range %s to %s",
-					dateFormat.format(lastPollTime), dateFormat.format(midnightMillis)));
-			return;
-		}
-
-		for (DataPoint data : dataPoints) {
+		for (Bucket bucket : result.getBuckets()) {
 			try {
+				DataPoint data =
+						bucket.getDataSet(DataType.TYPE_STEP_COUNT_DELTA).getDataPoints().get(0);
 				int stepCount = data.getValue(data.getDataType().getFields().get(0)).asInt();
 				Measurement steps = new Measurement();
 				steps.value = stepCount;
