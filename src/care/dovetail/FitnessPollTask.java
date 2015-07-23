@@ -60,7 +60,7 @@ public class FitnessPollTask extends TimerTask {
 		DataReadResult result =
 		        Fitness.HistoryApi.readData(app.apiClient, readRequest).await(1, TimeUnit.MINUTES);
 		if (result == null || !result.getStatus().isSuccess() || result.getBuckets() == null) {
-			Log.i(TAG, result.getStatus().getStatusMessage());
+			Log.w(TAG, result.getStatus().getStatusMessage());
 			return;
 		}
 
@@ -70,19 +70,29 @@ public class FitnessPollTask extends TimerTask {
 				if (steps != null) {
 					app.events.add(steps);
 				}
-
-				Event weight = getWeightEvent(bucket);
-				if (weight != null) {
-					app.events.add(weight);
-				}
 			} catch (Exception ex) {
 				Log.w(TAG, ex);
 			}
 		}
+
+		readRequest = makeWeightRequest(lastPollTime, midnightMillis);
+		result = Fitness.HistoryApi.readData(app.apiClient, readRequest).await(1, TimeUnit.MINUTES);
+		if (result == null || !result.getStatus().isSuccess() || result.getBuckets() == null) {
+			Log.w(TAG, result.getStatus().getStatusMessage());
+			return;
+		}
+		try {
+			Event weight = getWeightEvent(result.getDataSet(DataType.TYPE_WEIGHT));
+			if (weight != null) {
+				app.events.add(weight);
+			}
+		} catch (Exception ex) {
+			Log.w(TAG, ex);
+		}
 		app.setFitnessPollTime(midnightMillis);
 	}
 
-	private DataReadRequest makeDailyReadRequest(long startTime, long endTime) {
+	private static DataReadRequest makeDailyReadRequest(long startTime, long endTime) {
 		SimpleDateFormat dateFormat = Config.MESSAGE_DATE_TIME_FORMAT;
 		Log.i(TAG, String.format("Start: %s, End: %s",
 				dateFormat.format(startTime), dateFormat.format(endTime)));
@@ -91,7 +101,17 @@ public class FitnessPollTask extends TimerTask {
         		.setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
         		.bucketByTime(1, TimeUnit.DAYS)
 		        .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
-//		        .aggregate(DataType.TYPE_WEIGHT, DataType.AGGREGATE_WEIGHT_SUMMARY)
+		        .build();
+	}
+
+	private static DataReadRequest makeWeightRequest(long startTime, long endTime) {
+		SimpleDateFormat dateFormat = Config.MESSAGE_DATE_TIME_FORMAT;
+		Log.i(TAG, String.format("Start: %s, End: %s",
+				dateFormat.format(startTime), dateFormat.format(endTime)));
+
+		return new DataReadRequest.Builder()
+        		.setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+		        .read(DataType.TYPE_WEIGHT)
 		        .build();
 	}
 
@@ -116,12 +136,11 @@ public class FitnessPollTask extends TimerTask {
 		return new Event(Event.Type.STEPS.name(), steps.endMillis, Config.GSON.toJson(steps));
 	}
 
-	private static Event getWeightEvent(Bucket bucket) throws Exception {
-		DataPoint data =
-				bucket.getDataSet(DataType.AGGREGATE_WEIGHT_SUMMARY).getDataPoints().get(0);
+	private static Event getWeightEvent(DataSet dataSet) throws Exception {
+		DataPoint data = dataSet.getDataPoints().get(0);
 		Measurement weight = new Measurement();
-		weight.value = data.getValue(data.getDataType().getFields().get(0)).asInt();
-		weight.unit = Measurement.Unit.KILOGRAMS.name();
+		weight.value = (long) (data.getValue(data.getDataType().getFields().get(0)).asFloat() * 1000);
+		weight.unit = Measurement.Unit.GRAMS.name();
 		weight.startMillis = data.getStartTime(TimeUnit.MILLISECONDS);
 		weight.endMillis = data.getEndTime(TimeUnit.MILLISECONDS);
 		Log.v(TAG, String.format("Weight on %s is %d",
