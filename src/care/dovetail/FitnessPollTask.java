@@ -20,7 +20,9 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
+import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
 
@@ -41,8 +43,9 @@ public class FitnessPollTask extends TimerTask {
 
 		long lastPollTime = app.getFitnessPollTime();
 		if (lastPollTime == 0) {
-			// if not polled ever, set poll time to 90 days back
-			long backlogMillis = 90L * 24L * 60L * 60L * 1000L;
+			// if not polled ever, set poll time to 24 hours back
+			// TODO(abhi): Switch this to 90 days before launch.
+			long backlogMillis = 24L * 60L * 60L * 1000L;
 			lastPollTime = midnightMillis - backlogMillis;
 		}
 
@@ -63,18 +66,15 @@ public class FitnessPollTask extends TimerTask {
 
 		for (Bucket bucket : result.getBuckets()) {
 			try {
-				DataPoint data =
-						bucket.getDataSet(DataType.TYPE_STEP_COUNT_DELTA).getDataPoints().get(0);
-				int stepCount = data.getValue(data.getDataType().getFields().get(0)).asInt();
-				Measurement steps = new Measurement();
-				steps.value = stepCount;
-				steps.unit = Measurement.Unit.STEPS.name();
-				steps.startMillis = data.getStartTime(TimeUnit.MILLISECONDS);
-				steps.endMillis = data.getEndTime(TimeUnit.MILLISECONDS);
-				app.events.add(new Event(Event.Type.STEPS.name(), steps.endMillis,
-						Config.GSON.toJson(steps)));
-				Log.v(TAG, String.format("Steps for %s %d",
-						Config.MESSAGE_DATE_FORMAT.format(steps.endMillis), stepCount));
+				Event steps = getStepEvent(bucket);
+				if (steps != null) {
+					app.events.add(steps);
+				}
+
+				Event weight = getWeightEvent(bucket);
+				if (weight != null) {
+					app.events.add(weight);
+				}
 			} catch (Exception ex) {
 				Log.w(TAG, ex);
 			}
@@ -91,6 +91,7 @@ public class FitnessPollTask extends TimerTask {
         		.setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
         		.bucketByTime(1, TimeUnit.DAYS)
 		        .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
+//		        .aggregate(DataType.TYPE_WEIGHT, DataType.AGGREGATE_WEIGHT_SUMMARY)
 		        .build();
 	}
 
@@ -100,6 +101,48 @@ public class FitnessPollTask extends TimerTask {
 		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH), 0, 0);
 		return cal.getTimeInMillis();
+	}
+
+	private static Event getStepEvent(Bucket bucket) throws Exception {
+		DataPoint data =
+				bucket.getDataSet(DataType.TYPE_STEP_COUNT_DELTA).getDataPoints().get(0);
+		Measurement steps = new Measurement();
+		steps.value = data.getValue(data.getDataType().getFields().get(0)).asInt();
+		steps.unit = Measurement.Unit.STEPS.name();
+		steps.startMillis = data.getStartTime(TimeUnit.MILLISECONDS);
+		steps.endMillis = data.getEndTime(TimeUnit.MILLISECONDS);
+		Log.v(TAG, String.format("Steps on %s is %d",
+				Config.MESSAGE_DATE_FORMAT.format(steps.endMillis), steps.value));
+		return new Event(Event.Type.STEPS.name(), steps.endMillis, Config.GSON.toJson(steps));
+	}
+
+	private static Event getWeightEvent(Bucket bucket) throws Exception {
+		DataPoint data =
+				bucket.getDataSet(DataType.AGGREGATE_WEIGHT_SUMMARY).getDataPoints().get(0);
+		Measurement weight = new Measurement();
+		weight.value = data.getValue(data.getDataType().getFields().get(0)).asInt();
+		weight.unit = Measurement.Unit.KILOGRAMS.name();
+		weight.startMillis = data.getStartTime(TimeUnit.MILLISECONDS);
+		weight.endMillis = data.getEndTime(TimeUnit.MILLISECONDS);
+		Log.v(TAG, String.format("Weight on %s is %d",
+				Config.MESSAGE_DATE_FORMAT.format(weight.endMillis), weight.value));
+		return new Event(Event.Type.WEIGHT.name(), weight.endMillis, Config.GSON.toJson(weight));
+	}
+
+	private static void dumpDataSet(DataSet dataSet) {
+	    Log.i(TAG, "Data returned for Data type: " + dataSet.getDataType().getName());
+	    SimpleDateFormat dateFormat = Config.MESSAGE_DATE_FORMAT;
+
+	    for (DataPoint dp : dataSet.getDataPoints()) {
+	        Log.i(TAG, "Data point:");
+	        Log.i(TAG, "\tType: " + dp.getDataType().getName());
+	        Log.i(TAG, "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+	        Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+	        for(Field field : dp.getDataType().getFields()) {
+	            Log.i(TAG, "\tField: " + field.getName() +
+	                    " Value: " + dp.getValue(field));
+	        }
+	    }
 	}
 
 	/**
