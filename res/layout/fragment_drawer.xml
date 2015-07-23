@@ -53,6 +53,7 @@
         android:layout_toRightOf="@+id/dueDateIcon"
         android:layout_alignTop="@+id/dueDateIcon"
         android:layout_alignBottom="@+id/dueDateIcon"
+        android:layout_alignParentRight="true"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/due_date" />
@@ -63,6 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/dueDate"
         android:layout_below="@+id/dueDateIcon"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/history" />
@@ -73,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/dueDate"
         android:layout_below="@+id/history"
+        android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/about" />
 
