@@ -159,6 +159,7 @@ public class FitnessPollTask extends TimerTask {
 		app.apiClient = new GoogleApiClient.Builder(app)
 			.addApi(Fitness.HISTORY_API)
 			.addScope(Fitness.SCOPE_ACTIVITY_READ)
+			.addScope(Fitness.SCOPE_BODY_READ)
 			.addConnectionCallbacks(
 				new GoogleApiClient.ConnectionCallbacks() {
 
