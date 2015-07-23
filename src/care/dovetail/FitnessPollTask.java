@@ -1,8 +1,6 @@
 package care.dovetail;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +37,7 @@ public class FitnessPollTask extends TimerTask {
 
 	@Override
 	public void run() {
-		long midnightMillis = getMidnightMillis();
+		long midnightMillis = Utils.getMidnightMillis();
 
 		long lastPollTime = app.getFitnessPollTime();
 		if (lastPollTime == 0) {
@@ -113,14 +111,6 @@ public class FitnessPollTask extends TimerTask {
         		.setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
 		        .read(DataType.TYPE_WEIGHT)
 		        .build();
-	}
-
-	private static long getMidnightMillis() {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-				cal.get(Calendar.DAY_OF_MONTH), 0, 0);
-		return cal.getTimeInMillis();
 	}
 
 	private static Event getStepEvent(Bucket bucket) throws Exception {

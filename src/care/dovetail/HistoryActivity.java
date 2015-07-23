@@ -60,7 +60,9 @@ public class HistoryActivity extends FragmentActivity {
 
 		((ListView) findViewById(R.id.cards)).setAdapter(new CardsAdapter());
 
-		new EventsGet(app, Event.Type.STEPS.name()) {
+		long endTime = System.currentTimeMillis();
+		long startTime = Utils.getMidnightMillis() - 7L * 24L * 60L * 60L * 1000L;
+		new EventsGet(app, Event.Type.STEPS.name(), startTime, endTime) {
 			@Override
 			protected void onPostExecute(ApiResponse result) {
 				super.onPostExecute(result);
@@ -70,7 +72,7 @@ public class HistoryActivity extends FragmentActivity {
 			}
 		}.execute();
 
-		new EventsGet(app, Event.Type.CARD_ARCHIVED.name()) {
+		new EventsGet(app, Event.Type.CARD_ARCHIVED.name(), startTime, endTime) {
 			@Override
 			protected void onPostExecute(ApiResponse result) {
 				super.onPostExecute(result);
