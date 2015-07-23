@@ -129,6 +129,7 @@ public class FitnessPollTask extends TimerTask {
 		return new Event(Event.Type.WEIGHT.name(), weight.endMillis, Config.GSON.toJson(weight));
 	}
 
+	@SuppressWarnings("unused")
 	private static void dumpDataSet(DataSet dataSet) {
 	    Log.i(TAG, "Data returned for Data type: " + dataSet.getDataType().getName());
 	    SimpleDateFormat dateFormat = Config.MESSAGE_DATE_FORMAT;
