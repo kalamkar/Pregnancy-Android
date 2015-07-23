@@ -52,8 +52,8 @@ public class EventUploadTask extends TimerTask {
 			List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
 			queryParams.add(new BasicNameValuePair("type", event.type));
 			queryParams.add(new BasicNameValuePair("time", Long.toString(event.time)));
-			if (event.extra != null) {
-				queryParams.add(new BasicNameValuePair("extra", event.extra));
+			if (event.data != null) {
+				queryParams.add(new BasicNameValuePair("data", event.data));
 			}
 			for (Pair<String, String> param : params) {
 				queryParams.add(new BasicNameValuePair(param.first, param.second));

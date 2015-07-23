@@ -33,6 +33,8 @@
     <string name="history">History</string>
     <string name="about">About</string>
     
+    <string name="archived_cards">Archived Cards</string>
+    
     
     <string name="continue_booking_appointment">Continue booking this appointment?</string>
     <string name="continue_remove_appointment">Continue removing this appointment?</string>

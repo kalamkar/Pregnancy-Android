@@ -18,7 +18,7 @@ import care.dovetail.common.model.ApiResponse.Message;
 
 @SuppressWarnings("deprecation")
 public class MessagesGet extends ApiResponseTask {
-	private static final String TAG = "UserGet";
+	private static final String TAG = "MessagesGet";
 
 	private final App app;
 	private final String groupId;

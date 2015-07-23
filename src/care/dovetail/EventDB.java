@@ -20,7 +20,7 @@ public class EventDB extends SQLiteOpenHelper {
 	public static final String EVENTS_TABLE_NAME = "events";
 	public static final String EVENTS_TIME = "timeMillis";
 	public static final String EVENTS_TYPE = "type";
-	public static final String EVENTS_EXTRA = "extra";
+	public static final String EVENTS_DATA = "data";
 
 	public EventDB(Context context) {
 		super(context, DATABASE_NAME, null, VERSION);
@@ -29,7 +29,7 @@ public class EventDB extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(String.format("CREATE TABLE %s (%s integer primary key, %s text, %s text)",
-				EVENTS_TABLE_NAME, EVENTS_TIME, EVENTS_TYPE, EVENTS_EXTRA));
+				EVENTS_TABLE_NAME, EVENTS_TIME, EVENTS_TYPE, EVENTS_DATA));
 	}
 
 	@Override
@@ -48,8 +48,8 @@ public class EventDB extends SQLiteOpenHelper {
 	    ContentValues contentValues = new ContentValues();
 	    contentValues.put(EVENTS_TIME, event.time);
 	    contentValues.put(EVENTS_TYPE, event.type);
-	    if (event.extra != null) {
-	    	contentValues.put(EVENTS_EXTRA, event.extra);
+	    if (event.data != null) {
+	    	contentValues.put(EVENTS_DATA, event.data);
 	    }
 	    try {
 	    	getWritableDatabase().insert(EVENTS_TABLE_NAME, null, contentValues);
@@ -88,8 +88,8 @@ public class EventDB extends SQLiteOpenHelper {
 	private static Event makeEventFromCursor(Cursor cursor) {
 		Event event = new Event(cursor.getString(cursor.getColumnIndex(EVENTS_TYPE)),
 				cursor.getLong(cursor.getColumnIndex(EVENTS_TIME)));
-		if (cursor.getColumnIndex(EVENTS_EXTRA) >= 0) {
-			event.extra = cursor.getString(cursor.getColumnIndex(EVENTS_EXTRA));
+		if (cursor.getColumnIndex(EVENTS_DATA) >= 0) {
+			event.data = cursor.getString(cursor.getColumnIndex(EVENTS_DATA));
 		}
 		return event;
 	}

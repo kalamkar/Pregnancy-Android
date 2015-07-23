@@ -45,7 +45,7 @@ public class FitnessPollTask extends TimerTask {
 		if (lastPollTime == 0) {
 			// if not polled ever, set poll time to 24 hours back
 			// TODO(abhi): Switch this to 90 days before launch.
-			long backlogMillis = 24L * 60L * 60L * 1000L;
+			long backlogMillis = 90L * 24L * 60L * 60L * 1000L;
 			lastPollTime = midnightMillis - backlogMillis;
 		}
 

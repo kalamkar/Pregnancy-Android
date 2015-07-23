@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
+import care.dovetail.HistoryActivity;
 import care.dovetail.R;
 import care.dovetail.api.PhotoUpdate;
 import care.dovetail.common.model.User;
@@ -132,6 +133,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			break;
 		case R.id.dueDate:
 			new DueDateFragment().show(getChildFragmentManager(), null);
+			break;
+		case R.id.history:
+			startActivity(new Intent(app, HistoryActivity.class));
 			break;
 		}
 	}

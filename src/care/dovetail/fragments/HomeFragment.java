@@ -20,6 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
+import care.dovetail.common.Config;
+import care.dovetail.common.model.Event;
 import care.dovetail.common.model.Tip;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -92,6 +94,8 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		Object tag = view.getTag();
 		if (view.getId() == R.id.close && tag != null && tag instanceof Tip) {
 			tips.remove(tag);
+			app.events.add(new Event(Event.Type.CARD_ARCHIVED.name(), System.currentTimeMillis(),
+					Config.GSON.toJson(tag)));
 			((BaseAdapter) ((ListView) getView()).getAdapter()).notifyDataSetChanged();
 		}
 	}
@@ -149,7 +153,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		}
 	}
 
-	private String getIcon(Tip tip) {
+	private static String getIcon(Tip tip) {
 		if (tip == null || tip.tags == null) {
 			return null;
 		}
