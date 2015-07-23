@@ -77,7 +77,7 @@ public class FitnessPollTask extends TimerTask {
 
 		readRequest = makeWeightRequest(lastPollTime, midnightMillis);
 		result = Fitness.HistoryApi.readData(app.apiClient, readRequest).await(1, TimeUnit.MINUTES);
-		if (result == null || !result.getStatus().isSuccess() || result.getBuckets() == null) {
+		if (result == null || !result.getStatus().isSuccess()) {
 			Log.w(TAG, result.getStatus().getStatusMessage());
 			return;
 		}
