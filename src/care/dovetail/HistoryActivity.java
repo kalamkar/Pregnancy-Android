@@ -1,5 +1,6 @@
 package care.dovetail;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,17 +24,21 @@ import care.dovetail.common.model.Tip;
 import com.android.volley.toolbox.NetworkImageView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer.GridStyle;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class HistoryActivity extends FragmentActivity {
 	private static final String TAG = "HistoryActivity";
+	private static final SimpleDateFormat DAY_OF_WEEK = new SimpleDateFormat("EE");
+	private static final SimpleDateFormat MONTH_DAY = new SimpleDateFormat("MMM dd");
 
 	private App app;
 	private GraphView graph;
 	private List<Tip> tips = new ArrayList<Tip>();
 
-	private LineGraphSeries<DataPoint> dataSeries = new LineGraphSeries<DataPoint>();
+	private BarGraphSeries<DataPoint> dataSeries = new BarGraphSeries<DataPoint>();
+
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -48,15 +53,7 @@ public class HistoryActivity extends FragmentActivity {
 
 		graph = ((GraphView) findViewById(R.id.graph));
 		graph.addSeries(dataSeries);
-		graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
-			@Override
-			public String formatLabel(double value, boolean isValueX) {
-				return isValueX ? Config.MESSAGE_DATE_FORMAT.format(new Date((long) value))
-						: String.format("%.0fk", value / 1000);
-			}
-		});
-		graph.getViewport().setXAxisBoundsManual(true);
-		graph.getViewport().setYAxisBoundsManual(true);
+		customizeGraphUI();
 
 		((ListView) findViewById(R.id.cards)).setAdapter(new CardsAdapter());
 
@@ -111,7 +108,7 @@ public class HistoryActivity extends FragmentActivity {
 		if (dataPoints.size() > 0) {
 			graph.getViewport().setMaxX(dataPoints.get(dataPoints.size() -1).getX());
 			graph.getViewport().setMinX(dataPoints.get(0).getX());
-			graph.getViewport().setMaxY(maxY);
+			graph.getViewport().setMaxY(maxY + (int) (maxY * 0.1));
 		}
 		dataSeries.resetData(dataPoints.toArray(new DataPoint[0]));
 	}
@@ -127,6 +124,29 @@ public class HistoryActivity extends FragmentActivity {
 			}
 		}
 		((BaseAdapter) ((ListView) findViewById(R.id.cards)).getAdapter()).notifyDataSetChanged();
+	}
+
+	private void customizeGraphUI() {
+		int barColor = getResources().getColor(R.color.graph_bar);
+		int graphTextColor = getResources().getColor(R.color.graph_text);
+
+		dataSeries.setSpacing(getResources().getDimensionPixelOffset(R.dimen.small_margin));
+		dataSeries.setDrawValuesOnTop(true);
+		dataSeries.setValuesOnTopColor(graphTextColor);
+		dataSeries.setColor(barColor);
+
+		graph.getGridLabelRenderer().setHorizontalLabelsColor(graphTextColor);
+		graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
+		graph.getGridLabelRenderer().setGridStyle(GridStyle.HORIZONTAL);
+		graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+			@Override
+			public String formatLabel(double value, boolean isValueX) {
+				return isValueX ? DAY_OF_WEEK.format(new Date((long) value))
+						: String.format("%.0fk", value / 1000);
+			}
+		});
+		graph.getViewport().setXAxisBoundsManual(true);
+		graph.getViewport().setYAxisBoundsManual(true);
 	}
 
 	private class CardsAdapter extends BaseAdapter {
