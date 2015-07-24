@@ -144,6 +144,7 @@ public class HistoryActivity extends FragmentActivity {
 		graph.getGridLabelRenderer().setHorizontalLabelsColor(graphTextColor);
 		graph.getGridLabelRenderer().setNumHorizontalLabels(
 				getResources().getInteger(R.integer.num_graph_labels));
+		graph.getGridLabelRenderer().setGridColor(barColor);
 		graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
 		graph.getGridLabelRenderer().setGridStyle(GridStyle.HORIZONTAL);
 		graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
