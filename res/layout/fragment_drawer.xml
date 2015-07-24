@@ -38,11 +38,75 @@
         android:textColor="@android:color/secondary_text_light" />
 
     <ImageView
-        android:id="@+id/dueDateIcon"
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/name"
+        android:layout_alignTop="@+id/name"
+        android:layout_alignBottom="@+id/email"
+        android:src="@android:drawable/ic_menu_edit" />
+
+    <ImageView
+        android:id="@+id/homeIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/email"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:src="@drawable/ic_home" />
+    
+    <TextView
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/homeIcon"
+        android:layout_alignTop="@+id/homeIcon"
+        android:layout_alignBottom="@+id/homeIcon"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/home" />
+    
+    <ImageView
+        android:id="@+id/sharingIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/homeIcon"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:src="@drawable/ic_group" />
+
+    <TextView
+        android:id="@+id/sharing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/sharingIcon"
+        android:layout_alignTop="@+id/sharingIcon"
+        android:layout_alignBottom="@+id/sharingIcon"
+        android:layout_alignLeft="@+id/home"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/sharing" />
+    
+    <TextView
+        android:id="@+id/history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/home"
+        android:layout_below="@+id/sharingIcon"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/history" />
+
+    <ImageView
+        android:id="@+id/dueDateIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/history"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:src="@android:drawable/ic_menu_my_calendar" />
     
@@ -53,39 +117,20 @@
         android:layout_toRightOf="@+id/dueDateIcon"
         android:layout_alignTop="@+id/dueDateIcon"
         android:layout_alignBottom="@+id/dueDateIcon"
+        android:layout_alignLeft="@+id/home"        
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/due_date" />
-
-    <TextView
-        android:id="@+id/history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dueDate"
-        android:layout_below="@+id/dueDateIcon"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/history" />
-
+    
     <TextView
         android:id="@+id/about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/dueDate"
-        android:layout_below="@+id/history"
+        android:layout_below="@+id/dueDateIcon"
         android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/about" />
-
-    <ImageView
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/name"
-        android:layout_alignTop="@+id/name"
-        android:layout_alignBottom="@+id/email"
-        android:src="@android:drawable/ic_menu_edit" />
 
 </RelativeLayout>

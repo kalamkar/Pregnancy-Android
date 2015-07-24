@@ -1,20 +1,24 @@
-package care.dovetail;
+package care.dovetail.fragments;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import care.dovetail.App;
+import care.dovetail.Config;
+import care.dovetail.R;
+import care.dovetail.Utils;
 import care.dovetail.api.EventsGet;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.Event;
@@ -28,8 +32,8 @@ import com.jjoe64.graphview.GridLabelRenderer.GridStyle;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
-public class HistoryActivity extends FragmentActivity {
-	private static final String TAG = "HistoryActivity";
+public class HistoryFragment extends Fragment {
+	private static final String TAG = "HistoryFragment";
 	private static final SimpleDateFormat DAY_OF_WEEK = new SimpleDateFormat("EE");
 	private static final SimpleDateFormat MONTH_DAY = new SimpleDateFormat("MMM dd");
 
@@ -40,22 +44,28 @@ public class HistoryActivity extends FragmentActivity {
 	private BarGraphSeries<DataPoint> dataSeries = new BarGraphSeries<DataPoint>();
 
 
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		app = (App) activity.getApplication();
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_history, container, false);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_history);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
-		app = (App) getApplication();
-
-		graph = ((GraphView) findViewById(R.id.graph));
+		graph = ((GraphView) view.findViewById(R.id.graph));
 		graph.addSeries(dataSeries);
 		customizeGraphUI();
 
-		((ListView) findViewById(R.id.cards)).setAdapter(new CardsAdapter());
+		((ListView) view.findViewById(R.id.cards)).setAdapter(new CardsAdapter());
 
 		long endTime = System.currentTimeMillis();
 		long startTime = Utils.getMidnightMillis() - 7L * 24L * 60L * 60L * 1000L;
@@ -78,16 +88,6 @@ public class HistoryActivity extends FragmentActivity {
 				}
 			}
 		}.execute();
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-		case android.R.id.home:
-	        NavUtils.navigateUpFromSameTask(this);
-	        return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	private void updateGraph(Event[] events) {
@@ -129,7 +129,8 @@ public class HistoryActivity extends FragmentActivity {
 				Log.w(TAG, ex);
 			}
 		}
-		((BaseAdapter) ((ListView) findViewById(R.id.cards)).getAdapter()).notifyDataSetChanged();
+		((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
+				.notifyDataSetChanged();
 	}
 
 	private void customizeGraphUI() {
@@ -176,7 +177,7 @@ public class HistoryActivity extends FragmentActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view;
 			if (convertView == null) {
-				view = getLayoutInflater().inflate(R.layout.list_item_card, null);
+				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
 				view.findViewById(R.id.hint).setVisibility(View.GONE);
 				view.findViewById(R.id.time).setVisibility(View.GONE);
 				view.findViewById(R.id.menu_button).setVisibility(View.GONE);

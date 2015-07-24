@@ -9,4 +9,11 @@
         android:icon="@drawable/ic_action_search"
         android:title="@string/action_search"/>
     
+    <item
+        android:id="@+id/action_create_group"
+        android:orderInCategory="101"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_person"
+        android:title="@string/create_group"/>
+    
 </menu>

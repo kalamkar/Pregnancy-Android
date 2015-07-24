@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
-import care.dovetail.HistoryActivity;
+import care.dovetail.MainActivity;
 import care.dovetail.R;
 import care.dovetail.api.PhotoUpdate;
 import care.dovetail.common.model.User;
@@ -65,8 +65,10 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		view.findViewById(R.id.name).setOnClickListener(this);
 		view.findViewById(R.id.email).setOnClickListener(this);
 		view.findViewById(R.id.edit).setOnClickListener(this);
-		view.findViewById(R.id.dueDate).setOnClickListener(this);
+		view.findViewById(R.id.home).setOnClickListener(this);
+		view.findViewById(R.id.sharing).setOnClickListener(this);
 		view.findViewById(R.id.history).setOnClickListener(this);
+		view.findViewById(R.id.dueDate).setOnClickListener(this);
 		view.findViewById(R.id.about).setOnClickListener(this);
 
 		updateUi(view);
@@ -134,8 +136,14 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		case R.id.dueDate:
 			new DueDateFragment().show(getChildFragmentManager(), null);
 			break;
+		case R.id.sharing:
+			((MainActivity) getActivity()).setContentFragment(new GroupsFragment());
+			break;
+		case R.id.home:
+			((MainActivity) getActivity()).setContentFragment(new HomeFragment());
+			break;
 		case R.id.history:
-			startActivity(new Intent(app, HistoryActivity.class));
+			((MainActivity) getActivity()).setContentFragment(new HistoryFragment());
 			break;
 		}
 	}

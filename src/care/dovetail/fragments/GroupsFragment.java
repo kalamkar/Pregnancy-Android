@@ -50,7 +50,6 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
 		((ListView) view.findViewById(R.id.groups)).setAdapter(new GroupsAdapter());
 	}
 
@@ -100,25 +99,23 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 			new MessagesGet(app, (String) tag).execute();
 			startActivity(new Intent(app, MessagingActivity.class)
 					.putExtra(Config.GROUP_ID, (String) tag));
-		} else {
-			new GroupNameFragment().show(getFragmentManager(), null);
 		}
 	}
 
 	private class GroupsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
-			return groups.length + 1;
+			return groups.length;
 		}
 
 		@Override
 		public Group getItem(int position) {
-			return position == 0 ? null : groups[position -1];
+			return groups[position];
 		}
 
 		@Override
 		public long getItemId(int position) {
-			return position == 0 ? 0 : getItem(position).hashCode();
+			return getItem(position).hashCode();
 		}
 
 		@Override
@@ -132,20 +129,12 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 			}
 
 			Group group = getItem(position);
-			if (group == null) {
-				((TextView) view.findViewById(R.id.title)).setText(R.string.create_new_group);
-				view.findViewById(R.id.hint).setVisibility(View.GONE);
-				view.findViewById(R.id.time).setVisibility(View.GONE);
-				((NetworkImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_group);
-				return view;
-			} else {
-				view.findViewById(R.id.hint).setVisibility(View.VISIBLE);
-				view.findViewById(R.id.time).setVisibility(View.VISIBLE);
-				String photoUrl = String.format("%s%s&size=%d", Config.GROUP_PHOTO_URL, group.uuid,
-						(int) app.getResources().getDimension(R.dimen.icon_width));
-				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
-						photoUrl, app.imageLoader);
-			}
+			view.findViewById(R.id.hint).setVisibility(View.VISIBLE);
+			view.findViewById(R.id.time).setVisibility(View.VISIBLE);
+			String photoUrl = String.format("%s%s&size=%d", Config.GROUP_PHOTO_URL, group.uuid,
+					(int) app.getResources().getDimension(R.dimen.icon_width));
+			((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
+					photoUrl, app.imageLoader);
 			view.setTag(group.uuid);
 			if (group.name != null && !group.name.isEmpty()) {
 				((TextView) view.findViewById(R.id.title)).setText(group.name);

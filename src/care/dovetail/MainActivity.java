@@ -1,16 +1,11 @@
 package care.dovetail;
 
-import java.util.Locale;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -19,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import care.dovetail.api.GroupsGet;
 import care.dovetail.api.UserGet;
+import care.dovetail.fragments.GroupNameFragment;
 import care.dovetail.fragments.GroupsFragment;
 import care.dovetail.fragments.HomeFragment;
 import care.dovetail.messaging.GCMUtils;
@@ -27,12 +23,12 @@ public class MainActivity extends FragmentActivity {
 	private static final String TAG = "MainActivity";
 
 	private App app;
-	private PagerAdapter adapter;
-	private ViewPager pager;
 
 	private DrawerLayout drawerLayout;
     private View drawer;
     private ActionBarDrawerToggle drawerToggle;
+
+    private Fragment fragment;
 
 	@SuppressLint("NewApi")
 	@SuppressWarnings("unchecked")
@@ -45,10 +41,6 @@ public class MainActivity extends FragmentActivity {
 		if (GCMUtils.checkPlayServices(this)) {
 			app.requestPushToken();
 		}
-
-		pager = (ViewPager) findViewById(R.id.pager);
-		adapter = new PagerAdapter(getSupportFragmentManager());
-		pager.setAdapter(adapter);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer = findViewById(R.id.left_drawer);
@@ -88,6 +80,8 @@ public class MainActivity extends FragmentActivity {
 	    }
 
 		FitnessPollTask.buildFitnessClient(this, app);
+
+		setContentFragment(new HomeFragment());
 	}
 
 	@Override
@@ -128,6 +122,9 @@ public class MainActivity extends FragmentActivity {
 		case R.id.action_search:
 			startActivity(new Intent(this, SearchActivity.class));
 			break;
+		case R.id.action_create_group:
+			new GroupNameFragment().show(getSupportFragmentManager(), null);
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -137,6 +134,8 @@ public class MainActivity extends FragmentActivity {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawer);
         menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+        menu.findItem(R.id.action_create_group).setVisible(
+        		(!drawerOpen) && (fragment instanceof GroupsFragment));
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -153,27 +152,9 @@ public class MainActivity extends FragmentActivity {
 	    }
 	}
 
-	public class PagerAdapter extends FragmentStatePagerAdapter {
-		private Fragment fragments[] = { new HomeFragment(), new GroupsFragment() };
-		private int titles[] = {R.string.home, R.string.sharing};
-
-		public PagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
-
-		@Override
-		public Fragment getItem(int position) {
-			return fragments[position];
-		}
-
-		@Override
-		public int getCount() {
-			return fragments.length;
-		}
-
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return getString(titles[position]).toUpperCase(Locale.getDefault());
-		}
+	public void setContentFragment(Fragment fragment) {
+		getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+		drawerLayout.closeDrawers();
+		this.fragment = fragment;
 	}
 }

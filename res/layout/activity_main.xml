@@ -6,20 +6,12 @@
     android:layout_height="match_parent">
     
     <!-- The main content view -->
-    <android.support.v4.view.ViewPager
-	    android:id="@+id/pager"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    style="@style/Activity">
-
-	    <android.support.v4.view.PagerTitleStrip
-	        android:id="@+id/pager_title_strip"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="top"
-	        android:paddingTop="@dimen/small_margin"
-	        android:paddingBottom="@dimen/small_margin" />
-	</android.support.v4.view.ViewPager>
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/Activity" >
+    </FrameLayout>
     
     <!-- The navigation drawer -->
     <FrameLayout
