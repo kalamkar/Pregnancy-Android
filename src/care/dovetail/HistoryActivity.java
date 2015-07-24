@@ -106,10 +106,16 @@ public class HistoryActivity extends FragmentActivity {
 			}
 		}
 		if (dataPoints.size() > 0) {
+			graph.getViewport().setXAxisBoundsManual(true);
 			graph.getViewport().setMaxX(dataPoints.get(dataPoints.size() -1).getX());
 			graph.getViewport().setMinX(dataPoints.get(0).getX());
-			graph.getViewport().setMaxY(maxY + (int) (maxY * 0.1));
+			if (dataPoints.size() < 7) {
+
+			}
 		}
+		graph.getViewport().setYAxisBoundsManual(true);
+		graph.getViewport().setMaxY(maxY + (int) (maxY * 0.1));
+
 		dataSeries.resetData(dataPoints.toArray(new DataPoint[0]));
 	}
 
@@ -130,12 +136,14 @@ public class HistoryActivity extends FragmentActivity {
 		int barColor = getResources().getColor(R.color.graph_bar);
 		int graphTextColor = getResources().getColor(R.color.graph_text);
 
-		dataSeries.setSpacing(getResources().getDimensionPixelOffset(R.dimen.small_margin));
+		dataSeries.setSpacing(50); // Spacing in percentage of bar width
 		dataSeries.setDrawValuesOnTop(true);
 		dataSeries.setValuesOnTopColor(graphTextColor);
 		dataSeries.setColor(barColor);
 
 		graph.getGridLabelRenderer().setHorizontalLabelsColor(graphTextColor);
+		graph.getGridLabelRenderer().setNumHorizontalLabels(
+				getResources().getInteger(R.integer.num_graph_labels));
 		graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
 		graph.getGridLabelRenderer().setGridStyle(GridStyle.HORIZONTAL);
 		graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
@@ -145,8 +153,6 @@ public class HistoryActivity extends FragmentActivity {
 						: String.format("%.0fk", value / 1000);
 			}
 		});
-		graph.getViewport().setXAxisBoundsManual(true);
-		graph.getViewport().setYAxisBoundsManual(true);
 	}
 
 	private class CardsAdapter extends BaseAdapter {

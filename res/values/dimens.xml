@@ -21,4 +21,6 @@
 
     <dimen name="icon_width">50dp</dimen>
     <dimen name="icon_height">50dp</dimen>
+    
+    <integer name="num_graph_labels">7</integer>
 </resources>
