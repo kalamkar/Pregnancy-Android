@@ -13,12 +13,14 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+import care.dovetail.common.model.Event;
+import care.dovetail.common.model.Measurement;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class WeighingScaleClient extends BluetoothGattCallback {
 	private static final String TAG = "WighingScaleClient";
 
-	private final Context context;
+	private final App app;
 	private final BluetoothAdapter adapter;
 
 	private BluetoothGatt gatt;
@@ -26,10 +28,10 @@ public class WeighingScaleClient extends BluetoothGattCallback {
 
 	private int lastStableWeightInGrams = 0;
 
-	public WeighingScaleClient(Context context) {
-		this.context = context;
+	public WeighingScaleClient(App app) {
+		this.app = app;
 		BluetoothManager bluetoothManager =
-				(BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+				(BluetoothManager) app.getSystemService(Context.BLUETOOTH_SERVICE);
 		adapter = bluetoothManager.getAdapter();
 	}
 
@@ -41,7 +43,7 @@ public class WeighingScaleClient extends BluetoothGattCallback {
 		if (adapter != null && adapter.isEnabled()) {
 			Log.i(TAG, String.format("Connecting to BluetoothLE device %s.", address));
 			BluetoothDevice device = adapter.getRemoteDevice(address);
-			device.connectGatt(context, true, this);
+			device.connectGatt(app, true, this);
 		}
 	}
 
@@ -56,8 +58,14 @@ public class WeighingScaleClient extends BluetoothGattCallback {
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
         	Log.i(TAG, String.format("Disconnected from %s.", gatt.getDevice().getName()));
         	if (lastStableWeightInGrams > 0) {
- 				Log.i(TAG, String.format("Latest stable weight: %.2fKg",
- 						(float) lastStableWeightInGrams / 1000));
+        		Measurement weight = new Measurement();
+        		weight.value = lastStableWeightInGrams;
+        		weight.unit = Measurement.Unit.GRAMS.name();
+        		weight.endMillis = System.currentTimeMillis();
+        		Log.v(TAG, String.format("Weight on %s is %d",
+        				Config.MESSAGE_DATE_FORMAT.format(weight.endMillis), weight.value));
+        		app.events.add(new Event(
+        				Event.Type.WEIGHT.name(), weight.endMillis, Config.GSON.toJson(weight)));
         	}
         }
     }
