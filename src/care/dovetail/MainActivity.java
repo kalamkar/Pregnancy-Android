@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -81,7 +82,7 @@ public class MainActivity extends FragmentActivity {
 
 		FitnessPollTask.buildFitnessClient(this, app);
 
-		setContentFragment(new HomeFragment());
+		setContentFragment(new HomeFragment(), false);
 	}
 
 	@Override
@@ -153,7 +154,16 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public void setContentFragment(Fragment fragment) {
-		getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+		setContentFragment(fragment, true);
+	}
+
+	public void setContentFragment(Fragment fragment, boolean addToBackStack) {
+		FragmentTransaction txn = getSupportFragmentManager().beginTransaction();
+		txn.replace(R.id.content, fragment);
+		if (addToBackStack) {
+			txn.addToBackStack(fragment.getClass().getSimpleName());
+		}
+		txn.commit();
 		drawerLayout.closeDrawers();
 		this.fragment = fragment;
 	}

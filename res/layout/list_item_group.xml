@@ -21,6 +21,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:text="Jun 24"
+        android:textColor="@color/secondary_text_gray"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -30,7 +31,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/icon"
         android:layout_toLeftOf="@+id/time"
-        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginLeft="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_margin"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
