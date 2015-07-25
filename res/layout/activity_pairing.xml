@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/small_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/small_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:background="@drawable/scale"
+    style="@style/Activity" >
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="92dp"
+        android:layout_marginRight="52dp" />
+
+    <ImageView
+        android:id="@+id/success"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/progress"
+        android:layout_alignTop="@+id/progress"
+        android:layout_alignRight="@+id/progress"
+        android:layout_alignBottom="@+id/progress"
+        android:src="@drawable/ic_success"
+        android:visibility="invisible" />
+
+</RelativeLayout>

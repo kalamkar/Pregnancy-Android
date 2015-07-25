@@ -28,6 +28,7 @@ import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.MainActivity;
+import care.dovetail.PairingActivity;
 import care.dovetail.R;
 import care.dovetail.api.PhotoUpdate;
 import care.dovetail.common.model.User;
@@ -69,6 +70,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		view.findViewById(R.id.sharing).setOnClickListener(this);
 		view.findViewById(R.id.history).setOnClickListener(this);
 		view.findViewById(R.id.dueDate).setOnClickListener(this);
+		view.findViewById(R.id.pairScale).setOnClickListener(this);
 		view.findViewById(R.id.about).setOnClickListener(this);
 
 		updateUi(view);
@@ -144,6 +146,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			break;
 		case R.id.history:
 			((MainActivity) getActivity()).setContentFragment(new HistoryFragment());
+			break;
+		case R.id.pairScale:
+			startActivity(new Intent(getActivity(), PairingActivity.class));
 			break;
 		}
 	}

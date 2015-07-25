@@ -90,14 +90,25 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/sharing" />
     
+    <ImageView
+        android:id="@+id/historyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/sharingIcon"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:src="@drawable/ic_history" />
+    
     <TextView
         android:id="@+id/history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/historyIcon"
+        android:layout_alignTop="@+id/historyIcon"
+        android:layout_alignBottom="@+id/historyIcon"
         android:layout_alignLeft="@+id/home"
-        android:layout_below="@+id/sharingIcon"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/history" />
 
@@ -106,9 +117,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/history"
+        android:layout_below="@+id/historyIcon"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:src="@android:drawable/ic_menu_my_calendar" />
+        android:src="@drawable/ic_date" />
     
     <TextView
         android:id="@+id/dueDate"
@@ -117,19 +128,53 @@
         android:layout_toRightOf="@+id/dueDateIcon"
         android:layout_alignTop="@+id/dueDateIcon"
         android:layout_alignBottom="@+id/dueDateIcon"
-        android:layout_alignLeft="@+id/home"        
+        android:layout_alignLeft="@+id/home"
         android:layout_alignParentRight="true"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/due_date" />
     
+    <ImageView
+        android:id="@+id/scaleIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dueDateIcon"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:src="@drawable/ic_action_pair" />
+    
+    <TextView
+        android:id="@+id/pairScale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/scaleIcon"
+        android:layout_alignTop="@+id/scaleIcon"
+        android:layout_alignBottom="@+id/scaleIcon"
+        android:layout_alignLeft="@+id/home"        
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/pair_scale" />
+    
+    <ImageView
+        android:id="@+id/aboutIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/scaleIcon"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:src="@drawable/ic_info" />
+    
     <TextView
         android:id="@+id/about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dueDate"
-        android:layout_below="@+id/dueDateIcon"
+        android:layout_toRightOf="@+id/aboutIcon"
+        android:layout_alignTop="@+id/aboutIcon"
+        android:layout_alignBottom="@+id/aboutIcon"
+        android:layout_alignLeft="@+id/home"        
         android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/about" />
 

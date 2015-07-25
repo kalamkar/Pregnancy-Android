@@ -56,4 +56,6 @@ public class Config extends care.dovetail.common.Config {
 
 	public static final String GROUP_ID = "group_uuid";
 	public static final String USER_ID = "uuid";
+
+	public static final String WEIGHT_SCALE_NAME = "Samico Scales";
 }
