@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PregnanSi</string>
+    <string name="app_name">pregnanSi</string>
     <string name="action_settings">About Me</string>
     <string name="action_message">Message</string>
     <string name="action_search">Search</string>
@@ -35,7 +35,7 @@
     <string name="about">About</string>
     
     <string name="archived_cards">Archived Cards</string>
-    
+    <string name="last_seen">Last seen</string>
     
     <string name="continue_booking_appointment">Continue booking this appointment?</string>
     <string name="continue_remove_appointment">Continue removing this appointment?</string>

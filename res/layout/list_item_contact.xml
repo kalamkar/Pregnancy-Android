@@ -4,37 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/small_margin"
+    android:gravity="center_vertical"
     tools:context="care.dovetail.SearchActivity" >
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/icon"
         android:layout_width="@dimen/icon_width"
         android:layout_height="@dimen/icon_width"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_action_add_user" />
+        android:src="@drawable/ic_user" />
+    
+    <TextView
+        android:id="@+id/last_seen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/last_seen"
+        android:textSize="12sp"
+        android:textColor="@color/secondary_text_gray" />
+    
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/last_seen"
+        android:layout_alignLeft="@+id/last_seen"
+        android:text="hint"
+        android:textSize="12sp"
+        android:textColor="@color/secondary_text_gray" />
     
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@+id/last_seen"
         android:layout_toRightOf="@+id/icon"
-        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginLeft="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/small_margin"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_alignLeft="@+id/title"
-        android:text="hint"
-        android:textSize="12sp"
-        android:textColor="@android:color/secondary_text_light" />
 
 </RelativeLayout>

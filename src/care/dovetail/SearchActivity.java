@@ -31,6 +31,8 @@ import care.dovetail.common.model.ApiResponse.Result;
 import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 
+import com.android.volley.toolbox.NetworkImageView;
+
 public class SearchActivity extends FragmentActivity implements OnClickListener,
 		OnEditorActionListener {
 	private static final String TAG = "ContactsActivity";
@@ -44,8 +46,7 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contacts);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().hide();
 
 		app = (App) getApplication();
 		groupId = this.getIntent().getStringExtra(Config.GROUP_ID);
@@ -158,17 +159,23 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 			Result result = getItem(position);
 			if (result != null && result.user != null) {
 				((TextView) view.findViewById(R.id.title)).setText(result.user.name);
-				((TextView) view.findViewById(R.id.hint)).setText(
+				((TextView) view.findViewById(R.id.date)).setText(
 						Utils.getDisplayTime(result.user.update_time));
-				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_user);
+				String photoUrl = String.format("%s%s&size=%d", Config.USER_PHOTO_URL,
+						result.user.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
+				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
+						photoUrl, app.imageLoader);
 			} else if (result != null && result.group != null) {
 				((TextView) view.findViewById(R.id.title)).setText(result.group.toString());
-				((TextView) view.findViewById(R.id.hint)).setText(
+				((TextView) view.findViewById(R.id.date)).setText(
 						Utils.getDisplayTime(result.group.update_time));
-				((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_group);
+				String photoUrl = String.format("%s%s&size=%d", Config.GROUP_PHOTO_URL,
+						result.group.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
+				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
+						photoUrl, app.imageLoader);
 			} else {
 				((TextView) view.findViewById(R.id.title)).setText("");
-				((TextView) view.findViewById(R.id.hint)).setText("");
+				((TextView) view.findViewById(R.id.date)).setText("");
 				((ImageView) view.findViewById(R.id.icon)).setImageDrawable(null);
 			}
 			view.setOnClickListener(SearchActivity.this);
