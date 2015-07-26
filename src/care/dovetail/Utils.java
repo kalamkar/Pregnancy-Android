@@ -3,6 +3,12 @@ package care.dovetail;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.support.v4.app.NotificationCompat;
+import android.util.Pair;
+
 public class Utils {
 
 	public static String getMessageDisplayTime(long messageTime) {
@@ -30,4 +36,35 @@ public class Utils {
 				cal.get(Calendar.DAY_OF_MONTH), 0, 0);
 		return cal.getTimeInMillis();
 	}
+
+	public static void sendNotification(Context context, String text, int id) {
+		sendNotification(context, text, id, null);
+	}
+
+    public static void sendNotification(Context context, String text, int id,
+    		PendingIntent intent) {
+    	Pair<String, String> lines =
+    			splitLines(text, context.getResources().getString(R.string.app_name));
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        		.setSmallIcon(R.drawable.ic_service)
+        		.setContentTitle(lines.first)
+        		.setContentText(lines.second);
+        builder.setTicker(text);
+		builder.setAutoCancel(true);
+		if (intent != null) {
+			builder.setContentIntent(intent);
+		}
+
+    	NotificationManager notificationManager = (NotificationManager)
+    			context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(id, builder.build());
+    }
+
+
+    public static Pair<String, String> splitLines(String line, String defaultLine1) {
+    	String[] lines = line.split("[\\p{Punct}]", 2);
+		String line1 = lines.length > 1 && lines[0] != null ? lines[0] : defaultLine1;
+		String line2 = lines.length > 1 && lines[1] != null ? lines[1] : line;
+		return Pair.create(line1.trim(), line2.trim());
+    }
 }
