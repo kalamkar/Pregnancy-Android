@@ -6,6 +6,7 @@ import java.util.Date;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Pair;
 
@@ -51,6 +52,7 @@ public class Utils {
         		.setContentText(lines.second);
         builder.setTicker(text);
 		builder.setAutoCancel(true);
+		builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 		if (intent != null) {
 			builder.setContentIntent(intent);
 		}
