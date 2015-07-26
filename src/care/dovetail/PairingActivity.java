@@ -10,6 +10,7 @@ import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -79,6 +80,8 @@ public class PairingActivity extends Activity {
 				app.setWeightScaleAddress(result.getDevice().getAddress());
 				findViewById(R.id.progress).setVisibility(View.INVISIBLE);
 				findViewById(R.id.success).setVisibility(View.VISIBLE);
+				(RingtoneManager.getRingtone(app,
+						RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))).play();
 			}
 			super.onScanResult(callbackType, result);
 		}
