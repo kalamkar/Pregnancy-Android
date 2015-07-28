@@ -54,7 +54,7 @@
             android:name=".SignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PairingActivity"
+            android:name="care.dovetail.weight.PairingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SearchActivity"
@@ -64,6 +64,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        
+        <service
+            android:name=".BackgroundService"
+            android:exported="false"/>
         
         <receiver
             android:name=".messaging.GCMBroadcastReceiver"

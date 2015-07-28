@@ -28,10 +28,10 @@ import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.MainActivity;
-import care.dovetail.PairingActivity;
 import care.dovetail.R;
 import care.dovetail.api.PhotoUpdate;
 import care.dovetail.common.model.User;
+import care.dovetail.weight.PairingActivity;
 
 import com.android.volley.toolbox.NetworkImageView;
 

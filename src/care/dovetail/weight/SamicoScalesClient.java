@@ -1,4 +1,4 @@
-package care.dovetail;
+package care.dovetail.weight;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
@@ -13,12 +13,16 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+import care.dovetail.App;
+import care.dovetail.Config;
+import care.dovetail.R;
+import care.dovetail.Utils;
 import care.dovetail.common.model.Event;
 import care.dovetail.common.model.Measurement;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class WeighingScaleClient extends BluetoothGattCallback {
-	private static final String TAG = "WighingScaleClient";
+public class SamicoScalesClient extends BluetoothGattCallback {
+	private static final String TAG = "SamicoScalesClient";
 
 	private final App app;
 	private final BluetoothAdapter adapter;
@@ -28,7 +32,7 @@ public class WeighingScaleClient extends BluetoothGattCallback {
 
 	private int lastStableWeightInGrams = 0;
 
-	public WeighingScaleClient(App app) {
+	public SamicoScalesClient(App app) {
 		this.app = app;
 		BluetoothManager bluetoothManager =
 				(BluetoothManager) app.getSystemService(Context.BLUETOOTH_SERVICE);

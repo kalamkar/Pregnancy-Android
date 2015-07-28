@@ -29,8 +29,6 @@ public class MainActivity extends FragmentActivity {
     private View drawer;
     private ActionBarDrawerToggle drawerToggle;
 
-    private WeighingScaleClient weighingScale;
-
     private Fragment fragment;
 
 	@SuppressLint("NewApi")
@@ -44,8 +42,6 @@ public class MainActivity extends FragmentActivity {
 		if (GCMUtils.checkPlayServices(this)) {
 			app.requestPushToken();
 		}
-
-		weighingScale = new WeighingScaleClient(app);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer = findViewById(R.id.left_drawer);
@@ -95,7 +91,6 @@ public class MainActivity extends FragmentActivity {
 	    if (!app.apiClient.isConnecting() && !app.apiClient.isConnected()) {
         	app.apiClient.connect();
         }
-	    weighingScale.connectToDevice(app.getWeightScaleAddress());
 	}
 
 	@Override
@@ -104,7 +99,6 @@ public class MainActivity extends FragmentActivity {
 	    if (app.apiClient.isConnected()) {
 	    	app.apiClient.disconnect();
 	    }
-	    weighingScale.disconnect();
 	}
 
 	@Override

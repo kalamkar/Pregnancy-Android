@@ -1,5 +1,10 @@
-package care.dovetail;
+package care.dovetail.weight;
 
+import care.dovetail.App;
+import care.dovetail.Config;
+import care.dovetail.R;
+import care.dovetail.R.id;
+import care.dovetail.R.layout;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Timer;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -65,6 +66,8 @@ public class App extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		startService(new Intent(this, BackgroundService.class));
+
 		String profile =
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);
 		mother = profile != null ? Mother.fromUser(profile) : new Mother();
