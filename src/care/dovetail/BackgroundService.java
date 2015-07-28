@@ -8,7 +8,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import care.dovetail.weight.SamicoScalesClient;
+import care.dovetail.bluetooth.SamicoScalesClient;
 
 public class BackgroundService extends Service implements OnSharedPreferenceChangeListener {
 	private static final String TAG = "BackgroundService";

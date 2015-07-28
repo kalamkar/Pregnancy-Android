@@ -1,4 +1,4 @@
-package care.dovetail.weight;
+package care.dovetail.bluetooth;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;

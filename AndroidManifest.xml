@@ -54,7 +54,7 @@
             android:name=".SignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".weight.PairingActivity"
+            android:name=".bluetooth.PairingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SearchActivity"

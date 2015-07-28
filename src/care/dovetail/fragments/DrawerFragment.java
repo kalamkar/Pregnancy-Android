@@ -30,8 +30,8 @@ import care.dovetail.Config;
 import care.dovetail.MainActivity;
 import care.dovetail.R;
 import care.dovetail.api.PhotoUpdate;
+import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.User;
-import care.dovetail.weight.PairingActivity;
 
 import com.android.volley.toolbox.NetworkImageView;
 
