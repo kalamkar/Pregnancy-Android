@@ -1,6 +1,5 @@
 package care.dovetail;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.os.IBinder;
 import android.util.Log;
 import care.dovetail.weight.SamicoScalesClient;
 
-@SuppressLint("NewApi")
 public class BackgroundService extends Service implements OnSharedPreferenceChangeListener {
 	private static final String TAG = "BackgroundService";
 
