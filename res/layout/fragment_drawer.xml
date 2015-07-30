@@ -137,13 +137,35 @@
             android:gravity="center_vertical"
             android:text="@string/due_date"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <ImageView
+            android:id="@+id/fitIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/dueDateIcon"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:src="@drawable/ic_heart" />
+
+        <TextView
+            android:id="@+id/pairFit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/fitIcon"
+            android:layout_alignLeft="@+id/home"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/fitIcon"
+            android:layout_toRightOf="@+id/fitIcon"
+            android:gravity="center_vertical"
+            android:text="@string/pair_google_fit"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageView
             android:id="@+id/scaleIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/dueDateIcon"
+            android:layout_below="@+id/fitIcon"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:src="@drawable/ic_action_pair" />
 

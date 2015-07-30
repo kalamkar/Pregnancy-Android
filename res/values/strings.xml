@@ -33,6 +33,7 @@
     <string name="add_baby">Add baby</string>
     <string name="history">History</string>
     <string name="pair_scale">Connect weight scale</string>
+    <string name="pair_google_fit">Connect Google Fit</string>
     <string name="about">About</string>
     
     <string name="archived_cards">Archived Cards</string>

@@ -40,6 +40,8 @@ public class App extends Application {
 	public static final String USER_AUTH = "USER_AUTH";
 	public static final String USER_PROFILE = "USER_PROFILE";
 	public static final String WEIGHT_SCALE_MAC = "WEIGHT_SCALE_MAC";
+	public static final String GOOGLE_FIT_ACCOUNT = "GOOGLE_FIT_ACCOUNT";
+
 	public static final String FITNESS_POLL_TIME = "FITNESS_POLL_TIME";
 	public static final String EVENT_SYNC_TIME = "EVENT_SYNC_TIME";
 	public static final String MESSAGE_SYNC_TIME = "MESSAGE_SYNC_TIME";
@@ -87,6 +89,15 @@ public class App extends Application {
 
 		new Timer().scheduleAtFixedRate(eventUploadTask, Config.EVENT_SYNC_INTERVAL_MILLIS,
 				Config.EVENT_SYNC_INTERVAL_MILLIS);
+	}
+
+	public void setGoogleFitAccount(String account) {
+		setStringPref(GOOGLE_FIT_ACCOUNT, account);
+	}
+
+	public String getGoogleFitAccount() {
+		return getSharedPreferences(
+				getPackageName(), MODE_PRIVATE).getString(GOOGLE_FIT_ACCOUNT, null);
 	}
 
 	public void setWeightScaleAddress(String macAddress) {

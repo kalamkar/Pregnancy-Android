@@ -80,7 +80,9 @@ public class MainActivity extends FragmentActivity {
 	        app.authInProgress = savedInstanceState.getBoolean(FitnessPollTask.AUTH_PENDING);
 	    }
 
-		FitnessPollTask.buildFitnessClient(this, app);
+		if (app.getGoogleFitAccount() != null) {
+			FitnessPollTask.buildFitnessClient(this, app);
+		}
 		setContentFragment(new HomeFragment(), false);
 	}
 
@@ -88,7 +90,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onStart() {
 	    super.onStart();
 	    Log.i(TAG, "Google API client connecting...");
-	    if (!app.apiClient.isConnecting() && !app.apiClient.isConnected()) {
+	    if (app.apiClient != null && !app.apiClient.isConnecting() && !app.apiClient.isConnected()) {
         	app.apiClient.connect();
         }
 	}
@@ -96,7 +98,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onStop() {
 	    super.onStop();
-	    if (app.apiClient.isConnected()) {
+	    if (app.apiClient != null && app.apiClient.isConnected()) {
 	    	app.apiClient.disconnect();
 	    }
 	}

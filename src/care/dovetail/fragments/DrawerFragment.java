@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
+import care.dovetail.FitnessPollTask;
 import care.dovetail.MainActivity;
 import care.dovetail.R;
 import care.dovetail.api.PhotoUpdate;
@@ -71,6 +72,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		view.findViewById(R.id.history).setOnClickListener(this);
 		view.findViewById(R.id.dueDate).setOnClickListener(this);
 		view.findViewById(R.id.pairScale).setOnClickListener(this);
+		view.findViewById(R.id.pairFit).setOnClickListener(this);
 		view.findViewById(R.id.about).setOnClickListener(this);
 
 		updateUi(view);
@@ -149,6 +151,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			break;
 		case R.id.pairScale:
 			startActivity(new Intent(getActivity(), PairingActivity.class));
+			break;
+		case R.id.pairFit:
+			FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
 			break;
 		}
 	}
