@@ -19,11 +19,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
@@ -42,6 +46,13 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 
     private static final int CAMERA_ACTIVITY = 0;
     private static final int GALLERY_ACTIVITY = 1;
+
+	private static final int TITLES[] = new int[] {R.string.home, R.string.sharing,
+		R.string.history, R.string.due_date, R.string.pair_google_fit, R.string.pair_scale,
+		R.string.about};
+	private static final int ICONS[] = new int[] {R.drawable.ic_home, R.drawable.ic_group,
+		R.drawable.ic_history, R.drawable.ic_date, R.drawable.ic_heart, R.drawable.ic_action_pair,
+		R.drawable.ic_info};
 
 	private App app;
 
@@ -63,17 +74,12 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		((ListView) view.findViewById(R.id.menu)).setAdapter(new MenuAdapter());
+
 		view.findViewById(R.id.photo).setOnClickListener(this);
 		view.findViewById(R.id.name).setOnClickListener(this);
 		view.findViewById(R.id.email).setOnClickListener(this);
 		view.findViewById(R.id.edit).setOnClickListener(this);
-		view.findViewById(R.id.home).setOnClickListener(this);
-		view.findViewById(R.id.sharing).setOnClickListener(this);
-		view.findViewById(R.id.history).setOnClickListener(this);
-		view.findViewById(R.id.dueDate).setOnClickListener(this);
-		view.findViewById(R.id.pairScale).setOnClickListener(this);
-		view.findViewById(R.id.pairFit).setOnClickListener(this);
-		view.findViewById(R.id.about).setOnClickListener(this);
 
 		updateUi(view);
 	}
@@ -137,24 +143,6 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		case R.id.edit:
 			new NameEmailFragment().show(getActivity().getSupportFragmentManager(), null);
 			break;
-		case R.id.dueDate:
-			new DueDateFragment().show(getChildFragmentManager(), null);
-			break;
-		case R.id.sharing:
-			((MainActivity) getActivity()).setContentFragment(new GroupsFragment());
-			break;
-		case R.id.home:
-			((MainActivity) getActivity()).setContentFragment(new HomeFragment());
-			break;
-		case R.id.history:
-			((MainActivity) getActivity()).setContentFragment(new HistoryFragment());
-			break;
-		case R.id.pairScale:
-			startActivity(new Intent(getActivity(), PairingActivity.class));
-			break;
-		case R.id.pairFit:
-			FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
-			break;
 		}
 	}
 
@@ -202,6 +190,67 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 					updateUi(getView());
 				}
 			}.execute();
+		}
+	}
+
+	private class MenuAdapter extends BaseAdapter implements OnClickListener {
+
+		@Override
+		public int getCount() {
+			return Math.min(ICONS.length, TITLES.length);
+		}
+
+		@Override
+		public Pair<String, Integer> getItem(int position) {
+			return Pair.create(getResources().getString(TITLES[position]), ICONS[position]);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return getItem(position).hashCode();
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view;
+			if (convertView == null) {
+				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_drawer, null);
+			} else {
+				view = convertView;
+			}
+
+			Pair<String, Integer> menu = getItem(position);
+			((ImageView) view.findViewById(R.id.icon)).setImageResource(menu.second);;
+			((TextView) view.findViewById(R.id.text)).setText(menu.first);
+			view.setTag(TITLES[position]);
+			view.setOnClickListener(this);
+			return view;
+		}
+
+		@Override
+		public void onClick(View view) {
+			switch((Integer) view.getTag()) {
+			case R.string.due_date:
+				new DueDateFragment().show(getChildFragmentManager(), null);
+				break;
+			case R.string.sharing:
+				((MainActivity) getActivity()).setContentFragment(new GroupsFragment());
+				break;
+			case R.string.home:
+				((MainActivity) getActivity()).setContentFragment(new HomeFragment());
+				break;
+			case R.string.history:
+				((MainActivity) getActivity()).setContentFragment(new HistoryFragment());
+				break;
+			case R.string.pair_scale:
+				startActivity(new Intent(getActivity(), PairingActivity.class));
+				break;
+			case R.string.pair_google_fit:
+				FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
+				break;
+			case R.string.about:
+				break;
+			}
 		}
 	}
 }
