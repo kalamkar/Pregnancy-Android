@@ -33,15 +33,6 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/secondary_text_light" />
 
-    <ImageView
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/email"
-        android:layout_alignTop="@+id/name"
-        android:layout_toLeftOf="@+id/name"
-        android:src="@android:drawable/ic_menu_edit" />
-    
     <ListView
         android:id="@+id/menu"
         android:layout_width="match_parent"
