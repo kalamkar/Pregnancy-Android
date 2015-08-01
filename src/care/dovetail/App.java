@@ -19,10 +19,10 @@ import android.util.Pair;
 import care.dovetail.api.EventUploadTask;
 import care.dovetail.api.UserUpdate;
 import care.dovetail.common.model.ApiResponse.Message;
+import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Goal;
 import care.dovetail.common.model.Goal.Aggregation;
 import care.dovetail.common.model.Group;
-import care.dovetail.common.model.Tip;
 import care.dovetail.common.model.User;
 import care.dovetail.messaging.GCMUtils;
 import care.dovetail.model.Mother;
@@ -244,18 +244,18 @@ public class App extends Application {
 	    }.execute(null, null, null);
 	}
 
-	public List<Tip> getTips(String tag) {
-		List<Tip> tips = new ArrayList<Tip>();
-		if (mother == null || mother.insights == null) {
-			return tips;
+	public List<Card> getTips(String tag) {
+		List<Card> cards = new ArrayList<Card>();
+		if (mother == null || mother.cards == null) {
+			return cards;
 		}
-		for (Tip tip : mother.insights) {
-			List<String> tags = Arrays.asList(tip.tags);
+		for (Card card : mother.cards) {
+			List<String> tags = Arrays.asList(card.tags);
 			if (tag == null || tags.contains(tag.toLowerCase())) {
-				tips.add(tip);
+				cards.add(card);
 			}
 		}
-		return tips;
+		return cards;
 	}
 
 	private void setStringPref(final String pref, String value) {

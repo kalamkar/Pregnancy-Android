@@ -21,8 +21,8 @@ import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
 import care.dovetail.common.Config;
+import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
-import care.dovetail.common.model.Tip;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "HomeFragment";
 
 	private App app;
-	private List<Tip> tips = new ArrayList<Tip>();
+	private List<Card> cards = new ArrayList<Card>();
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		updateTips();
+		updateCards();
 		((ListView) view).setAdapter(new CardsAdapter());
 	}
 
@@ -67,33 +67,33 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			updateTips();
+			updateCards();
 			((BaseAdapter) ((ListView) getView()).getAdapter()).notifyDataSetChanged();
 		}
 	};
 
-	private void updateTips() {
-		tips.clear();
-		tips.add(makeHelloTip());
-		if (app.getMother().insights == null) {
+	private void updateCards() {
+		cards.clear();
+		cards.add(makeHelloCard());
+		if (app.getMother().cards == null) {
 			return;
 		}
-		Arrays.sort(app.getMother().insights, new Comparator<Tip>() {
+		Arrays.sort(app.getMother().cards, new Comparator<Card>() {
 			@Override
-			public int compare(Tip lhs, Tip rhs) {
+			public int compare(Card lhs, Card rhs) {
 				return lhs.priority - rhs.priority;
 			}
 		});
-		for (Tip tip : app.getMother().insights) {
-			tips.add(tip);
+		for (Card card : app.getMother().cards) {
+			cards.add(card);
 		}
 	}
 
 	@Override
 	public void onClick(View view) {
 		Object tag = view.getTag();
-		if (view.getId() == R.id.close && tag != null && tag instanceof Tip) {
-			tips.remove(tag);
+		if (view.getId() == R.id.close && tag != null && tag instanceof Card) {
+			cards.remove(tag);
 			app.events.add(new Event(Event.Type.CARD_ARCHIVED.name(), System.currentTimeMillis(),
 					Config.GSON.toJson(tag)));
 			((BaseAdapter) ((ListView) getView()).getAdapter()).notifyDataSetChanged();
@@ -103,12 +103,12 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	private class CardsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
-			return tips.size();
+			return cards.size();
 		}
 
 		@Override
-		public Tip getItem(int position) {
-			return tips.get(position);
+		public Card getItem(int position) {
+			return cards.get(position);
 		}
 
 		@Override
@@ -136,8 +136,8 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			}
 			view.findViewById(R.id.menu).setVisibility(View.INVISIBLE);
 
-			Tip tip = getItem(position);
-			String iconUrl = getIcon(tip);
+			Card card = getItem(position);
+			String iconUrl = getIcon(card);
 			if (iconUrl == null) {
 				view.findViewById(R.id.icon).setVisibility(View.GONE);
 			} else {
@@ -145,19 +145,19 @@ public class HomeFragment extends Fragment implements OnClickListener {
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
 						iconUrl, app.imageLoader);
 			}
-			((TextView) view.findViewById(R.id.title)).setText(tip.title);
+			((TextView) view.findViewById(R.id.title)).setText(card.text);
 			view.findViewById(R.id.close).setOnClickListener(HomeFragment.this);
-			view.findViewById(R.id.close).setTag(tip);
-			view.setTag(tip);
+			view.findViewById(R.id.close).setTag(card);
+			view.setTag(card);
 			return view;
 		}
 	}
 
-	private static String getIcon(Tip tip) {
-		if (tip == null || tip.tags == null) {
+	private static String getIcon(Card card) {
+		if (card == null || card.tags == null) {
 			return null;
 		}
-		for (String tag : tip.tags) {
+		for (String tag : card.tags) {
 			if (tag != null && tag.toLowerCase().startsWith("image")) {
 				return tag.replaceFirst("image:", "");
 			}
@@ -165,9 +165,11 @@ public class HomeFragment extends Fragment implements OnClickListener {
 		return null;
 	}
 
-	private Tip makeHelloTip() {
+	private Card makeHelloCard() {
 		String firstName = app.getMother().name != null ? app.getMother().name.split(" ")[0] : "";
-		return new Tip(
-				String.format(getResources().getString(R.string.hello_text), firstName), null, 1);
+		Card card = new Card();
+		card.text = String.format(getResources().getString(R.string.hello_text), firstName);
+		card.priority = 0;
+		return card;
 	}
 }

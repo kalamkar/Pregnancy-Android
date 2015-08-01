@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
-import care.dovetail.common.model.Tip;
+import care.dovetail.common.model.Card;
 
 public class HelloFragment extends Fragment {
 	private App app;
@@ -68,16 +68,16 @@ public class HelloFragment extends Fragment {
 	}
 
 	private void fillTips(View view) {
-		Tip sortedTips[] = app.getTips("mother").toArray(new Tip[0]);
-		Arrays.sort(sortedTips, new Comparator<Tip>() {
+		Card sortedTips[] = app.getTips("mother").toArray(new Card[0]);
+		Arrays.sort(sortedTips, new Comparator<Card>() {
 			@Override
-			public int compare(Tip lhs, Tip rhs) {
+			public int compare(Card lhs, Card rhs) {
 				return lhs.priority - rhs.priority;
 			}
 		});
 		int tipIds[] = new int[] { R.id.tip1, R.id.tip2, R.id.tip3 };
 		for (int i = 0; i < sortedTips.length && i < tipIds.length; i++) {
-			((TextView) view.findViewById(tipIds[i])).setText(sortedTips[i].title);
+			((TextView) view.findViewById(tipIds[i])).setText(sortedTips[i].text);
 		}
 	}
 }

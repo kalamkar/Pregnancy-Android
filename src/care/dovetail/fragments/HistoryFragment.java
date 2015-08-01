@@ -21,9 +21,9 @@ import care.dovetail.R;
 import care.dovetail.Utils;
 import care.dovetail.api.EventsGet;
 import care.dovetail.common.model.ApiResponse;
+import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
 import care.dovetail.common.model.Measurement;
-import care.dovetail.common.model.Tip;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
@@ -39,7 +39,7 @@ public class HistoryFragment extends Fragment {
 
 	private App app;
 	private GraphView graph;
-	private List<Tip> tips = new ArrayList<Tip>();
+	private List<Card> tips = new ArrayList<Card>();
 
 	private BarGraphSeries<DataPoint> dataSeries = new BarGraphSeries<DataPoint>();
 
@@ -123,7 +123,7 @@ public class HistoryFragment extends Fragment {
 		tips.clear();
 		for (int i = 0; i < events.length; i++) {
 			try {
-				Tip tip = Config.GSON.fromJson(events[i].data, Tip.class);
+				Card tip = Config.GSON.fromJson(events[i].data, Card.class);
 				tips.add(tip);
 			} catch(Exception ex) {
 				Log.w(TAG, ex);
@@ -164,7 +164,7 @@ public class HistoryFragment extends Fragment {
 		}
 
 		@Override
-		public Tip getItem(int position) {
+		public Card getItem(int position) {
 			return tips.get(position);
 		}
 
@@ -186,7 +186,7 @@ public class HistoryFragment extends Fragment {
 				view = convertView;
 			}
 
-			Tip tip = getItem(position);
+			Card tip = getItem(position);
 			String iconUrl = getIcon(tip);
 			if (iconUrl == null) {
 				view.findViewById(R.id.icon).setVisibility(View.GONE);
@@ -195,12 +195,12 @@ public class HistoryFragment extends Fragment {
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
 						iconUrl, app.imageLoader);
 			}
-			((TextView) view.findViewById(R.id.title)).setText(tip.title);
+			((TextView) view.findViewById(R.id.title)).setText(tip.text);
 			return view;
 		}
 	}
 
-	private String getIcon(Tip tip) {
+	private String getIcon(Card tip) {
 		if (tip == null || tip.tags == null) {
 			return null;
 		}
