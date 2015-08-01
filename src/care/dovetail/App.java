@@ -2,7 +2,6 @@ package care.dovetail;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import android.util.Pair;
 import care.dovetail.api.EventUploadTask;
 import care.dovetail.api.UserUpdate;
 import care.dovetail.common.model.ApiResponse.Message;
-import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Goal;
 import care.dovetail.common.model.Goal.Aggregation;
 import care.dovetail.common.model.Group;
@@ -242,20 +240,6 @@ public class App extends Application {
 	            return null;
 	        }
 	    }.execute(null, null, null);
-	}
-
-	public List<Card> getTips(String tag) {
-		List<Card> cards = new ArrayList<Card>();
-		if (mother == null || mother.cards == null) {
-			return cards;
-		}
-		for (Card card : mother.cards) {
-			List<String> tags = Arrays.asList(card.tags);
-			if (tag == null || tags.contains(tag.toLowerCase())) {
-				cards.add(card);
-			}
-		}
-		return cards;
 	}
 
 	private void setStringPref(final String pref, String value) {
