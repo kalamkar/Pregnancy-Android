@@ -85,7 +85,9 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			}
 		});
 		for (Card card : app.getMother().cards) {
-			cards.add(card);
+			if (card.expire_time > System.currentTimeMillis()) {
+				cards.add(card);
+			}
 		}
 	}
 
