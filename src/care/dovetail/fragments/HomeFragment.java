@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.Application;
@@ -21,15 +23,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
+import care.dovetail.Config;
 import care.dovetail.R;
 import care.dovetail.api.UserGet;
-import care.dovetail.common.Config;
 import care.dovetail.common.model.Card;
-import care.dovetail.common.model.Event;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-public class HomeFragment extends Fragment implements OnClickListener, OnRefreshListener {
+public class HomeFragment extends Fragment implements OnRefreshListener {
 	private static final String TAG = "HomeFragment";
 
 	private App app;
@@ -100,22 +101,21 @@ public class HomeFragment extends Fragment implements OnClickListener, OnRefresh
 		}
 	}
 
-	@Override
-	public void onClick(View view) {
-		Object tag = view.getTag();
-		if (view.getId() == R.id.close && tag != null && tag instanceof Card) {
-			cards.remove(tag);
-			app.events.add(new Event(Event.Type.CARD_ARCHIVED.name(), System.currentTimeMillis(),
-					Config.GSON.toJson(tag)));
-			((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
-					.notifyDataSetChanged();
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onRefresh() {
 		new UserGet(app).execute();
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						((SwipeRefreshLayout) getView()).setRefreshing(false);
+					}
+				});
+			}
+		}, Config.REFRESH_TIMEOUT_MILLIS);
 	}
 
 	private class CardsAdapter extends BaseAdapter {
@@ -139,48 +139,31 @@ public class HomeFragment extends Fragment implements OnClickListener, OnRefresh
 			View view;
 			if (convertView == null) {
 				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
-				view.findViewById(R.id.hint).setVisibility(View.GONE);
-				view.findViewById(R.id.time).setVisibility(View.GONE);
 				view.findViewById(R.id.menu_button).setOnClickListener(new OnClickListener() {
 					@Override
-					public void onClick(View v) {
-						View menu = ((View) v.getParent()).findViewById(R.id.menu);
-						menu.setVisibility(menu.getVisibility() == View.INVISIBLE ?
-								View.VISIBLE : View.INVISIBLE);
+					public void onClick(View menuButton) {
+						CardMenuFragment fragment = new CardMenuFragment();
+						fragment.setCard((Card) menuButton.getTag());
+						fragment.show(getChildFragmentManager(), null);
 					}
 				});
 			} else {
 				view = convertView;
 			}
-			view.findViewById(R.id.menu).setVisibility(View.INVISIBLE);
 
 			Card card = getItem(position);
-			String iconUrl = getIcon(card);
-			if (iconUrl == null) {
+			if (card.icon == null) {
 				view.findViewById(R.id.icon).setVisibility(View.GONE);
 			} else {
 				view.findViewById(R.id.icon).setVisibility(View.VISIBLE);
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
-						iconUrl, app.imageLoader);
+						card.icon, app.imageLoader);
 			}
 			((TextView) view.findViewById(R.id.title)).setText(card.text);
-			view.findViewById(R.id.close).setOnClickListener(HomeFragment.this);
-			view.findViewById(R.id.close).setTag(card);
 			view.setTag(card);
+			view.findViewById(R.id.menu_button).setTag(card);
 			return view;
 		}
-	}
-
-	private static String getIcon(Card card) {
-		if (card == null || card.tags == null) {
-			return null;
-		}
-		for (String tag : card.tags) {
-			if (tag != null && tag.toLowerCase().startsWith("image")) {
-				return tag.replaceFirst("image:", "");
-			}
-		}
-		return null;
 	}
 
 	private Card makeHelloCard() {

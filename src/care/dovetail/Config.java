@@ -63,4 +63,6 @@ public class Config extends care.dovetail.common.Config {
 	public static final String USER_ID = "uuid";
 
 	public static final String WEIGHT_SCALE_NAME = "Samico Scales";
+
+	public static final int REFRESH_TIMEOUT_MILLIS = 3000;
 }

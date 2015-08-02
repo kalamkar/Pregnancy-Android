@@ -69,5 +69,10 @@
         <item>Take Photo</item>
         <item>Choose from Library</item>
     </string-array>
+    
+    <string name="archive">Archive</string>
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="share">Share</string>
+    <string name="learn_more">Learn more</string>
 
 </resources>

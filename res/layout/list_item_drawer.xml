@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/medium_margin"
     android:paddingTop="@dimen/medium_margin"
+    android:background="?android:attr/selectableItemBackground"
     tools:context="care.dovetail.MainActivity" >
 
     <ImageView
