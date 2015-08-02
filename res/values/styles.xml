@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -15,7 +15,7 @@
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <item name="android:textColor">@color/text</item>
+        <item name="android:textColor">#5C5C5C</item>
         <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
         <item name="android:actionBarTabTextStyle">@style/ActionBarTabText</item>
@@ -24,7 +24,8 @@
     
     <style name="ActionBar"
            parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/actionbar_background</item>
+        <item name="android:background">#D2AEE8</item>
+        <item name="elevation">0dp</item>
     </style>
     <style name="ActionBarTitleText"
            parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
@@ -52,15 +53,15 @@
         <item name="android:textColor">@color/actionbar_background</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <color name="background">#E8E8E8</color>
     <color name="card">#FFFFFF</color>
     <color name="card_border_light">#DEDEDE</color>
     <color name="card_border_dark">#B0B0B0</color>
-    <color name="actionbar_background">#D2AEE8</color>
 
     <color name="text">#5C5C5C</color>
     <color name="actionbar_text">#FAFAFA</color>
+    <color name="actionbar_background">#D2AEE8</color>
     
     <color name="my_message">#EDEDED</color>
     <color name="message">#dcedc8</color>

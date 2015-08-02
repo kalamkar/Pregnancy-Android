@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,13 +22,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
+import care.dovetail.api.UserGet;
 import care.dovetail.common.Config;
 import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-public class HomeFragment extends Fragment implements OnClickListener {
+public class HomeFragment extends Fragment implements OnClickListener, OnRefreshListener {
 	private static final String TAG = "HomeFragment";
 
 	private App app;
@@ -47,8 +50,9 @@ public class HomeFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		((SwipeRefreshLayout) view).setOnRefreshListener(this);
 		updateCards();
-		((ListView) view).setAdapter(new CardsAdapter());
+		((ListView) view.findViewById(R.id.cards)).setAdapter(new CardsAdapter());
 	}
 
 	@Override
@@ -57,22 +61,27 @@ public class HomeFragment extends Fragment implements OnClickListener {
 				.registerOnSharedPreferenceChangeListener(listener);
 		super.onResume();
 	}
+
 	@Override
-	public void onPause() {
+	public void onDestroyView() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.unregisterOnSharedPreferenceChangeListener(listener);
-		super.onPause();
+		super.onDestroyView();
 	}
 
 	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			updateCards();
-			((BaseAdapter) ((ListView) getView()).getAdapter()).notifyDataSetChanged();
+			if (App.USER_PROFILE.equals(key)) {
+				updateCards();
+				((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
+						.notifyDataSetChanged();
+			}
 		}
 	};
 
 	private void updateCards() {
+		((SwipeRefreshLayout) getView()).setRefreshing(false);
 		cards.clear();
 		cards.add(makeHelloCard());
 		if (app.getMother().cards == null) {
@@ -98,8 +107,15 @@ public class HomeFragment extends Fragment implements OnClickListener {
 			cards.remove(tag);
 			app.events.add(new Event(Event.Type.CARD_ARCHIVED.name(), System.currentTimeMillis(),
 					Config.GSON.toJson(tag)));
-			((BaseAdapter) ((ListView) getView()).getAdapter()).notifyDataSetChanged();
+			((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
+					.notifyDataSetChanged();
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onRefresh() {
+		new UserGet(app).execute();
 	}
 
 	private class CardsAdapter extends BaseAdapter {
