@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
 import care.dovetail.Utils;
+import care.dovetail.api.CardsGet;
 import care.dovetail.api.EventsGet;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.Card;
@@ -39,7 +41,7 @@ public class HistoryFragment extends Fragment {
 
 	private App app;
 	private GraphView graph;
-	private List<Card> cards = new ArrayList<Card>();
+	private Card cards[] = new Card[0];
 
 	private BarGraphSeries<DataPoint> dataSeries = new BarGraphSeries<DataPoint>();
 
@@ -79,15 +81,17 @@ public class HistoryFragment extends Fragment {
 			}
 		}.execute();
 
-		new EventsGet(app, Event.Type.CARD_ARCHIVED.name(), startTime, endTime) {
+		new CardsGet(app) {
 			@Override
 			protected void onPostExecute(ApiResponse result) {
 				super.onPostExecute(result);
-				if (result != null && result.events != null) {
-					updateCards(result.events);
+				if (result != null && result.cards != null) {
+					cards = result.cards;
+					((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
+							.notifyDataSetChanged();
 				}
 			}
-		}.execute();
+		}.execute(Pair.create(CardsGet.PARAM_TAGS, Card.TAGS.ARCHIVED.name()));
 	}
 
 	private void updateGraph(Event[] events) {
@@ -120,22 +124,6 @@ public class HistoryFragment extends Fragment {
 		dataSeries.resetData(dataPoints.toArray(new DataPoint[0]));
 	}
 
-	private void updateCards(Event[] events) {
-		cards.clear();
-		for (int i = 0; i < events.length; i++) {
-			try {
-				Card card = Config.GSON.fromJson(events[i].data, Card.class);
-				if (card != null) {
-					cards.add(card);
-				}
-			} catch(Exception ex) {
-				Log.w(TAG, ex);
-			}
-		}
-		((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
-				.notifyDataSetChanged();
-	}
-
 	private void customizeGraphUI() {
 		int barColor = getResources().getColor(R.color.graph_bar);
 		int graphTextColor = getResources().getColor(R.color.graph_text);
@@ -163,12 +151,12 @@ public class HistoryFragment extends Fragment {
 	private class CardsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
-			return cards.size();
+			return cards.length;
 		}
 
 		@Override
 		public Card getItem(int position) {
-			return cards.get(position);
+			return cards[position];
 		}
 
 		@Override

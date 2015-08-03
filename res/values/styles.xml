@@ -63,8 +63,8 @@
     <color name="actionbar_text">#FAFAFA</color>
     <color name="actionbar_background">#D2AEE8</color>
     
-    <color name="my_message">#EDEDED</color>
-    <color name="message">#dcedc8</color>
+    <color name="my_message">#E0A6C6</color>
+    <color name="message">#D1D2D4</color>
     
     <color name="background_green">#dcedc8</color>
     <color name="secondary_text_gray">#9E9E9E</color>

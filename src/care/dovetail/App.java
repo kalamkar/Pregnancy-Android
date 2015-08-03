@@ -17,6 +17,7 @@ import android.util.Log;
 import android.util.Pair;
 import care.dovetail.api.EventUploadTask;
 import care.dovetail.api.UserUpdate;
+import care.dovetail.common.ApiResponseTask;
 import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.Goal;
 import care.dovetail.common.model.Goal.Aggregation;
@@ -169,6 +170,7 @@ public class App extends Application {
 			if (user.auth != null) {
 				setStringPref(USER_AUTH, user.auth);
 			}
+			Log.i(TAG, ApiResponseTask.getAuthHeader(user.uuid, user.auth));
 		}
 		mother = Mother.fromUser(Config.GSON.toJson(user));
 

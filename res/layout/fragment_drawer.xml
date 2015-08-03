@@ -3,6 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="care.dovetail.MainActivity" >
+    
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/menu"
+        android:scaleType="centerCrop"
+        android:alpha="0.3"
+        android:src="@drawable/flowers" />
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/photo"

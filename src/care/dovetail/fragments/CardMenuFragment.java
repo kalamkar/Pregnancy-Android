@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,9 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
-import care.dovetail.common.Config;
+import care.dovetail.api.CardUpdate;
 import care.dovetail.common.model.Card;
-import care.dovetail.common.model.Event;
 
 public class CardMenuFragment extends DialogFragment {
 	private static final String TAG = "CardMenuFragment";
@@ -98,6 +98,7 @@ public class CardMenuFragment extends DialogFragment {
 			return view;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void onClick(View view) {
 			switch(itemIds[(Integer) view.getTag()]) {
@@ -110,8 +111,8 @@ public class CardMenuFragment extends DialogFragment {
 				}
 				app.getMother().cards = cards.toArray(new Card[0]);
 				app.setUser(app.getMother());
-				app.events.add(new Event(Event.Type.CARD_ARCHIVED.name(), System.currentTimeMillis(),
-						Config.GSON.toJson(card)));
+				new CardUpdate(app).execute(Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
+						Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.ARCHIVED.name()));
 				break;
 			case R.string.add_to_favorites:
 				break;
