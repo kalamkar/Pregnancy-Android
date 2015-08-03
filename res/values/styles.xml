@@ -4,7 +4,7 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -17,23 +17,13 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">#5C5C5C</item>
         <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
-        <item name="android:actionBarTabTextStyle">@style/ActionBarTabText</item>
         <item name="android:actionMenuTextColor">@color/actionbar_text</item>
     </style>
     
     <style name="ActionBar"
-           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#D2AEE8</item>
+           parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/my_message</item>
         <item name="elevation">0dp</item>
-    </style>
-    <style name="ActionBarTitleText"
-           parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/actionbar_text</item>
-    </style>
-    <style name="ActionBarTabText"
-           parent="@android:style/Widget.Holo.Light.ActionBar.TabText">
-        <item name="android:textColor">@color/actionbar_text</item>
     </style>
     
     <style name="Activity">
