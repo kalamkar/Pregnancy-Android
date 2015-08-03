@@ -68,7 +68,7 @@ public class HistoryFragment extends Fragment {
 		((ListView) view.findViewById(R.id.cards)).setAdapter(new CardsAdapter());
 
 		long endTime = System.currentTimeMillis();
-		long startTime = Utils.getMidnightMillis() - 7L * 24L * 60L * 60L * 1000L;
+		long startTime = Utils.getMidnightMillis() - Config.GRAPH_DAYS * 24L * 60L * 60L * 1000L;
 		new EventsGet(app, Event.Type.STEPS.name(), startTime, endTime) {
 			@Override
 			protected void onPostExecute(ApiResponse result) {
@@ -96,9 +96,10 @@ public class HistoryFragment extends Fragment {
 		for (Event event : events) {
 			try {
 				Measurement steps = Config.GSON.fromJson(event.data, Measurement.class);
-				if (steps != null) {
+				DataPoint data = new DataPoint(event.time, steps.value);
+				if (!dataPoints.contains(data)) {
 					// Add at the beginning as events are sorted descending
-					dataPoints.add(0, new DataPoint(event.time, steps.value));
+					dataPoints.add(0, data);
 					maxY = steps.value > maxY ? steps.value : maxY;
 				}
 			} catch(Exception ex) {
