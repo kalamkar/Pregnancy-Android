@@ -39,7 +39,7 @@ public class HistoryFragment extends Fragment {
 
 	private App app;
 	private GraphView graph;
-	private List<Card> tips = new ArrayList<Card>();
+	private List<Card> cards = new ArrayList<Card>();
 
 	private BarGraphSeries<DataPoint> dataSeries = new BarGraphSeries<DataPoint>();
 
@@ -120,11 +120,13 @@ public class HistoryFragment extends Fragment {
 	}
 
 	private void updateCards(Event[] events) {
-		tips.clear();
+		cards.clear();
 		for (int i = 0; i < events.length; i++) {
 			try {
-				Card tip = Config.GSON.fromJson(events[i].data, Card.class);
-				tips.add(tip);
+				Card card = Config.GSON.fromJson(events[i].data, Card.class);
+				if (card != null) {
+					cards.add(card);
+				}
 			} catch(Exception ex) {
 				Log.w(TAG, ex);
 			}
@@ -160,12 +162,12 @@ public class HistoryFragment extends Fragment {
 	private class CardsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
-			return tips.size();
+			return cards.size();
 		}
 
 		@Override
 		public Card getItem(int position) {
-			return tips.get(position);
+			return cards.get(position);
 		}
 
 		@Override
@@ -178,37 +180,21 @@ public class HistoryFragment extends Fragment {
 			View view;
 			if (convertView == null) {
 				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
-				view.findViewById(R.id.hint).setVisibility(View.GONE);
-				view.findViewById(R.id.time).setVisibility(View.GONE);
 				view.findViewById(R.id.menu_button).setVisibility(View.GONE);
-				view.findViewById(R.id.menu).setVisibility(View.INVISIBLE);
 			} else {
 				view = convertView;
 			}
 
-			Card tip = getItem(position);
-			String iconUrl = getIcon(tip);
-			if (iconUrl == null) {
+			Card card = getItem(position);
+			if (card.icon == null) {
 				view.findViewById(R.id.icon).setVisibility(View.GONE);
 			} else {
 				view.findViewById(R.id.icon).setVisibility(View.VISIBLE);
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
-						iconUrl, app.imageLoader);
+						card.icon, app.imageLoader);
 			}
-			((TextView) view.findViewById(R.id.title)).setText(tip.text);
+			((TextView) view.findViewById(R.id.title)).setText(card.text);
 			return view;
 		}
-	}
-
-	private String getIcon(Card tip) {
-		if (tip == null || tip.tags == null) {
-			return null;
-		}
-		for (String tag : tip.tags) {
-			if (tag != null && tag.toLowerCase().startsWith("image")) {
-				return tag.replaceFirst("image:", "");
-			}
-		}
-		return null;
 	}
 }
