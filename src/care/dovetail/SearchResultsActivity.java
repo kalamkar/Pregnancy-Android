@@ -12,12 +12,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.api.GroupUpdate;
@@ -42,7 +44,7 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 		setContentView(R.layout.activity_search_results);
 
 		app = (App) getApplication();
-		((ListView) findViewById(R.id.results)).setAdapter(new UsersAdapter());
+		((ListView) findViewById(R.id.results)).setAdapter(new ResultsAdapter());
 
 		handleIntent(getIntent());
 	}
@@ -105,11 +107,8 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 			public void onResult(Result[] results) {
 				SearchResultsActivity.this.results.clear();
 				for (Result result : results) {
-					if (result != null && (result.user != null || result.group != null)) {
+					if (result != null) {
 						SearchResultsActivity.this.results.add(result);
-						if (result.user != null) {
-							app.contacts.add(result.user);
-						}
 					}
 				}
 				((BaseAdapter) ((ListView) findViewById(R.id.results)).getAdapter())
@@ -118,7 +117,7 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 		}.execute(Pair.create(Search.PARAM_QUERY, query));
 	}
 
-	private class UsersAdapter extends BaseAdapter {
+	private class ResultsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
 			return results.size();
@@ -131,21 +130,15 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 
 		@Override
 		public long getItemId(int position) {
-			Result result = getItem(position);
-			return result == null ? 0 : result.hashCode();
+			return getItem(position).hashCode();
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view;
-			if (convertView == null) {
-				view = getLayoutInflater().inflate(R.layout.list_item_contact, null);
-			} else {
-				view = convertView;
-			}
-
 			Result result = getItem(position);
-			if (result != null && result.user != null) {
+			if (result.user != null) {
+				view = getLayoutInflater().inflate(R.layout.list_item_contact, null);
 				((TextView) view.findViewById(R.id.title)).setText(result.user.name);
 				((TextView) view.findViewById(R.id.date)).setText(
 						Utils.getDisplayTime(result.user.update_time));
@@ -153,7 +146,8 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 						result.user.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
 						photoUrl, app.imageLoader);
-			} else if (result != null && result.group != null) {
+			} else if (result.group != null) {
+				view = getLayoutInflater().inflate(R.layout.list_item_contact, null);
 				((TextView) view.findViewById(R.id.title)).setText(result.group.toString());
 				((TextView) view.findViewById(R.id.date)).setText(
 						Utils.getDisplayTime(result.group.update_time));
@@ -161,11 +155,42 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 						result.group.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
 						photoUrl, app.imageLoader);
+			} else if (result.message != null) {
+				view = getLayoutInflater().inflate(R.layout.list_item_message, null);
+				((TextView) view.findViewById(R.id.text)).setText(result.message.text);
+				((TextView) view.findViewById(R.id.sender)).setText(result.message.sender.name);
+				((TextView) view.findViewById(R.id.time)).setText(
+						Utils.getMessageDisplayTime(result.message.create_time));
+
+				View bubble = view.findViewById(R.id.bubble);
+				FrameLayout.LayoutParams params =
+						(FrameLayout.LayoutParams) bubble.getLayoutParams();
+				if (params == null) {
+					params = new FrameLayout.LayoutParams(
+							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				}
+				if (app.getMother().equals(result.message.sender)) {
+					params.rightMargin = getResources().getDimensionPixelOffset(R.dimen.tiny_margin);
+					params.leftMargin = getResources().getDimensionPixelOffset(R.dimen.message_indent);
+					params.gravity = Gravity.RIGHT;
+					bubble.setBackground(getResources().getDrawable(R.drawable.my_message));
+				} else {
+					params.rightMargin = getResources().getDimensionPixelOffset(R.dimen.message_indent);
+					params.leftMargin = getResources().getDimensionPixelOffset(R.dimen.tiny_margin);
+					params.gravity = Gravity.LEFT;
+					bubble.setBackground(getResources().getDrawable(R.drawable.message));
+				}
+				params.topMargin =
+						getResources().getDimensionPixelOffset(R.dimen.activity_vertical_margin);
+				bubble.setLayoutParams(params);
 			} else {
-				((TextView) view.findViewById(R.id.title)).setText("");
-				((TextView) view.findViewById(R.id.date)).setText("");
-				((ImageView) view.findViewById(R.id.icon)).setImageDrawable(null);
+				return new View(app);
 			}
+			int horizontal =
+					getResources().getDimensionPixelOffset(R.dimen.activity_horizontal_margin);
+			int vertical =
+					getResources().getDimensionPixelOffset(R.dimen.activity_vertical_margin);
+			view.setPadding(horizontal, result.message != null ? 0 : vertical, horizontal, vertical);
 			view.setOnClickListener(SearchResultsActivity.this);
 			view.setTag(result);
 			return view;
