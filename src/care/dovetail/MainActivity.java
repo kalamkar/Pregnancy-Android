@@ -1,6 +1,10 @@
 package care.dovetail;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import care.dovetail.api.GroupsGet;
 import care.dovetail.api.UserGet;
 import care.dovetail.fragments.GroupNameFragment;
@@ -112,6 +117,17 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
+
+		// Associate searchable configuration with the SearchView
+	    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	    SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+	    SearchableInfo searchable = searchManager.getSearchableInfo(
+	    		new ComponentName(getApplicationContext(), SearchResultsActivity.class));
+	    if (searchable == null) {
+	    	Log.w(TAG, "SearchableInfo is NULL");
+	    }
+	    searchView.setSearchableInfo(searchable);
+
 		return true;
 	}
 
@@ -121,9 +137,6 @@ public class MainActivity extends FragmentActivity {
 			return true;
 	    }
 		switch(item.getItemId()) {
-		case R.id.action_search:
-			startActivity(new Intent(this, SearchActivity.class));
-			break;
 		case R.id.action_create_group:
 			new GroupNameFragment().show(getSupportFragmentManager(), null);
 			break;
