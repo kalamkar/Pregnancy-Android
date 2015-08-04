@@ -75,7 +75,6 @@ public class MainActivity extends FragmentActivity {
 
 		if (app.getUserUUID() == null || app.getUserAuth() == null) {
 			startActivity(new Intent(this, SignUpActivity.class));
-			finish();
 		} else {
 			new UserGet(app).execute();
 			new GroupsGet(app).execute();

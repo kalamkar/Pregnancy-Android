@@ -1,7 +1,6 @@
 package care.dovetail;
 
 import android.app.Application;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 		findViewById(R.id.recover_text).setOnClickListener(this);
 	}
 
-
 	@Override
 	public void onResume() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
@@ -52,12 +50,15 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 			if (app.getUserAuth() != null && app.getUserUUID() != null) {
-				startActivity(new Intent(SignUpActivity.this, MainActivity.class));
 				finish();
 			}
 		}
 	};
 
+	@Override
+	public void onBackPressed() {
+		// Do nothing and not let user get out of sign up
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -75,7 +76,6 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 				protected void onPostExecute(ApiResponse result) {
 					super.onPostExecute(result);
 					if (app.getUserUUID() != null && app.getUserAuth() != null) {
-						startActivity(new Intent(SignUpActivity.this, MainActivity.class));
 						finish();
 					}
 				}
@@ -117,7 +117,6 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 					if (result != null && result.users != null && result.users.length > 0
 							&& result.users[0].auth != null) {
 						app.setUser(result.users[0]);
-						startActivity(new Intent(SignUpActivity.this, MainActivity.class));
 						finish();
 					} else {
 						Log.w(TAG, String.format("Could not recover  user"));
