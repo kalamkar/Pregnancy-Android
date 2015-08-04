@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -19,27 +18,24 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import care.dovetail.api.GroupUpdate;
-import care.dovetail.api.MessagesGet;
 import care.dovetail.api.Search;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.ApiResponse.Result;
-import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-public class SearchActivity extends FragmentActivity implements OnClickListener,
+public class ContactsActivity extends FragmentActivity implements OnClickListener,
 		OnEditorActionListener {
 	private static final String TAG = "ContactsActivity";
 
 	private App app;
 	private String groupId;
-	private final List<Result> results = new ArrayList<Result>();
+	private final List<User> users = new ArrayList<User>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +46,7 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 
 		app = (App) getApplication();
 		groupId = this.getIntent().getStringExtra(Config.GROUP_ID);
-		reloadContacts();
+		users.addAll(app.contacts);
 		((ListView) findViewById(R.id.messages)).setAdapter(new UsersAdapter());
 		((TextView) findViewById(R.id.search)).setOnEditorActionListener(this);
 	}
@@ -71,22 +67,9 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 		return super.onOptionsItemSelected(item);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onClick(View view) {
-		final Result result = (Result) view.getTag();
-		if (result.user != null) {
-			if (groupId != null) {
-				addUserToGroup(result.user, groupId);
-			} else {
-				startMessagingWithUser(result.user);
-			}
-		} else if (result.group != null) {
-			new MessagesGet(app, result.group.uuid).execute();
-			startActivity(new Intent(app, MessagingActivity.class)
-					.putExtra(Config.GROUP_ID, result.group.uuid));
-			finish();
-		}
+		addUserToGroup((User) view.getTag(), groupId);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,13 +85,11 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 		new Search(app) {
 			@Override
 			public void onResult(Result[] results) {
-				SearchActivity.this.results.clear();
+				ContactsActivity.this.users.clear();
 				for (Result result : results) {
-					if (result != null && (result.user != null || result.group != null)) {
-						SearchActivity.this.results.add(result);
-						if (result.user != null) {
-							app.contacts.add(result.user);
-						}
+					if (result != null && result.user != null) {
+						ContactsActivity.this.users.add(result.user);
+						app.contacts.add(result.user);
 					}
 				}
 				((BaseAdapter) ((ListView) findViewById(R.id.messages)).getAdapter())
@@ -122,29 +103,20 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 		return true;
 	}
 
-	private void reloadContacts() {
-		for (User user : app.contacts) {
-			Result result = new Result();
-			result.user = user;
-			results.add(result);
-		}
-	}
-
 	private class UsersAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
-			return results.size();
+			return users.size();
 		}
 
 		@Override
-		public Result getItem(int position) {
-			return results.get(position);
+		public User getItem(int position) {
+			return users.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			Result result = getItem(position);
-			return result == null ? 0 : result.hashCode();
+			return getItem(position).hashCode();
 		}
 
 		@Override
@@ -156,30 +128,16 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 				view = convertView;
 			}
 
-			Result result = getItem(position);
-			if (result != null && result.user != null) {
-				((TextView) view.findViewById(R.id.title)).setText(result.user.name);
-				((TextView) view.findViewById(R.id.date)).setText(
-						Utils.getDisplayTime(result.user.update_time));
-				String photoUrl = String.format("%s%s&size=%d", Config.USER_PHOTO_URL,
-						result.user.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
-				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
-						photoUrl, app.imageLoader);
-			} else if (result != null && result.group != null) {
-				((TextView) view.findViewById(R.id.title)).setText(result.group.toString());
-				((TextView) view.findViewById(R.id.date)).setText(
-						Utils.getDisplayTime(result.group.update_time));
-				String photoUrl = String.format("%s%s&size=%d", Config.GROUP_PHOTO_URL,
-						result.group.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
-				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
-						photoUrl, app.imageLoader);
-			} else {
-				((TextView) view.findViewById(R.id.title)).setText("");
-				((TextView) view.findViewById(R.id.date)).setText("");
-				((ImageView) view.findViewById(R.id.icon)).setImageDrawable(null);
-			}
-			view.setOnClickListener(SearchActivity.this);
-			view.setTag(result);
+			User user = getItem(position);
+			((TextView) view.findViewById(R.id.title)).setText(user.name);
+			((TextView) view.findViewById(R.id.date)).setText(
+					Utils.getDisplayTime(user.update_time));
+			String photoUrl = String.format("%s%s&size=%d", Config.USER_PHOTO_URL,
+					user.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
+			((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
+					photoUrl, app.imageLoader);
+			view.setOnClickListener(ContactsActivity.this);
+			view.setTag(user);
 			return view;
 		}
 	}
@@ -193,29 +151,5 @@ public class SearchActivity extends FragmentActivity implements OnClickListener,
 				finish();
 			}
 		}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, user.uuid));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void startMessagingWithUser(final User user) {
-		Group group = app.findUserGroup(user);
-		if (group == null) {
-			new GroupUpdate(app, null) {
-				@Override
-				protected void onPostExecute(ApiResponse response) {
-					super.onPostExecute(response);
-					Group group = app.findUserGroup(user);
-					if (group != null) {
-						startActivity(
-								new Intent(SearchActivity.this, MessagingActivity.class)
-								.putExtra(Config.GROUP_ID, group.uuid));
-						finish();
-					}
-				}
-			}.execute(Pair.create(GroupUpdate.PARAM_MEMBER, user.uuid));
-		} else {
-			startActivity(new Intent(this, MessagingActivity.class)
-				.putExtra(Config.GROUP_ID, group.uuid));
-			finish();
-		}
 	}
 }

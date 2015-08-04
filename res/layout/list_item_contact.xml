@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/small_margin"
     android:gravity="center_vertical"
-    tools:context="care.dovetail.SearchActivity" >
+    tools:context="care.dovetail.ContactsActivity" >
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/icon"

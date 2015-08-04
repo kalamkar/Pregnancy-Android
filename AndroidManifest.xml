@@ -58,7 +58,7 @@
             android:name=".bluetooth.PairingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".ContactsActivity"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
             <meta-data
