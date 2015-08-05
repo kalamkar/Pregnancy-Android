@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.util.Pair;
@@ -67,7 +68,11 @@ public class App extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		startService(new Intent(this, BackgroundService.class));
+
+		// BkgService needed for BTLE devices which are supported JBMR2+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			startService(new Intent(this, BackgroundService.class));
+		}
 
 		String profile =
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);

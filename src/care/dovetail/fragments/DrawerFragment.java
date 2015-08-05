@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,12 +30,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.FitnessPollTask;
 import care.dovetail.MainActivity;
 import care.dovetail.R;
 import care.dovetail.api.PhotoUpdate;
+import care.dovetail.bluetooth.JellyBeanPairingActivity;
 import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.User;
 
@@ -241,7 +244,15 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 				((MainActivity) getActivity()).setContentFragment(new HistoryFragment());
 				break;
 			case R.string.pair_scale:
-				startActivity(new Intent(getActivity(), PairingActivity.class));
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+					startActivity(new Intent(getActivity(), PairingActivity.class));
+				} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+					startActivity(new Intent(getActivity(), JellyBeanPairingActivity.class));
+				} else {
+					Toast.makeText(app,
+							getResources().getString(R.string.weight_scale_not_supported),
+							Toast.LENGTH_SHORT).show();
+				}
 				break;
 			case R.string.pair_google_fit:
 				FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);

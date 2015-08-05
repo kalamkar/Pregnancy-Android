@@ -45,6 +45,9 @@
     <string name="email_justification">No spam! Email needed to recover password</string>
     <string name="recover_account">Already signed up? Tap here to recover your account</string>
     
+    <string name="weight_scale_not_supported">
+        Connecting to weighing scale not supported on your phone.
+    </string>
     <string name="stand_on_scale">Stand on the weighing scale to connect.</string>
     <string name="weight_message">Recorded weight %d lbs</string>
     

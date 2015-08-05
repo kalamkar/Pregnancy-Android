@@ -1,15 +1,18 @@
 package care.dovetail;
 
+import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import care.dovetail.bluetooth.SamicoScalesClient;
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class BackgroundService extends Service implements OnSharedPreferenceChangeListener {
 	private static final String TAG = "BackgroundService";
 
