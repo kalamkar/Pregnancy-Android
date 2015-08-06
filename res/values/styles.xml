@@ -19,11 +19,17 @@
         <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="android:actionMenuTextColor">@color/actionbar_text</item>
     </style>
-    
+
     <style name="ActionBar"
            parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/actionbar_background</item>
         <item name="elevation">0dp</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
+    </style>
+    
+    <style name="ActionBarTitleText"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/actionbar_text</item>
     </style>
     
     <style name="Activity">

@@ -5,7 +5,7 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
-        <item name="android:statusBarColor">@color/actionbar_background</item>
+        <!--item name="android:statusBarColor">@color/actionbar_background</item-->
     </style>
     
 </resources>
