@@ -51,6 +51,8 @@
     <string name="stand_on_scale">Stand on the weighing scale to connect.</string>
     <string name="weight_message">Recorded weight %d lbs</string>
     
+    <string name="search_results_not_found">No results found.</string>
+    
     <string-array name="baby_genders">
         <item>Unknown</item>
         <item>Girl</item>

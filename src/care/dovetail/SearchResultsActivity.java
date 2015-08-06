@@ -106,6 +106,10 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 			@Override
 			public void onResult(Result[] results) {
 				SearchResultsActivity.this.results.clear();
+				findViewById(R.id.progress).setVisibility(View.INVISIBLE);
+				if (results == null || results.length == 0) {
+					findViewById(R.id.message).setVisibility(View.VISIBLE);
+				}
 				for (Result result : results) {
 					if (result != null) {
 						SearchResultsActivity.this.results.add(result);
@@ -115,6 +119,8 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 						.notifyDataSetChanged();
 			}
 		}.execute(Pair.create(Search.PARAM_QUERY, query));
+		findViewById(R.id.progress).setVisibility(View.VISIBLE);
+		findViewById(R.id.message).setVisibility(View.INVISIBLE);
 	}
 
 	private class ResultsAdapter extends BaseAdapter {

@@ -45,6 +45,7 @@ public abstract class Search extends ApiResponseTask {
 		if (result != null && !"OK".equalsIgnoreCase(result.code)) {
 			Log.e(TAG, result.message);
 			Toast.makeText(app, result.message, Toast.LENGTH_LONG).show();
+			onResult(new Result[0]);
 		} else if (result != null && result.results != null) {
 			onResult(result.results);
 		}
