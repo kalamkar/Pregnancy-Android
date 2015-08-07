@@ -14,32 +14,39 @@
         android:layout_gravity="right"
         android:src="@drawable/menu" />
 
-    
     <RelativeLayout
         style="@style/Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <com.android.volley.toolbox.NetworkImageView
+        <ImageView
             android:id="@+id/icon"
             android:layout_width="@dimen/icon_width"
             android:layout_height="@dimen/icon_width"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:scaleType="centerInside"
-            android:src="@android:drawable/ic_dialog_alert" />
+            android:src="@android:drawable/sym_def_app_icon" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/small_margin"
-            android:layout_marginLeft="@dimen/small_margin"
-            android:layout_toLeftOf="@+id/time"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_toRightOf="@+id/icon"
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/title"
+            android:layout_below="@+id/title"
+            android:text="@string/thats_how_big_baby_is"
+            android:textColor="@color/secondary_text_gray" />
 
     </RelativeLayout>
 </LinearLayout>

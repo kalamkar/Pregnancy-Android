@@ -3,7 +3,9 @@ package care.dovetail.fragments;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,6 +14,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,8 +24,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
@@ -30,18 +38,57 @@ import care.dovetail.api.UserGet;
 import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.Card;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 public class HomeFragment extends Fragment implements OnRefreshListener, OnClickListener {
 	private static final String TAG = "HomeFragment";
 
+	private static class Action {
+		int title;
+		int icon;
+		Runnable runnable;
+		Action (int title, int icon, Runnable runnable) {
+			this.title = title;
+			this.icon = icon;
+			this.runnable = runnable;
+		}
+	}
+
 	private App app;
 	private List<Card> cards = new ArrayList<Card>();
+	private Map<Card.Action, Action> actions = new HashMap<Card.Action, Action>();
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		app = (App) activity.getApplication();
+		actions.put(Card.Action.DUE_DATE,
+				new Action(R.string.due_date, R.drawable.ic_date, new Runnable() {
+					@Override
+					public void run() {
+						new DueDateFragment().show(getChildFragmentManager(), null);
+					}
+				}));
+		actions.put(Card.Action.CONNECT_SCALE,
+				new Action(R.string.pair_scale, R.drawable.ic_action_pair, new Runnable() {
+					@Override
+					public void run() {
+						startActivity(new Intent(getActivity(), PairingActivity.class));
+					}
+				}));
+		actions.put(Card.Action.CONNECT_HEALTH_DATA,
+				new Action(R.string.pair_google_fit, R.drawable.ic_heart, new Runnable() {
+					@Override
+					public void run() {
+						startActivity(new Intent(getActivity(), PairingActivity.class));
+					}
+				}));
+		actions.put(Card.Action.TO_DO,
+				new Action(R.string.action_add_to_do, R.drawable.ic_todo, new Runnable() {
+					@Override
+					public void run() {
+						// TODO(abhi): Add TO-Do Action here
+						Toast.makeText(app, "Adding to do", Toast.LENGTH_SHORT).show();
+					}
+				}));
 	}
 
 	@Override
@@ -128,19 +175,6 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			fragment.show(getChildFragmentManager(), null);
 			return;
 		}
-		String action = null;
-		for (String tag : card.tags) {
-			if (tag.toLowerCase().startsWith("action:")) {
-				action = tag.replaceFirst("action:", "");
-			}
-		}
-		if (Card.ACTION.DUE_DATE.name().equalsIgnoreCase(action)) {
-			new DueDateFragment().show(getChildFragmentManager(), null);
-		} else if (Card.ACTION.CONNECT_SCALE.name().equalsIgnoreCase(action)) {
-			startActivity(new Intent(getActivity(), PairingActivity.class));
-		} else if (Card.ACTION.CONNECT_HEALTH_DATA.name().equalsIgnoreCase(action)) {
-			startActivity(new Intent(getActivity(), PairingActivity.class));
-		}
 	}
 
 	private class CardsAdapter extends BaseAdapter {
@@ -162,23 +196,114 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view;
-			if (convertView == null) {
+			Card card = getItem(position);
+			String title = card.getTitle();
+			String text = card.getText();
+			Card.Action actionType = card.getAction();
+			Card.Type type = card.getType();
+			switch(type) {
+			case SIZE:
+				view = getActivity().getLayoutInflater().inflate(R.layout.card_size, null);
+				text = getResources().getString(R.string.thats_how_big_baby_is);
+				break;
+			case TIP:
+			case MILESTONE:
+				view = getActivity().getLayoutInflater().inflate(R.layout.card_tip, null);
+				break;
+			case CARE:
+				view = getActivity().getLayoutInflater().inflate(R.layout.card_care, null);
+				break;
+			case SYMPTOM:
+				view = getActivity().getLayoutInflater().inflate(R.layout.card_symptom, null);
+				break;
+			case POLL:
+				view = getActivity().getLayoutInflater().inflate(R.layout.card_poll, null);
+				title = title == null ? text : title;
+				break;
+			default:
 				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
-				view.findViewById(R.id.menu_button).setOnClickListener(HomeFragment.this);
-				view.setOnClickListener(HomeFragment.this);
-			} else {
-				view = convertView;
+				break;
+			}
+			view.findViewById(R.id.menu_button).setOnClickListener(HomeFragment.this);
+			view.setOnClickListener(HomeFragment.this);
+
+			TextView titleView = (TextView) view.findViewById(R.id.title);
+			TextView textView = (TextView) view.findViewById(R.id.text);
+			ImageView iconView = (ImageView) view.findViewById(R.id.icon);
+			ImageView photoView = (ImageView) view.findViewById(R.id.photo);
+			TextView actionView = (TextView) view.findViewById(R.id.action);
+			ImageView actionIconView = (ImageView) view.findViewById(R.id.action_icon);
+			LinearLayout optionsView = (LinearLayout) view.findViewById(R.id.options);
+			SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+
+			if (title != null && titleView != null) {
+				titleView.setText(title);
+			} else if (titleView != null) {
+				titleView.setVisibility(View.GONE);
 			}
 
-			Card card = getItem(position);
-			if (card.icon == null) {
-				view.findViewById(R.id.icon).setVisibility(View.GONE);
-			} else {
-				view.findViewById(R.id.icon).setVisibility(View.VISIBLE);
-				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
-						card.icon, app.imageLoader);
+			if (text != null && !text.trim().isEmpty() && textView != null) {
+				textView.setText(text);
+			} else if (textView != null) {
+				textView.setVisibility(View.GONE);
 			}
-			((TextView) view.findViewById(R.id.title)).setText(card.text);
+
+			if (iconView != null && card.icon != null) {
+				// TODO(abhi): Make this NetworkImageView
+				iconView.setImageURI(Uri.parse(card.icon));
+			} else if (iconView != null) {
+				iconView.setVisibility(View.GONE);
+			}
+
+			if (photoView != null && card.image != null) {
+				// TODO(abhi): Make this NetworkImageView
+				photoView.setImageURI(Uri.parse(card.image));
+			}
+
+			if (actionView != null && actionType != Card.Action.NONE) {
+				final Action action = actions.get(actionType);
+				if (action != null) {
+					actionView.setText(action.title);
+					actionView.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							action.runnable.run();
+						}
+					});
+					if (actionIconView != null) {
+						actionIconView.setImageDrawable(getResources().getDrawable(action.icon));
+					}
+				}
+			}
+
+			if (optionsView != null && card.options != null) {
+				for (final String option : card.options) {
+					View optionView =
+							getActivity().getLayoutInflater().inflate(R.layout.option, null);
+					((TextView) optionView.findViewById(R.id.text)).setText(option);
+					optionView.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							// TODO(abhi): Handle poll choice
+							Toast.makeText(app, ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+						}
+					});
+					optionsView.addView(optionView);
+					((LinearLayout.LayoutParams) optionView.getLayoutParams()).topMargin =
+							getResources().getDimensionPixelOffset(R.dimen.medium_margin);
+				}
+			}
+			if (seekBar != null) {
+				seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+					@Override
+					public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
+						// TODO(abhi): Do something here
+					}
+					@Override public void onStartTrackingTouch(SeekBar bar) {}
+					@Override public void onStopTrackingTouch(SeekBar bar) {}
+				});
+			}
+
 			view.setTag(card);
 			view.findViewById(R.id.menu_button).setTag(card);
 			return view;

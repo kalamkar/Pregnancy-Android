@@ -48,6 +48,7 @@
         <item name="android:background">@drawable/text_button</item>
         <item name="android:textColor">@color/actionbar_background</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:padding">@dimen/small_margin</item>
     </style>
 
     <color name="background">#F5F5F5</color>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="care.dovetail.MainActivity" >
+
+    <ImageView
+        android:id="@+id/menu_button"
+        android:layout_width="@dimen/card_menu_width"
+        android:layout_height="@dimen/card_menu_height"
+        android:layout_marginRight="@dimen/medium_margin"
+        android:layout_gravity="right"
+        android:src="@drawable/menu" />
+
+    <RelativeLayout
+        style="@style/Card"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="0dp" >
+
+        <ImageView
+            android:id="@+id/photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="2dp"
+            android:scaleType="centerCrop"
+            android:alpha="0.3"
+            android:src="@drawable/flowers" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="@dimen/medium_margin"
+            android:padding="@dimen/small_margin"
+            android:text="more text explaining stuff"
+            android:textColor="@color/secondary_text_gray"
+            android:background="#80FFFFFF" />
+
+    </RelativeLayout>
+</LinearLayout>

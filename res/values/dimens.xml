@@ -22,5 +22,8 @@
     <dimen name="icon_width">50dp</dimen>
     <dimen name="icon_height">50dp</dimen>
     
+    <dimen name="card_menu_width">20dp</dimen>
+    <dimen name="card_menu_height">20dp</dimen>
+    
     <integer name="num_graph_labels">7</integer>
 </resources>

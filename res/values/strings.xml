@@ -10,6 +10,7 @@
     <string name="action_sign_up">Sign Up</string>
     <string name="action_recover">Recover</string>
     <string name="action_submit">Submit</string>
+    <string name="action_add_to_do">Add To-Do</string>
     
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
@@ -52,6 +53,8 @@
     <string name="weight_message">Recorded weight %d lbs</string>
     
     <string name="search_results_not_found">No results found.</string>
+    
+    <string name="thats_how_big_baby_is">thats how big your baby is.</string>
     
     <string-array name="baby_genders">
         <item>Unknown</item>
