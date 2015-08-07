@@ -5,24 +5,25 @@
     android:layout_height="wrap_content"
     tools:context="care.dovetail.MainActivity"
     style="@style/Card" >
+        
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/icon_width"
+        android:layout_height="@dimen/icon_width"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/small_margin"
+        android:scaleType="centerInside"
+        android:src="@android:drawable/ic_dialog_alert" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_toRightOf="@+id/icon"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <LinearLayout
-        android:id="@+id/options"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/title"
-        android:layout_below="@+id/title"
-        android:orientation="vertical" >
-    </LinearLayout>
 
 </RelativeLayout>

@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -221,11 +222,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 				title = title == null ? text : title;
 				break;
 			default:
-				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
+				view = getActivity().getLayoutInflater().inflate(R.layout.card_basic, null);
 				break;
 			}
-			view.findViewById(R.id.menu_button).setOnClickListener(HomeFragment.this);
-			view.setOnClickListener(HomeFragment.this);
 
 			TextView titleView = (TextView) view.findViewById(R.id.title);
 			TextView textView = (TextView) view.findViewById(R.id.text);
@@ -304,9 +303,13 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 				});
 			}
 
-			view.setTag(card);
-			view.findViewById(R.id.menu_button).setTag(card);
-			return view;
+			View cardView = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
+			((CardView) cardView.findViewById(R.id.card)).addView(view);
+			cardView.setTag(card);
+			cardView.findViewById(R.id.menu_button).setTag(card);
+			cardView.findViewById(R.id.menu_button).setOnClickListener(HomeFragment.this);
+			cardView.setOnClickListener(HomeFragment.this);
+			return cardView;
 		}
 	}
 }

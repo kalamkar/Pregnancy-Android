@@ -1,62 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:context="care.dovetail.MainActivity" >
+    tools:context="care.dovetail.MainActivity"
+    style="@style/Card" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/title"
+        android:layout_below="@+id/title"
+        android:text="more text explaining stuff"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:textColor="@color/secondary_text_gray" />
+
+    <TextView
+        android:id="@+id/action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/text"
+        android:text="Button"
+        style="@style/TextButton" />
 
     <ImageView
-        android:id="@+id/menu_button"
-        android:layout_width="@dimen/card_menu_width"
-        android:layout_height="@dimen/card_menu_height"
-        android:layout_marginRight="@dimen/medium_margin"
-        android:layout_gravity="right"
-        android:src="@drawable/menu" />
+        android:id="@+id/action_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/action"
+        android:layout_alignBottom="@+id/action"
+        android:layout_marginRight="@dimen/small_margin"
+        android:layout_toLeftOf="@+id/action"
+        android:src="@drawable/ic_todo" />
 
-   <RelativeLayout
-        style="@style/Card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="@dimen/medium_margin"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/title"
-            android:layout_below="@+id/title"
-            android:text="more text explaining stuff"
-            android:layout_marginBottom="@dimen/medium_margin"
-            android:textColor="@color/secondary_text_gray" />
-
-        <TextView
-            android:id="@+id/action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/text"
-            android:text="Button"
-            style="@style/TextButton" />
-
-        <ImageView
-            android:id="@+id/action_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/action"
-            android:layout_alignBottom="@+id/action"
-            android:layout_marginRight="@dimen/small_margin"
-            android:layout_toLeftOf="@+id/action"
-            android:src="@drawable/ic_todo" />
-
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

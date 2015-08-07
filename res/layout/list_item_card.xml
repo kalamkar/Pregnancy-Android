@@ -14,32 +14,12 @@
         android:layout_gravity="right"
         android:src="@drawable/menu" />
 
-    
-    <RelativeLayout
-        style="@style/Card"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <com.android.volley.toolbox.NetworkImageView
-            android:id="@+id/icon"
-            android:layout_width="@dimen/icon_width"
-            android:layout_height="@dimen/icon_width"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:scaleType="centerInside"
-            android:src="@android:drawable/ic_dialog_alert" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/small_margin"
-            android:layout_marginLeft="@dimen/small_margin"
-            android:layout_toLeftOf="@+id/time"
-            android:layout_toRightOf="@+id/icon"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginLeft="@dimen/medium_margin"
+        android:id="@+id/card">
+    </android.support.v7.widget.CardView>
 </LinearLayout>
