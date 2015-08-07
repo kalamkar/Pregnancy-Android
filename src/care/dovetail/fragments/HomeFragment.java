@@ -212,7 +212,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 				view = getActivity().getLayoutInflater().inflate(R.layout.card_tip, null);
 				break;
 			case CARE:
-				view = getActivity().getLayoutInflater().inflate(R.layout.card_care, null);
+				view = getActivity().getLayoutInflater().inflate(R.layout.card_action, null);
 				break;
 			case SYMPTOM:
 				view = getActivity().getLayoutInflater().inflate(R.layout.card_symptom, null);
@@ -222,6 +222,10 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 				title = title == null ? text : title;
 				break;
 			default:
+				if (actionType != Card.Action.NONE) {
+					view = getActivity().getLayoutInflater().inflate(R.layout.card_action, null);
+					break;
+				}
 				view = getActivity().getLayoutInflater().inflate(R.layout.card_basic, null);
 				break;
 			}
