@@ -15,14 +15,14 @@
         android:layout_marginBottom="@dimen/medium_margin"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <LinearLayout
+
+    <care.dovetail.fragments.FlowLayout
         android:id="@+id/options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/title"
         android:layout_below="@+id/title"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:gravity="top|center_horizontal">
+    </care.dovetail.fragments.FlowLayout>
 
 </RelativeLayout>

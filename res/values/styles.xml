@@ -45,7 +45,12 @@
         <item name="android:background">@drawable/text_button</item>
         <item name="android:textColor">@color/actionbar_background</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:padding">@dimen/small_margin</item>
+        <item name="android:layout_marginLeft">@dimen/medium_margin</item>
+        <item name="android:layout_marginRight">@dimen/medium_margin</item>
+        <item name="android:paddingTop">@dimen/small_margin</item>
+        <item name="android:paddingRight">@dimen/medium_margin</item>
+        <item name="android:paddingBottom">@dimen/small_margin</item>
+        <item name="android:paddingLeft">@dimen/medium_margin</item>
     </style>
 
     <color name="background">#F5F5F5</color>

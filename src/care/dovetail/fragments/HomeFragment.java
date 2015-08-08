@@ -30,9 +30,9 @@ import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -287,7 +287,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			ImageView photoView = (ImageView) view.findViewById(R.id.photo);
 			TextView actionView = (TextView) view.findViewById(R.id.action);
 			ImageView actionIconView = (ImageView) view.findViewById(R.id.action_icon);
-			LinearLayout optionsView = (LinearLayout) view.findViewById(R.id.options);
+			ViewGroup optionsView = (ViewGroup) view.findViewById(R.id.options);
 			SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 
 			if (title != null && titleView != null) {
@@ -331,7 +331,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			}
 
 			if (optionsView != null && card.options != null) {
-				for (final String option : card.options) {
+				for (String option : card.options) {
 					View optionView =
 							getActivity().getLayoutInflater().inflate(R.layout.option, null);
 					((TextView) optionView.findViewById(R.id.text)).setText(option);
@@ -343,7 +343,10 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 						}
 					});
 					optionsView.addView(optionView);
-					((LinearLayout.LayoutParams) optionView.getLayoutParams()).topMargin =
+					ViewGroup.MarginLayoutParams params =
+							(MarginLayoutParams) optionView.getLayoutParams();
+					params.width = params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+					params.rightMargin = params.topMargin =
 							getResources().getDimensionPixelOffset(R.dimen.medium_margin);
 				}
 			}
