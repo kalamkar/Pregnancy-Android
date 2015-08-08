@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -20,9 +21,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.CardView;
+import android.util.Pair;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -35,11 +41,13 @@ import android.widget.Toast;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
+import care.dovetail.api.CardUpdate;
 import care.dovetail.api.UserGet;
 import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.Card;
 
-public class HomeFragment extends Fragment implements OnRefreshListener, OnClickListener {
+public class HomeFragment extends Fragment implements OnRefreshListener, OnClickListener,
+		OnLongClickListener, OnDragListener {
 	private static final String TAG = "HomeFragment";
 
 	private static class Action {
@@ -56,6 +64,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 	private App app;
 	private List<Card> cards = new ArrayList<Card>();
 	private Map<Card.Action, Action> actions = new HashMap<Card.Action, Action>();
+
+	private float dragStartX = -1;
+	private float dragEndX = -1;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -104,6 +115,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		((SwipeRefreshLayout) view).setOnRefreshListener(this);
 		updateCards();
 		((ListView) view.findViewById(R.id.cards)).setAdapter(new CardsAdapter());
+		view.setOnDragListener(this);
 	}
 
 	@Override
@@ -176,6 +188,45 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			fragment.show(getChildFragmentManager(), null);
 			return;
 		}
+	}
+
+	@Override
+	public boolean onLongClick(View view) {
+		DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+		view.startDrag(ClipData.newPlainText("", ""), shadowBuilder, view, 0);
+		view.setVisibility(View.INVISIBLE);
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean onDrag(View view, DragEvent event) {
+	    switch (event.getAction()) {
+	    case DragEvent.ACTION_DRAG_STARTED:
+	    	dragStartX = event.getX();
+	    	break;
+	    case DragEvent.ACTION_DRAG_ENTERED:
+	    	break;
+	    case DragEvent.ACTION_DRAG_EXITED:
+	    	break;
+	    case DragEvent.ACTION_DROP:
+    		View cardView = (View) event.getLocalState();
+	    	if (Math.abs(dragStartX - event.getX()) > 500) {
+	    		Card card = (Card) cardView.getTag();
+	    		cards.remove(card);
+	    		new CardUpdate(app).execute(Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
+						Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.ARCHIVED.name()));
+	    	} else {
+	    		cardView.setVisibility(View.VISIBLE);
+	    	}
+		    dragStartX = -1;
+	    	break;
+	    case DragEvent.ACTION_DRAG_ENDED:
+	    	((BaseAdapter) ((ListView) view.findViewById(R.id.cards)).getAdapter())
+	    			.notifyDataSetChanged();
+	    	break;
+	    }
+	    return true;
 	}
 
 	private class CardsAdapter extends BaseAdapter {
@@ -312,7 +363,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			cardView.setTag(card);
 			cardView.findViewById(R.id.menu_button).setTag(card);
 			cardView.findViewById(R.id.menu_button).setOnClickListener(HomeFragment.this);
-			cardView.setOnClickListener(HomeFragment.this);
+			cardView.setOnLongClickListener(HomeFragment.this);
 			return cardView;
 		}
 	}
