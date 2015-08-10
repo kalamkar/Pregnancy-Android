@@ -17,12 +17,12 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textColor">#5C5C5C</item>
         <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="android:actionMenuTextColor">@color/actionbar_text</item>
+        <item name="android:actionMenuTextColor">@color/actionbar_text</item>        
     </style>
 
     <style name="ActionBar"
            parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/actionbar_background</item>
+        <item name="android:background">@color/primary</item>
         <item name="elevation">0dp</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleText</item>
     </style>
@@ -43,7 +43,7 @@
     
     <style name="TextButton" parent ="@android:style/Widget.Button.Small">
         <item name="android:background">@drawable/text_button</item>
-        <item name="android:textColor">@color/actionbar_background</item>
+        <item name="android:textColor">@color/primary_dark</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginLeft">@dimen/medium_margin</item>
         <item name="android:layout_marginRight">@dimen/medium_margin</item>
@@ -59,7 +59,10 @@
 
     <color name="text">#5C5C5C</color>
     <color name="actionbar_text">#FAFAFA</color>
-    <color name="actionbar_background">#E0A6C6</color>
+    
+    <color name="primary">#E0A6C6</color>
+    <color name="primary_dark">#C47AA3</color>
+    <color name="accent">#E0A6C6</color>
     
     <color name="my_message">#E0A6C6</color>
     <color name="message">#D1D2D4</color>
