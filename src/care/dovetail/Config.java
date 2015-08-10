@@ -9,7 +9,9 @@ import android.annotation.SuppressLint;
 public class Config extends care.dovetail.common.Config {
 
 	// Activity Request IDs
-	public static final int ACTIVITY_REQUEST_OAUTH = 1;
+	public static final int ACTIVITY_REQUEST_OAUTH = 0;
+	public static final int ACTIVITY_CAMERA = 1;
+	public static final int ACTIVITY_GALLERY = 2;
 
 	// Notification IDs
 	public static final int MESSAGE_NOTIFICATION_ID = 1;

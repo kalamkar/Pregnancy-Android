@@ -47,9 +47,6 @@ import com.android.volley.toolbox.NetworkImageView;
 public class DrawerFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "DrawerFragment";
 
-    private static final int CAMERA_ACTIVITY = 0;
-    private static final int GALLERY_ACTIVITY = 1;
-
 	private static final int TITLES[] = new int[] {R.string.home, R.string.sharing,
 		R.string.history, R.string.due_date, R.string.pair_google_fit, R.string.pair_scale,
 		R.string.about};
@@ -112,8 +109,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		((TextView) view.findViewById(R.id.name)).setText(user.name);
 		((TextView) view.findViewById(R.id.email)).setText(user.email);
 
-		String photoUrl = String.format("%s%s&size=%d", Config.USER_PHOTO_URL, user.uuid,
-				(int) app.getResources().getDimension(R.dimen.photo_width));
+		String photoUrl = String.format("%s%s&size=%d&rnd=%d", Config.USER_PHOTO_URL, user.uuid,
+				(int) app.getResources().getDimension(R.dimen.photo_width),
+				(int) (Math.random() * 10000));
 		((NetworkImageView) view.findViewById(R.id.photo)).setImageUrl(photoUrl, app.imageLoader);
 	}
 
@@ -134,7 +132,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	            	case 1:
 	            		startActivityForResult(Intent.createChooser(
 	    						new Intent().setType("image/jpeg").setAction(Intent.ACTION_GET_CONTENT),
-	    						getResources().getString(R.string.update_photo)), GALLERY_ACTIVITY);
+	    						getResources().getString(R.string.update_photo)), Config.ACTIVITY_GALLERY);
 	                }
 	            }
 	        });
@@ -165,7 +163,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	    	return;
 	    }
 		takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-		startActivityForResult(takePictureIntent, CAMERA_ACTIVITY);
+		startActivityForResult(takePictureIntent, Config.ACTIVITY_CAMERA);
 	}
 
 	@Override
@@ -175,7 +173,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			Log.w(TAG, String.format("Failed to get photo activity result."));
 			return;
 		}
-		if (requestCode == CAMERA_ACTIVITY) {
+		if (requestCode == Config.ACTIVITY_CAMERA) {
 			new PhotoUpdate(app, photoUrl, "image/jpeg") {
 				@Override
 				protected void onPostExecute(String result) {
@@ -183,7 +181,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 					updateUi(getView());
 				}
 			}.execute();
-		} else if (requestCode == GALLERY_ACTIVITY) {
+		} else if (requestCode == Config.ACTIVITY_CAMERA) {
 			new PhotoUpdate(app, data.getData(), "image/jpeg") {
 				@Override
 				protected void onPostExecute(String result) {

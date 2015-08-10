@@ -155,6 +155,7 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 	    if (requestCode == Config.ACTIVITY_REQUEST_OAUTH) {
 	        app.authInProgress = false;
 	        if (resultCode == RESULT_OK) {

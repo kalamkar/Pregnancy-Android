@@ -72,6 +72,7 @@ public class PhotoUpdate extends AsyncTask<String, Void, String> {
 	}
 
 	private Pair<Integer, String> uploadFile(String contentType, byte data[]) throws IOException {
+		Log.v(TAG, String.format("Uploading %d bytes to %s", data.length, Config.PHOTO_UPLOAD_URL));
 
 		HttpURLConnection conn = (HttpURLConnection) new URL(Config.PHOTO_UPLOAD_URL).openConnection();
 		conn.setDoInput(true);
