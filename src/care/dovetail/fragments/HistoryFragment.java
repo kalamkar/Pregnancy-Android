@@ -6,15 +6,20 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
@@ -27,7 +32,6 @@ import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
 import care.dovetail.common.model.Measurement;
 
-import com.android.volley.toolbox.NetworkImageView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer.GridStyle;
@@ -167,22 +171,75 @@ public class HistoryFragment extends Fragment {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view;
-			if (convertView == null) {
-				view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
-				view.findViewById(R.id.menu_button).setVisibility(View.GONE);
-			} else {
-				view = convertView;
+			Card card = getItem(position);
+			String title = card.getTitle();
+			String text = card.getText();
+			Card.Action actionType = card.getAction();
+			Card.Type type = card.getType();
+			if (type == Card.Type.SIZE) {
+				text = getResources().getString(R.string.thats_how_big_baby_is);
+			} else if (type == Card.Type.POLL && title == null) {
+				title = text;
 			}
 
-			Card card = getItem(position);
-			if (card.icon == null) {
-				view.findViewById(R.id.icon).setVisibility(View.GONE);
-			} else {
-				view.findViewById(R.id.icon).setVisibility(View.VISIBLE);
-				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
-						card.icon, app.imageLoader);
+			View cardView = getActivity().getLayoutInflater().inflate(
+					HomeFragment.getCardLayout(card), null);
+			TextView titleView = (TextView) cardView.findViewById(R.id.title);
+			TextView textView = (TextView) cardView.findViewById(R.id.text);
+			ImageView iconView = (ImageView) cardView.findViewById(R.id.icon);
+			ImageView photoView = (ImageView) cardView.findViewById(R.id.photo);
+			TextView actionView = (TextView) cardView.findViewById(R.id.action);
+			ImageView actionIconView = (ImageView) cardView.findViewById(R.id.action_icon);
+			ViewGroup optionsView = (ViewGroup) cardView.findViewById(R.id.options);
+			SeekBar seekBar = (SeekBar) cardView.findViewById(R.id.seekBar);
+
+			if (title != null && titleView != null) {
+				titleView.setText(title);
+			} else if (titleView != null) {
+				titleView.setVisibility(View.GONE);
 			}
-			((TextView) view.findViewById(R.id.title)).setText(card.text);
+
+			if (text != null && !text.trim().isEmpty() && textView != null) {
+				textView.setText(text);
+			} else if (textView != null) {
+				textView.setVisibility(View.GONE);
+			}
+
+			if (iconView != null && card.icon != null) {
+				// TODO(abhi): Make this NetworkImageView
+				iconView.setImageURI(Uri.parse(card.icon));
+			} else if (iconView != null) {
+				iconView.setVisibility(View.GONE);
+			}
+
+			if (photoView != null && card.image != null) {
+				// TODO(abhi): Make this NetworkImageView
+				photoView.setImageURI(Uri.parse(card.image));
+			}
+
+			if (actionView != null && actionType != Card.Action.NONE) {
+				actionView.setVisibility(View.GONE);
+			}
+
+			if (optionsView != null && card.options != null) {
+				for (String option : card.options) {
+					View optionView =
+							getActivity().getLayoutInflater().inflate(R.layout.option, null);
+					((TextView) optionView.findViewById(R.id.text)).setText(option);
+					optionsView.addView(optionView);
+					ViewGroup.MarginLayoutParams params =
+							(MarginLayoutParams) optionView.getLayoutParams();
+					params.width = params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+					params.rightMargin = params.topMargin =
+							getResources().getDimensionPixelOffset(R.dimen.medium_margin);
+				}
+			}
+			if (seekBar != null) {
+			}
+
+			view = getActivity().getLayoutInflater().inflate(R.layout.list_item_card, null);
+			view.findViewById(R.id.menu_button).setVisibility(View.GONE);
+			((CardView) view.findViewById(R.id.card)).addView(cardView);
 			return view;
 		}
 	}

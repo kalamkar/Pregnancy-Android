@@ -247,40 +247,18 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view;
 			Card card = getItem(position);
 			String title = card.getTitle();
 			String text = card.getText();
 			Card.Action actionType = card.getAction();
 			Card.Type type = card.getType();
-			switch(type) {
-			case SIZE:
-				view = getActivity().getLayoutInflater().inflate(R.layout.card_size, null);
+			if (type == Card.Type.SIZE) {
 				text = getResources().getString(R.string.thats_how_big_baby_is);
-				break;
-			case TIP:
-			case MILESTONE:
-				view = getActivity().getLayoutInflater().inflate(R.layout.card_tip, null);
-				break;
-			case CARE:
-				view = getActivity().getLayoutInflater().inflate(R.layout.card_action, null);
-				break;
-			case SYMPTOM:
-				view = getActivity().getLayoutInflater().inflate(R.layout.card_symptom, null);
-				break;
-			case POLL:
-				view = getActivity().getLayoutInflater().inflate(R.layout.card_poll, null);
-				title = title == null ? text : title;
-				break;
-			default:
-				if (actionType != Card.Action.NONE) {
-					view = getActivity().getLayoutInflater().inflate(R.layout.card_action, null);
-					break;
-				}
-				view = getActivity().getLayoutInflater().inflate(R.layout.card_basic, null);
-				break;
+			} else if (type == Card.Type.POLL && title == null) {
+				title = text;
 			}
 
+			View view = getActivity().getLayoutInflater().inflate(getCardLayout(card), null);
 			TextView titleView = (TextView) view.findViewById(R.id.title);
 			TextView textView = (TextView) view.findViewById(R.id.text);
 			ImageView iconView = (ImageView) view.findViewById(R.id.icon);
@@ -368,6 +346,24 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			cardView.findViewById(R.id.menu_button).setOnClickListener(HomeFragment.this);
 			cardView.setOnLongClickListener(HomeFragment.this);
 			return cardView;
+		}
+	}
+
+	public static int getCardLayout(Card card) {
+		switch(card.getType()) {
+		case SIZE:
+			return R.layout.card_size;
+		case TIP:
+		case MILESTONE:
+			return R.layout.card_tip;
+		case CARE:
+			return R.layout.card_action;
+		case SYMPTOM:
+			return R.layout.card_symptom;
+		case POLL:
+			return R.layout.card_poll;
+		default:
+			return card.getAction() == Card.Action.NONE ? R.layout.card_basic : R.layout.card_action;
 		}
 	}
 }
