@@ -79,6 +79,13 @@
         <item>Choose from Library</item>
     </string-array>
     
+    <string name="week">Week</string>
+    <string-array name="trimester_options">
+        <item>1st trimester</item>
+        <item>2nd trimester</item>
+        <item>3rd trimester</item>
+    </string-array>
+    
     <string name="archive">Archive</string>
     <string name="add_to_favorites">Add to favorites</string>
     <string name="share">Share</string>

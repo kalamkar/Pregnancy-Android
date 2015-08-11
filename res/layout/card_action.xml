@@ -25,24 +25,23 @@
         android:text="more text explaining stuff"
         android:layout_marginBottom="@dimen/medium_margin"
         android:textColor="@color/secondary_text_gray" />
+    
+    <ImageView
+        android:id="@+id/action_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/action"
+        android:layout_alignBottom="@+id/action"
+        android:src="@drawable/ic_todo" />
 
     <TextView
         android:id="@+id/action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/text"
+        android:layout_toRightOf="@+id/action_icon"
         android:text="Button"
         style="@style/TextButton" />
-
-    <ImageView
-        android:id="@+id/action_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/action"
-        android:layout_alignBottom="@+id/action"
-        android:layout_marginRight="@dimen/small_margin"
-        android:layout_toLeftOf="@+id/action"
-        android:src="@drawable/ic_todo" />
 
 </RelativeLayout>

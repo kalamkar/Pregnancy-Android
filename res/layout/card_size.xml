@@ -1,38 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="care.dovetail.MainActivity"
-    style="@style/Card" >
-
+    tools:context="care.dovetail.MainActivity" >
+    
     <ImageView
-        android:id="@+id/icon"
-        android:layout_width="@dimen/icon_width"
-        android:layout_height="@dimen/icon_width"
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:scaleType="centerInside"
-        android:src="@android:drawable/sym_def_app_icon" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/cantaloupe" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="@dimen/medium_margin"
-        android:layout_toRightOf="@+id/icon"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <RelativeLayout
+        style="@style/Card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40000000" >
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/title"
-        android:layout_below="@+id/title"
-        android:text="@string/thats_how_big_baby_is"
-        android:textColor="@color/secondary_text_gray" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_alignParentLeft="true"
+            android:textColor="@android:color/white"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/title"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/thats_how_big_baby_is"
+            android:textColor="@android:color/white" />
+
+        <ProgressBar
+            android:id="@+id/weekBar"
+            style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text"
+            android:max="39"
+            android:progress="20" />
+
+        <TextView
+            android:id="@+id/week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/weekBar"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+</FrameLayout>

@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -73,7 +74,7 @@ public class CardUtils {
 			iconView.setVisibility(View.GONE);
 		}
 
-		if (photoView != null) {
+		if (photoView != null && type != Card.Type.SIZE) {
 			// TODO(abhi): Make this NetworkImageView
 			if (card.image != null) {
 				photoView.setImageURI(Uri.parse(card.image));
@@ -123,6 +124,30 @@ public class CardUtils {
 				@Override public void onStartTrackingTouch(SeekBar bar) {}
 				@Override public void onStopTrackingTouch(SeekBar bar) {}
 			});
+		}
+
+		if (type == Card.Type.SIZE) {
+			ProgressBar weekBar = (ProgressBar) view.findViewById(R.id.weekBar);
+			TextView week = (TextView) view.findViewById(R.id.week);
+			try {
+				int weekNumber = 0;
+				for (String tag : card.tags) {
+					if (tag.toLowerCase().startsWith("week:")) {
+						weekNumber = Integer.parseInt(tag.split(":")[1]);
+						break;
+					}
+				}
+				if (weekNumber > 0) {
+					int trimester = weekNumber / 13;
+					week.setText(String.format("%s %d. %s", resources.getString(R.string.week),
+							weekNumber,
+							resources.getStringArray(R.array.trimester_options)[trimester]));
+					weekBar.setProgress(Math.min(weekNumber, weekBar.getMax()));
+				}
+			} catch(Exception ex) {
+				weekBar.setVisibility(View.GONE);
+				week.setVisibility(View.GONE);
+			}
 		}
 
 		View cardView = inflater.inflate(R.layout.list_item_card, null);
