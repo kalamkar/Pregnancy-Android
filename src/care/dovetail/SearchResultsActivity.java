@@ -7,11 +7,9 @@ import java.util.List;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
@@ -20,22 +18,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import care.dovetail.api.GroupUpdate;
 import care.dovetail.api.MessagesGet;
 import care.dovetail.api.Search;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.ApiResponse.Result;
-import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
-import care.dovetail.fragments.HomeFragment;
+import care.dovetail.fragments.CardUtils;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -203,74 +197,8 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 				bubble.setLayoutParams(params);
 			} else if (result.card != null) {
 				left = top = right = bottom = 0;
-				Card card = result.card;
-				String title = card.getTitle();
-				String text = card.getText();
-				Card.Action actionType = card.getAction();
-				Card.Type type = card.getType();
-				if (type == Card.Type.SIZE) {
-					text = getResources().getString(R.string.thats_how_big_baby_is);
-				} else if (type == Card.Type.POLL && title == null) {
-					title = text;
-				}
-
-				View cardView = getLayoutInflater().inflate(HomeFragment.getCardLayout(card), null);
-				TextView titleView = (TextView) cardView.findViewById(R.id.title);
-				TextView textView = (TextView) cardView.findViewById(R.id.text);
-				ImageView iconView = (ImageView) cardView.findViewById(R.id.icon);
-				ImageView photoView = (ImageView) cardView.findViewById(R.id.photo);
-				TextView actionView = (TextView) cardView.findViewById(R.id.action);
-				ImageView actionIconView = (ImageView) cardView.findViewById(R.id.action_icon);
-				ViewGroup optionsView = (ViewGroup) cardView.findViewById(R.id.options);
-				SeekBar seekBar = (SeekBar) cardView.findViewById(R.id.seekBar);
-
-				if (title != null && titleView != null) {
-					titleView.setText(title);
-				} else if (titleView != null) {
-					titleView.setVisibility(View.GONE);
-				}
-
-				if (text != null && !text.trim().isEmpty() && textView != null) {
-					textView.setText(text);
-				} else if (textView != null) {
-					textView.setVisibility(View.GONE);
-				}
-
-				if (iconView != null && card.icon != null) {
-					// TODO(abhi): Make this NetworkImageView
-					iconView.setImageURI(Uri.parse(card.icon));
-				} else if (iconView != null) {
-					iconView.setVisibility(View.GONE);
-				}
-
-				if (photoView != null && card.image != null) {
-					// TODO(abhi): Make this NetworkImageView
-					photoView.setImageURI(Uri.parse(card.image));
-				}
-
-				if (actionView != null && actionType != Card.Action.NONE) {
-					actionView.setVisibility(View.GONE);
-				}
-
-				if (optionsView != null && card.options != null) {
-					for (String option : card.options) {
-						View optionView =
-								getLayoutInflater().inflate(R.layout.option, null);
-						((TextView) optionView.findViewById(R.id.text)).setText(option);
-						optionsView.addView(optionView);
-						ViewGroup.MarginLayoutParams params =
-								(MarginLayoutParams) optionView.getLayoutParams();
-						params.width = params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-						params.rightMargin = params.topMargin =
-								getResources().getDimensionPixelOffset(R.dimen.medium_margin);
-					}
-				}
-				if (seekBar != null) {
-				}
-
-				view = getLayoutInflater().inflate(R.layout.list_item_card, null);
-				view.findViewById(R.id.menu_button).setVisibility(View.GONE);
-				((CardView) view.findViewById(R.id.card)).addView(cardView);
+				view = CardUtils.getViewForCard(result.card, null, null, getLayoutInflater(),
+						null, getResources());
 			} else {
 				view = new View(app);
 			}

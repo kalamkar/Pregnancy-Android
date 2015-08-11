@@ -70,4 +70,7 @@ public class Config extends care.dovetail.common.Config {
 	public static final int REFRESH_TIMEOUT_MILLIS = 3000;
 
 	public static final long GRAPH_DAYS = 7L;
+
+	public static final int BACKGROUND_IMAGES[] = new int[] {
+		R.drawable.baby1, R.drawable.baby2, R.drawable.baby3, };
 }
