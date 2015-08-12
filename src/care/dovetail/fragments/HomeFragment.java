@@ -103,6 +103,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 	public void onResume() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.registerOnSharedPreferenceChangeListener(listener);
+		app.tracker.setScreenName(TAG);
 		super.onResume();
 	}
 

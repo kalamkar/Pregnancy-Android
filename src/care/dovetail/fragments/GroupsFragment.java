@@ -60,6 +60,7 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 		loadGroups();
 		((BaseAdapter) ((ListView) getView().findViewById(R.id.groups)).getAdapter())
 				.notifyDataSetChanged();
+		app.tracker.setScreenName(TAG);
 		super.onResume();
 	}
 

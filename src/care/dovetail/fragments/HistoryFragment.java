@@ -92,6 +92,12 @@ public class HistoryFragment extends Fragment {
 		}.execute(Pair.create(CardsGet.PARAM_TAGS, Card.TAGS.ARCHIVED.name()));
 	}
 
+	@Override
+	public void onResume() {
+		app.tracker.setScreenName(TAG);
+		super.onResume();
+	}
+
 	private void updateGraph(Event[] events) {
 		long maxY = 0;
 		List<DataPoint> dataPoints = new ArrayList<DataPoint>();
