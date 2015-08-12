@@ -83,7 +83,9 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 		final Result result = (Result) view.getTag();
 		if (result.user != null) {
 			startMessagingWithUser(result.user);
+			Utils.trackEvent(app, "Search", "Click", "User");
 		} else if (result.group != null) {
+			Utils.trackEvent(app, "Search", "Click", "Group");
 			new MessagesGet(app, result.group.uuid).execute();
 			startActivity(new Intent(app, MessagingActivity.class)
 					.putExtra(Config.GROUP_ID, result.group.uuid));
@@ -198,7 +200,7 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 			} else if (result.card != null) {
 				left = top = right = bottom = 0;
 				view = CardUtils.getViewForCard(result.card, null, null, getLayoutInflater(),
-						null, getResources());
+						null, getResources(), app.imageLoader);
 			} else {
 				view = new View(app);
 			}

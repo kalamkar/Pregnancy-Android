@@ -10,6 +10,8 @@ import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Pair;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 public class Utils {
 
 	public static String getMessageDisplayTime(long messageTime) {
@@ -68,5 +70,13 @@ public class Utils {
 		String line1 = lines.length > 1 && lines[0] != null ? lines[0] : defaultLine1;
 		String line2 = lines.length > 1 && lines[1] != null ? lines[1] : line;
 		return Pair.create(line1.trim(), line2.trim());
+    }
+
+    public static void trackEvent(App app, String category, String action, String label) {
+    	app.tracker.send(new HitBuilders.EventBuilder()
+	       .setCategory(category)
+	       .setAction(action)
+	       .setLabel(label)
+	       .build());
     }
 }

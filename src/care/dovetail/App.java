@@ -30,6 +30,8 @@ import care.dovetail.model.Mother;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -47,6 +49,9 @@ public class App extends Application {
 	public static final String MESSAGE_SYNC_TIME = "MESSAGE_SYNC_TIME";
 	public static final String GROUP_SYNC_TIME = "GROUP_SYNC_TIME";
 	public static final String APPOINTMENT_SYNC_TIME = "APPOINTMENT_SYNC_TIME";
+
+	public GoogleAnalytics analytics;
+	public Tracker tracker;
 
 	public boolean authInProgress = false;
 
@@ -73,6 +78,11 @@ public class App extends Application {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 			startService(new Intent(this, BackgroundService.class));
 		}
+
+		analytics = GoogleAnalytics.getInstance(this);
+	    analytics.setLocalDispatchPeriod(1800);
+	    tracker = analytics.newTracker(R.xml.analytics_global_config);
+	    tracker.enableAdvertisingIdCollection(true); // Not sure why this is not in config file.
 
 		String profile =
 				getSharedPreferences(getPackageName(), MODE_PRIVATE).getString(USER_PROFILE, null);

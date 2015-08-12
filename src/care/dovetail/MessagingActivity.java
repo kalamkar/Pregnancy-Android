@@ -106,6 +106,7 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 		case R.id.action_add_user:
 			startActivity(
 					new Intent(this, ContactsActivity.class).putExtra(Config.GROUP_ID, groupId));
+			Utils.trackEvent(app, "Message", "Menu", "AddUser");
 			break;
 		case R.id.action_edit_name:
 			DialogFragment fragment = new GroupNameFragment();
@@ -113,9 +114,11 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 			args.putString(GroupNameFragment.GROUP_ID, groupId);
 			fragment.setArguments(args);
 			fragment.show(getSupportFragmentManager(), null);
+			Utils.trackEvent(app, "Message", "Menu", "Edit");
 			break;
 		case android.R.id.home:
 	        NavUtils.navigateUpFromSameTask(this);
+	        Utils.trackEvent(app, "Message", "Menu", "Home");
 	        return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -137,6 +140,7 @@ public class MessagingActivity extends FragmentActivity implements OnClickListen
 		messageBox.setText("");
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
 				.hideSoftInputFromWindow(messageBox.getWindowToken(), 0);
+		Utils.trackEvent(app, "Message", "Click", "Send");
 	}
 
 	private class MessagesAdapter extends BaseAdapter {

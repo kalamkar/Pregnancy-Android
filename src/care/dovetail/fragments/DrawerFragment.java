@@ -36,6 +36,7 @@ import care.dovetail.Config;
 import care.dovetail.FitnessPollTask;
 import care.dovetail.MainActivity;
 import care.dovetail.R;
+import care.dovetail.Utils;
 import care.dovetail.api.PhotoUpdate;
 import care.dovetail.bluetooth.JellyBeanPairingActivity;
 import care.dovetail.bluetooth.PairingActivity;
@@ -137,10 +138,13 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	            }
 	        });
 	        builder.create().show();
+	        Utils.trackEvent(app, "Drawer", "Click",
+	        		getResources().getString(R.string.update_photo));
 			break;
 		case R.id.name:
 		case R.id.email:
 			new NameEmailFragment().show(getActivity().getSupportFragmentManager(), null);
+			Utils.trackEvent(app, "Drawer", "Click", "NameEmail");
 			break;
 		}
 	}
@@ -257,6 +261,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 				break;
 			case R.string.about:
 				break;
+			}
+			if (view instanceof TextView) {
+				Utils.trackEvent(app, "Drawer", "Click", ((TextView) view).getText().toString());
 			}
 		}
 	}

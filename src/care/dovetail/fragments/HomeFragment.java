@@ -29,6 +29,7 @@ import android.widget.Toast;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
+import care.dovetail.Utils;
 import care.dovetail.api.UserGet;
 import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.Card;
@@ -50,6 +51,8 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 					@Override
 					public void run() {
 						new DueDateFragment().show(getChildFragmentManager(), null);
+						Utils.trackEvent(app, "Card", "Action",
+								getResources().getString(R.string.due_date));
 					}
 				}));
 		actions.put(Card.Action.CONNECT_SCALE,
@@ -57,6 +60,8 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 					@Override
 					public void run() {
 						startActivity(new Intent(getActivity(), PairingActivity.class));
+						Utils.trackEvent(app, "Card", "Action",
+								getResources().getString(R.string.pair_scale));
 					}
 				}));
 		actions.put(Card.Action.CONNECT_HEALTH_DATA,
@@ -64,6 +69,8 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 					@Override
 					public void run() {
 						startActivity(new Intent(getActivity(), PairingActivity.class));
+						Utils.trackEvent(app, "Card", "Action",
+								getResources().getString(R.string.pair_google_fit));
 					}
 				}));
 		actions.put(Card.Action.TO_DO,
@@ -72,6 +79,8 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 					public void run() {
 						// TODO(abhi): Add TO-Do Action here
 						Toast.makeText(app, "Adding to do", Toast.LENGTH_SHORT).show();
+						Utils.trackEvent(app, "Card", "Action",
+								getResources().getString(R.string.action_add_to_do));
 					}
 				}));
 	}
@@ -158,10 +167,13 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			CardMenuFragment fragment = new CardMenuFragment();
 			fragment.setCard(card);
 			fragment.show(getChildFragmentManager(), null);
+			Utils.trackEvent(app, "Card", "Click",
+					getResources().getString(R.string.action_settings));
 			return;
 		}
 		if (view instanceof TextView) {
 			Toast.makeText(app, ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
 		}
 	}
 

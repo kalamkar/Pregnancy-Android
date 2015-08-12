@@ -35,12 +35,6 @@ public class CardUtils {
 		}
 	}
 
-	public static View getViewForCard(Card card, OnClickListener menuListener,
-			OnClickListener optionListener,
-			LayoutInflater inflater, Map<Card.Action, Action> actions, Resources resources) {
-		return getViewForCard(card, menuListener, optionListener, inflater, actions, resources, null);
-	}
-
 	public static View getViewForCard(final Card card, OnClickListener menuListener,
 			OnClickListener optionListener,
 			LayoutInflater inflater, Map<Card.Action, Action> actions, Resources resources,
@@ -96,7 +90,7 @@ public class CardUtils {
 			if (card.image != null && imageLoader != null) {
 				((NetworkImageView) photoView).setImageUrl(card.image, imageLoader);
 			} else {
-				int index = (int) Math.round(Math.random() * (Config.BACKGROUND_IMAGES.length -1));
+				int index = card.hashCode() % Config.BACKGROUND_IMAGES.length;
 				((NetworkImageView) photoView).setImageUrl(Config.BACKGROUND_IMAGES[index], imageLoader);
 			}
 		}

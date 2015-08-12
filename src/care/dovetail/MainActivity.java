@@ -138,6 +138,7 @@ public class MainActivity extends FragmentActivity {
 		switch(item.getItemId()) {
 		case R.id.action_create_group:
 			new GroupNameFragment().show(getSupportFragmentManager(), null);
+			Utils.trackEvent(app, "Main", "Menu", "AddGroup");
 			break;
 		}
 		return super.onOptionsItemSelected(item);
