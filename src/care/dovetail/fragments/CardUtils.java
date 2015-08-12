@@ -182,7 +182,6 @@ public class CardUtils {
 		} else {
 			cardView.findViewById(R.id.menu_button).setVisibility(View.GONE);
 		}
-		// cardView.setOnLongClickListener(HomeFragment.this);
 		return cardView;
 	}
 
