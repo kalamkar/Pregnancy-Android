@@ -67,13 +67,6 @@ public class CardUtils {
 
 		if (text != null && !text.trim().isEmpty() && textView != null) {
 			textView.setText(text);
-			titleView.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					int visibility = textView.getVisibility();
-					textView.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
-				}
-			});
 		} else if (textView != null) {
 			textView.setVisibility(View.GONE);
 		}
@@ -90,6 +83,17 @@ public class CardUtils {
 			} else {
 				int index = card.hashCode() % Config.BACKGROUND_IMAGES.length;
 				((NetworkImageView) photoView).setImageUrl(Config.BACKGROUND_IMAGES[index], imageLoader);
+			}
+
+			// For cards with photo backgrounds make the text collapsible
+			if (textView != null) {
+				view.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						int visibility = textView.getVisibility();
+						textView.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+					}
+				});
 			}
 		}
 

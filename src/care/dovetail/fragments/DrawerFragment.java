@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -121,7 +122,6 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		switch(view.getId()) {
 		case R.id.photo:
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        builder.setTitle(getResources().getString(R.string.update_photo));
 	        builder.setItems(getResources().getStringArray(R.array.photo_options),
 	        		new DialogInterface.OnClickListener() {
 	            @Override
@@ -137,7 +137,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	                }
 	            }
 	        });
-	        builder.create().show();
+	        AlertDialog dialog = builder.create();
+	        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	        dialog.show();
 	        Utils.trackEvent(app, "Drawer", "Click",
 	        		getResources().getString(R.string.update_photo));
 			break;
@@ -232,7 +234,8 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 
 		@Override
 		public void onClick(View view) {
-			switch((Integer) view.getTag()) {
+			int resId = (Integer) view.getTag();
+			switch(resId) {
 			case R.string.due_date:
 				new DueDateFragment().show(getChildFragmentManager(), null);
 				break;
@@ -262,8 +265,10 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			case R.string.about:
 				break;
 			}
-			if (view instanceof TextView) {
-				Utils.trackEvent(app, "Drawer", "Click", ((TextView) view).getText().toString());
+			try {
+				Utils.trackEvent(app, "Drawer", "Click", getResources().getString(resId));
+			} catch(Exception ex) {
+				Log.w(TAG, ex);
 			}
 		}
 	}
