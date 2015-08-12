@@ -3,7 +3,6 @@ package care.dovetail.fragments;
 import java.util.Map;
 
 import android.content.res.Resources;
-import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,14 +78,13 @@ public class CardUtils {
 			textView.setVisibility(View.GONE);
 		}
 
-		if (iconView != null && card.icon != null) {
-			// TODO(abhi): Make this NetworkImageView
-			iconView.setImageURI(Uri.parse(card.icon));
+		if (iconView != null && card.icon != null && iconView instanceof NetworkImageView) {
+			((NetworkImageView) iconView).setImageUrl(card.icon, imageLoader);
 		} else if (iconView != null) {
 			iconView.setVisibility(View.GONE);
 		}
 
-		if (photoView != null && type != Card.Type.SIZE && photoView instanceof NetworkImageView) {
+		if (photoView != null && photoView instanceof NetworkImageView) {
 			if (card.image != null && imageLoader != null) {
 				((NetworkImageView) photoView).setImageUrl(card.image, imageLoader);
 			} else {
