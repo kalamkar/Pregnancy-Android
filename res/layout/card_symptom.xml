@@ -34,13 +34,12 @@
         android:max="100"
         android:progress="0" />
     
-    <LinearLayout
-        android:id="@+id/options"
+    <TextView
+        android:id="@+id/selectionValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/seekBar"
         android:layout_below="@+id/seekBar"
-        android:orientation="horizontal" >
-    </LinearLayout>
+        android:gravity="center" />
 
 </RelativeLayout>

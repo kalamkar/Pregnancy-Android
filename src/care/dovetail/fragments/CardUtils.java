@@ -40,7 +40,8 @@ public class CardUtils {
 			LayoutInflater inflater, Map<Card.Action, Action> actions, Resources resources) {
 		return getViewForCard(card, menuListener, optionListener, inflater, actions, resources, null);
 	}
-	public static View getViewForCard(Card card, OnClickListener menuListener,
+
+	public static View getViewForCard(final Card card, OnClickListener menuListener,
 			OnClickListener optionListener,
 			LayoutInflater inflater, Map<Card.Action, Action> actions, Resources resources,
 			ImageLoader imageLoader) {
@@ -56,12 +57,13 @@ public class CardUtils {
 
 		View view = inflater.inflate(getCardLayout(card), null);
 		TextView titleView = (TextView) view.findViewById(R.id.title);
-		TextView textView = (TextView) view.findViewById(R.id.text);
+		final TextView textView = (TextView) view.findViewById(R.id.text);
 		ImageView iconView = (ImageView) view.findViewById(R.id.icon);
 		ImageView photoView = (ImageView) view.findViewById(R.id.photo);
 		TextView actionView = (TextView) view.findViewById(R.id.action);
 		ImageView actionIconView = (ImageView) view.findViewById(R.id.action_icon);
 		ViewGroup optionsView = (ViewGroup) view.findViewById(R.id.options);
+		final TextView selectionValueView = (TextView) view.findViewById(R.id.selectionValue);
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
 
 		if (title != null && titleView != null) {
@@ -72,6 +74,13 @@ public class CardUtils {
 
 		if (text != null && !text.trim().isEmpty() && textView != null) {
 			textView.setText(text);
+			titleView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					int visibility = textView.getVisibility();
+					textView.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+				}
+			});
 		} else if (textView != null) {
 			textView.setVisibility(View.GONE);
 		}
@@ -124,11 +133,16 @@ public class CardUtils {
 			}
 		}
 
-		if (seekBar != null) {
+		if (seekBar != null && card.options != null && selectionValueView != null) {
+			selectionValueView.setText(card.options[0]);
+			// seekBar.setMax(card.options.length - 1);
 			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 				@Override
 				public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
-					// TODO(abhi): Do something here
+					int index = Math.round((card.options.length - 1) * progress / 100);
+					if (index < card.options.length) {
+						selectionValueView.setText(card.options[index]);
+					}
 				}
 				@Override public void onStartTrackingTouch(SeekBar bar) {}
 				@Override public void onStopTrackingTouch(SeekBar bar) {}
