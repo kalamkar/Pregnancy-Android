@@ -133,7 +133,8 @@ public class CardUtils {
 			}
 		}
 
-		if (seekBar != null && card.options != null && selectionValueView != null) {
+		if (seekBar != null && card.options != null && card.options.length > 0
+				&& selectionValueView != null) {
 			selectionValueView.setText(card.options[0]);
 			// seekBar.setMax(card.options.length - 1);
 			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
