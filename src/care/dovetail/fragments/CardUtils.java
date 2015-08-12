@@ -136,14 +136,13 @@ public class CardUtils {
 		if (seekBar != null && card.options != null && card.options.length > 0
 				&& selectionValueView != null) {
 			selectionValueView.setText(card.options[0]);
-			// seekBar.setMax(card.options.length - 1);
+			seekBar.setMax((card.options.length - 1) * 20);
 			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 				@Override
 				public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
-					int index = Math.round((card.options.length - 1) * progress / 100);
-					if (index < card.options.length) {
-						selectionValueView.setText(card.options[index]);
-					}
+					int index = Math.round(card.options.length * progress / bar.getMax());
+					index = Math.min(index, card.options.length - 1);
+					selectionValueView.setText(card.options[index]);
 				}
 				@Override public void onStartTrackingTouch(SeekBar bar) {}
 				@Override public void onStopTrackingTouch(SeekBar bar) {}
