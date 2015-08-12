@@ -86,7 +86,7 @@ public class CardUtils {
 			}
 
 			// For cards with photo backgrounds make the text collapsible
-			if (textView != null) {
+			if (textView != null && text != null && !text.trim().isEmpty()) {
 				view.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
