@@ -71,6 +71,8 @@ public class Config extends care.dovetail.common.Config {
 
 	public static final long GRAPH_DAYS = 7L;
 
-	public static final int BACKGROUND_IMAGES[] = new int[] {
-		R.drawable.baby1, R.drawable.baby2, R.drawable.baby3, };
+	public static final String BACKGROUND_IMAGES[] = new String[] {
+		"https://storage.googleapis.com/dovetail-images/baby1.png",
+		"https://storage.googleapis.com/dovetail-images/baby2.png",
+		"https://storage.googleapis.com/dovetail-images/baby3.png"};
 }

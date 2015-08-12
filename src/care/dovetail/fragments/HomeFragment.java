@@ -235,7 +235,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			return CardUtils.getViewForCard(getItem(position), HomeFragment.this, HomeFragment.this,
-					getActivity().getLayoutInflater(), actions, getResources());
+					getActivity().getLayoutInflater(), actions, getResources(), app.imageLoader);
 		}
 	}
 }

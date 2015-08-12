@@ -19,6 +19,9 @@ import care.dovetail.Config;
 import care.dovetail.R;
 import care.dovetail.common.model.Card;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
 public class CardUtils {
 
 	public static class Action {
@@ -35,6 +38,12 @@ public class CardUtils {
 	public static View getViewForCard(Card card, OnClickListener menuListener,
 			OnClickListener optionListener,
 			LayoutInflater inflater, Map<Card.Action, Action> actions, Resources resources) {
+		return getViewForCard(card, menuListener, optionListener, inflater, actions, resources, null);
+	}
+	public static View getViewForCard(Card card, OnClickListener menuListener,
+			OnClickListener optionListener,
+			LayoutInflater inflater, Map<Card.Action, Action> actions, Resources resources,
+			ImageLoader imageLoader) {
 		String title = card.getTitle();
 		String text = card.getText();
 		Card.Action actionType = card.getAction();
@@ -74,13 +83,12 @@ public class CardUtils {
 			iconView.setVisibility(View.GONE);
 		}
 
-		if (photoView != null && type != Card.Type.SIZE) {
-			// TODO(abhi): Make this NetworkImageView
-			if (card.image != null) {
-				photoView.setImageURI(Uri.parse(card.image));
+		if (photoView != null && type != Card.Type.SIZE && photoView instanceof NetworkImageView) {
+			if (card.image != null && imageLoader != null) {
+				((NetworkImageView) photoView).setImageUrl(card.image, imageLoader);
 			} else {
 				int index = (int) Math.round(Math.random() * (Config.BACKGROUND_IMAGES.length -1));
-				photoView.setImageResource(Config.BACKGROUND_IMAGES[index]);
+				((NetworkImageView) photoView).setImageUrl(Config.BACKGROUND_IMAGES[index], imageLoader);
 			}
 		}
 
@@ -115,6 +123,7 @@ public class CardUtils {
 						resources.getDimensionPixelOffset(R.dimen.medium_margin);
 			}
 		}
+
 		if (seekBar != null) {
 			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 				@Override

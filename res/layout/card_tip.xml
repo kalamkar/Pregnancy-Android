@@ -6,7 +6,7 @@
     android:background="?android:attr/selectableItemBackground"
     tools:context="care.dovetail.MainActivity" >
 
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/photo"
             android:layout_width="match_parent"
             android:layout_height="250dp"
