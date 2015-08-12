@@ -25,21 +25,20 @@
         android:layout_marginBottom="@dimen/medium_margin"
         android:text="more text explaining stuff"
         android:textColor="@color/secondary_text_gray" />
-
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text"
-        android:max="100"
-        android:progress="0" />
     
     <TextView
         android:id="@+id/selectionValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/seekBar"
-        android:layout_below="@+id/seekBar"
+        android:layout_below="@+id/text"
         android:gravity="center" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/selectionValue"
+        android:max="100"
+        android:progress="0" />
 
 </RelativeLayout>
