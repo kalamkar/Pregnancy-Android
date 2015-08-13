@@ -79,11 +79,12 @@
         <item>Choose from Library</item>
     </string-array>
     
-    <string name="week">Week</string>
+    <string name="week">week</string>
+    <string name="trimester">trimester</string>
     <string-array name="trimester_options">
-        <item>1st trimester</item>
-        <item>2nd trimester</item>
-        <item>3rd trimester</item>
+        <item>1st</item>
+        <item>2nd</item>
+        <item>3rd</item>
     </string-array>
     
     <string name="archive">Archive</string>

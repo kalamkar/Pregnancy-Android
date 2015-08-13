@@ -25,6 +25,9 @@
     <dimen name="card_menu_width">20dp</dimen>
     <dimen name="card_menu_height">20dp</dimen>
     
+    <dimen name="size_card_height">200dp</dimen>
+    <dimen name="picture_card_height">250dp</dimen>
+    
     <integer name="drag_to_archive_distance">500</integer>
     
     <integer name="num_graph_labels">7</integer>

@@ -75,4 +75,18 @@ public class Config extends care.dovetail.common.Config {
 		"https://storage.googleapis.com/dovetail-images/baby1.png",
 		"https://storage.googleapis.com/dovetail-images/baby2.png",
 		"https://storage.googleapis.com/dovetail-images/baby3.png"};
+
+	public static final int CENTER_DECOR[] = new int[] { R.drawable.back_b1, R.drawable.back_b4,
+		R.drawable.back_t_br1, R.drawable.back_t_br2, R.drawable.back_tl_br1, R.drawable.back_tr_b1 };
+	public static final int BOTTOM_DECOR[] = new int[] { R.drawable.back_b1, R.drawable.back_b2,
+		R.drawable.back_b3, R.drawable.back_b4, R.drawable.back_b5, R.drawable.back_t_br1,
+		R.drawable.back_t_br2, R.drawable.back_tl_br1, R.drawable.back_tr_b1 };
+	public static final int BOTTOM_RIGHT_DECOR[] = new int[] { R.drawable.back_br1,
+		R.drawable.back_br2, R.drawable.back_br3, R.drawable.back_br4, R.drawable.back_br5,
+		R.drawable.back_br6, R.drawable.back_br7, R.drawable.back_br8, R.drawable.back_br9,
+		R.drawable.back_br10 };
+	public static final int BOTTOM_LEFT_DECOR[] = new int[] {
+		R.drawable.back_bl1, R.drawable.back_bl2 };
+	public static final int TOP_RIGHT_DECOR[] = new int[] { R.drawable.back_tr1,
+		R.drawable.back_tr2, R.drawable.back_tr3, R.drawable.back_tr4, R.drawable.back_tr5};
 }

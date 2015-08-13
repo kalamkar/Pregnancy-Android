@@ -4,6 +4,7 @@ import java.util.Map;
 
 import android.content.res.Resources;
 import android.support.v7.widget.CardView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import care.dovetail.Config;
 import care.dovetail.R;
+import care.dovetail.Utils;
 import care.dovetail.common.model.Card;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -42,13 +44,12 @@ public class CardUtils {
 		String text = card.getText();
 		Card.Action actionType = card.getAction();
 		Card.Type type = card.getType();
-		if (type == Card.Type.SIZE) {
-			text = resources.getString(R.string.thats_how_big_baby_is);
-		} else if (type == Card.Type.POLL && title == null) {
+		if (type == Card.Type.POLL && title == null) {
 			title = text;
 		}
 
-		View view = inflater.inflate(getCardLayout(card), null);
+		Pair<Integer,Integer> layout = getCardLayout(card);
+		View view = inflater.inflate(layout.first, null);
 		TextView titleView = (TextView) view.findViewById(R.id.title);
 		final TextView textView = (TextView) view.findViewById(R.id.text);
 		ImageView iconView = (ImageView) view.findViewById(R.id.icon);
@@ -58,6 +59,13 @@ public class CardUtils {
 		ViewGroup optionsView = (ViewGroup) view.findViewById(R.id.options);
 		final TextView selectionValueView = (TextView) view.findViewById(R.id.selectionValue);
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+		ImageView decorView = (ImageView) view.findViewById(R.id.decor);
+
+		if (layout.second > 0 && decorView != null) {
+			decorView.setImageResource(layout.second);
+		} else if (layout.second > 0) {
+			view.setBackgroundResource(layout.second);
+		}
 
 		if (title != null && titleView != null) {
 			titleView.setText(title);
@@ -148,6 +156,7 @@ public class CardUtils {
 		if (type == Card.Type.SIZE) {
 			ProgressBar weekBar = (ProgressBar) view.findViewById(R.id.weekBar);
 			TextView week = (TextView) view.findViewById(R.id.week);
+			TextView trimester = (TextView) view.findViewById(R.id.trimester);
 			try {
 				int weekNumber = 0;
 				for (String tag : card.tags) {
@@ -157,15 +166,18 @@ public class CardUtils {
 					}
 				}
 				if (weekNumber > 0) {
-					int trimester = weekNumber / 13;
-					week.setText(String.format("%s %d. %s", resources.getString(R.string.week),
-							weekNumber,
-							resources.getStringArray(R.array.trimester_options)[trimester]));
+					int trimesterNumber = weekNumber / 13;
+					week.setText(Integer.toString(weekNumber));
+					trimester.setText(
+							resources.getStringArray(R.array.trimester_options)[trimesterNumber]);
 					weekBar.setProgress(Math.min(weekNumber, weekBar.getMax()));
 				}
 			} catch(Exception ex) {
 				weekBar.setVisibility(View.GONE);
 				week.setVisibility(View.GONE);
+				trimester.setVisibility(View.GONE);
+				view.findViewById(R.id.week_label).setVisibility(View.GONE);
+				view.findViewById(R.id.trimester_label).setVisibility(View.GONE);
 			}
 		}
 
@@ -181,21 +193,28 @@ public class CardUtils {
 		return cardView;
 	}
 
-	public static int getCardLayout(Card card) {
+	public static Pair<Integer, Integer> getCardLayout(Card card) {
 		switch(card.getType()) {
 		case SIZE:
-			return R.layout.card_size;
+			return Pair.create(R.layout.card_size, -1);
 		case TIP:
 		case MILESTONE:
-			return R.layout.card_tip;
+			return Pair.create(R.layout.card_tip, -1);
 		case CARE:
-			return R.layout.card_action;
+			return Pair.create(R.layout.card_action,
+					Utils.getRandom(Config.BOTTOM_LEFT_DECOR, card.hashCode()));
 		case SYMPTOM:
-			return R.layout.card_symptom;
+			return Pair.create(R.layout.card_symptom,
+					Utils.getRandom(Config.BOTTOM_RIGHT_DECOR, card.hashCode()));
 		case POLL:
-			return R.layout.card_poll;
+			return Pair.create(R.layout.card_poll,
+					Utils.getRandom(Config.BOTTOM_RIGHT_DECOR, card.hashCode()));
 		default:
-			return card.getAction() == Card.Action.NONE ? R.layout.card_basic : R.layout.card_action;
+			return card.getAction() == Card.Action.NONE ?
+					Pair.create(R.layout.card_basic,
+							Utils.getRandom(Config.CENTER_DECOR, card.hashCode()))
+					: Pair.create(R.layout.card_action,
+							Utils.getRandom(Config.BOTTOM_LEFT_DECOR, card.hashCode()));
 		}
 	}
 }

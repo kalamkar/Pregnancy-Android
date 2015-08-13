@@ -2,13 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/size_card_height"
     tools:context="care.dovetail.MainActivity" >
-    
+
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/photo"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/size_card_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop" />
@@ -16,45 +16,95 @@
     <RelativeLayout
         style="@style/Card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#40000000" >
+        android:layout_height="@dimen/size_card_height"
+        android:background="#50000000" >
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="@dimen/small_margin"
-            android:layout_alignParentLeft="true"
-            android:textColor="@android:color/white"
             android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/weekBar"
             android:layout_alignLeft="@+id/title"
             android:layout_below="@+id/title"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/thats_how_big_baby_is"
+            android:text=""
             android:textColor="@android:color/white" />
+
+        <LinearLayout
+            android:id="@+id/l3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+                <TextView
+                    android:id="@+id/trimester"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:text="2nd"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@android:color/white" />
+                <TextView
+                    android:id="@+id/trimester_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"                    
+                    android:text="@string/trimester"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/week_label"
+                    android:layout_alignBaseline="@+id/trimester"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="@dimen/small_margin"
+                    android:text="20"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@android:color/white" />
+                <TextView
+                    android:id="@+id/week_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/week"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/weekBar"
             style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text"
+            android:layout_above="@+id/l3"
             android:max="39"
             android:progress="20" />
-
-        <TextView
-            android:id="@+id/week"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/weekBar"
-            android:textColor="@android:color/white" />
     </RelativeLayout>
 
 </FrameLayout>

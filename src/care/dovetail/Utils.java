@@ -79,4 +79,8 @@ public class Utils {
 	       .setLabel(label)
 	       .build());
     }
+
+    public static int getRandom(int items[], long seed) {
+    	return items[(int) (seed % items.length)];
+    }
 }
