@@ -26,6 +26,7 @@ import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
 import care.dovetail.common.model.Measurement;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer.GridStyle;
@@ -95,6 +96,7 @@ public class HistoryFragment extends Fragment {
 	@Override
 	public void onResume() {
 		app.tracker.setScreenName(TAG);
+		app.tracker.send(new HitBuilders.ScreenViewBuilder().build());
 		super.onResume();
 	}
 

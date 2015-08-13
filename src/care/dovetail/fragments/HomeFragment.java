@@ -35,6 +35,8 @@ import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.Card;
 import care.dovetail.fragments.CardUtils.Action;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 public class HomeFragment extends Fragment implements OnRefreshListener, OnClickListener {
 	private static final String TAG = "HomeFragment";
 
@@ -104,6 +106,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.registerOnSharedPreferenceChangeListener(listener);
 		app.tracker.setScreenName(TAG);
+		app.tracker.send(new HitBuilders.ScreenViewBuilder().build());
 		super.onResume();
 	}
 

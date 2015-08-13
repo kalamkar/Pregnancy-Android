@@ -28,6 +28,7 @@ import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.Group;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.analytics.HitBuilders;
 
 public class GroupsFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "GroupsFragment";
@@ -61,6 +62,7 @@ public class GroupsFragment extends Fragment implements OnClickListener {
 		((BaseAdapter) ((ListView) getView().findViewById(R.id.groups)).getAdapter())
 				.notifyDataSetChanged();
 		app.tracker.setScreenName(TAG);
+		app.tracker.send(new HitBuilders.ScreenViewBuilder().build());
 		super.onResume();
 	}
 
