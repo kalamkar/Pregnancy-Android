@@ -1,110 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Card"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/size_card_height"
+    android:layout_height="wrap_content"
     tools:context="care.dovetail.MainActivity" >
-
+    
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/photo"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_card_height"
+        android:layout_width="@dimen/photo_width"
+        android:layout_height="@dimen/photo_height"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:scaleType="centerCrop" />
+        android:layout_marginBottom="@dimen/small_margin"
+        android:layout_toLeftOf="@+id/photo"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <RelativeLayout
-        style="@style/Card"
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/photo"
+        android:layout_alignLeft="@+id/title"
+        android:layout_below="@+id/title"
+        android:layout_toLeftOf="@+id/photo"
+        android:textColor="@color/secondary_text_gray" />
+
+    <ProgressBar
+        android:id="@+id/weekBar"
+        style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_card_height"
-        android:background="#50000000" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/photo"
+        android:max="39"
+        android:progress="20" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/small_margin"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white" />
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/weekBar"
-            android:layout_alignLeft="@+id/title"
-            android:layout_below="@+id/title"
-            android:text=""
-            android:textColor="@android:color/white" />
+    <LinearLayout
+        android:id="@+id/l3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/weekBar"
+        android:layout_alignParentRight="true" >
 
         <LinearLayout
-            android:id="@+id/l3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" >
-
-            <LinearLayout
-                android:layout_width="0dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical" >
+            <TextView
+                android:id="@+id/trimester"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
-                <TextView
-                    android:id="@+id/trimester"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/small_margin"
-                    android:text="2nd"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@android:color/white" />
-                <TextView
-                    android:id="@+id/trimester_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"                    
-                    android:text="@string/trimester"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/week"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/week_label"
-                    android:layout_alignBaseline="@+id/trimester"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginTop="@dimen/small_margin"
-                    android:text="20"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@android:color/white" />
-                <TextView
-                    android:id="@+id/week_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/week"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="2nd"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <TextView
+                android:id="@+id/trimester_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"                    
+                android:text="@string/trimester"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
-        <ProgressBar
-            android:id="@+id/weekBar"
-            style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/l3"
-            android:max="39"
-            android:progress="20" />
-    </RelativeLayout>
+            android:orientation="vertical" >
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/week_label"
+                android:layout_alignBaseline="@+id/trimester"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="20"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <TextView
+                android:id="@+id/week_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/week"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
+

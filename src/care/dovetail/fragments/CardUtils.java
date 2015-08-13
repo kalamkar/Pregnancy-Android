@@ -196,7 +196,8 @@ public class CardUtils {
 	public static Pair<Integer, Integer> getCardLayout(Card card) {
 		switch(card.getType()) {
 		case SIZE:
-			return Pair.create(R.layout.card_size, -1);
+			return Pair.create(R.layout.card_size,
+					Utils.getRandom(Config.BOTTOM_LEFT_DECOR, card.hashCode()));
 		case TIP:
 		case MILESTONE:
 			return Pair.create(R.layout.card_tip, -1);
