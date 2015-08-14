@@ -187,7 +187,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 					updateUi(getView());
 				}
 			}.execute();
-		} else if (requestCode == Config.ACTIVITY_CAMERA) {
+		} else if (requestCode == Config.ACTIVITY_GALLERY) {
 			new PhotoUpdate(app, data.getData(), "image/jpeg") {
 				@Override
 				protected void onPostExecute(String result) {
