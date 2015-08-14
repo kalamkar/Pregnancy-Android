@@ -3,7 +3,6 @@ package care.dovetail.messaging;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,41 +15,25 @@ import care.dovetail.Utils;
 import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.User;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.gcm.GcmListenerService;
 
-public class GCMIntentService extends IntentService {
+public class GCMIntentService extends GcmListenerService {
 	public static final String TAG = "GCMIntentService";
 
     NotificationCompat.Builder builder;
 
-    public GCMIntentService() {
-        super(TAG);
-    }
-
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Bundle data = intent.getExtras();
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        String messageType = gcm.getMessageType(intent);
+	public void onMessageReceived(String from, Bundle data) {
         if (!data.isEmpty()) {
         	Log.i(TAG, "Received: " + data.toString());
-        	if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-        		processData(data);
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-            }
+        	if (data.containsKey("message") || data.containsKey(Config.GROUP_ID)) {
+        		processMessage(data);
+    		} else if (data.containsKey("user")) {
+    			processUser(data);
+    		}
         }
-        // Release the wake lock provided by the WakefulBroadcastReceiver.
-        GCMBroadcastReceiver.completeWakefulIntent(intent);
-    }
-
-    private void processData(Bundle data) {
-    	if (data.containsKey("message") || data.containsKey(Config.GROUP_ID)) {
-    		processMessage(data);
-		} else if (data.containsKey("user")) {
-			processUser(data);
-		}
-    }
+		super.onMessageReceived(from, data);
+	}
 
     private void processUser(Bundle data) {
     	User user = Config.GSON.fromJson(data.getString("user"), User.class);
