@@ -10,6 +10,7 @@ import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import care.dovetail.api.UserCreate;
 import care.dovetail.api.UserRecovery;
 import care.dovetail.common.model.ApiResponse;
@@ -75,14 +76,20 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 				@Override
 				protected void onPostExecute(ApiResponse result) {
 					super.onPostExecute(result);
+					findViewById(R.id.sign_up).setVisibility(View.VISIBLE);
+					findViewById(R.id.progress).setVisibility(View.GONE);
 					if (app.getUserUUID() != null && app.getUserAuth() != null) {
 						finish();
+					} else  if (result != null && result.message != null) {
+						Toast.makeText(app, result.message, Toast.LENGTH_SHORT).show();
 					}
 				}
 			}.execute(Pair.create(UserCreate.PARAM_NAME, name),
 					Pair.create(UserCreate.PARAM_EMAIL, email),
         			Pair.create(UserCreate.PARAM_TYPE, "GOOGLE"),
         			Pair.create(UserCreate.PARAM_TOKEN, app.getPushToken()));
+			findViewById(R.id.sign_up).setVisibility(View.GONE);
+			findViewById(R.id.progress).setVisibility(View.VISIBLE);
 			break;
 		case R.id.recover:
 			if (email == null || email.isEmpty()) {
@@ -92,18 +99,26 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 				@Override
 				protected void onPostExecute(ApiResponse result) {
 					super.onPostExecute(result);
+					findViewById(R.id.recover).setVisibility(View.VISIBLE);
+					findViewById(R.id.progress).setVisibility(View.GONE);
 					if (result != null && result.users != null && result.users.length > 0) {
 						// Getting users in this list means we will need a code and UUID
 						findViewById(R.id.code).setVisibility(View.VISIBLE);
 						findViewById(R.id.submit_code).setVisibility(View.VISIBLE);
 						findViewById(R.id.recover).setVisibility(View.GONE);
+						findViewById(R.id.submit_code).requestFocus();
 						recoveredUser = result.users[0];
+					} else  if (result != null && !"OK".equalsIgnoreCase(result.code) &&
+							result.message != null) {
+						Toast.makeText(app, result.message, Toast.LENGTH_SHORT).show();
 					}
 				}
 			}.execute(
 					Pair.create(UserRecovery.PARAM_EMAIL, email),
         			Pair.create(UserRecovery.PARAM_TYPE, "GOOGLE"),
         			Pair.create(UserRecovery.PARAM_TOKEN, app.getPushToken()));
+			findViewById(R.id.recover).setVisibility(View.GONE);
+			findViewById(R.id.progress).setVisibility(View.VISIBLE);
 			break;
 		case R.id.submit_code:
 			String code = ((TextView) findViewById(R.id.code)).getText().toString();
@@ -114,10 +129,14 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 				@Override
 				protected void onPostExecute(ApiResponse result) {
 					super.onPostExecute(result);
+					findViewById(R.id.submit_code).setVisibility(View.VISIBLE);
+					findViewById(R.id.progress).setVisibility(View.GONE);
 					if (result != null && result.users != null && result.users.length > 0
 							&& result.users[0].auth != null) {
 						app.setUser(result.users[0]);
 						finish();
+					} else  if (result != null && result.message != null) {
+						Toast.makeText(app, result.message, Toast.LENGTH_SHORT).show();
 					} else {
 						Log.w(TAG, String.format("Could not recover  user"));
 					}
@@ -125,6 +144,8 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 			}.execute(
 					Pair.create(UserRecovery.PARAM_UUID, recoveredUser.uuid),
         			Pair.create(UserRecovery.PARAM_CODE, code));
+			findViewById(R.id.submit_code).setVisibility(View.GONE);
+			findViewById(R.id.progress).setVisibility(View.VISIBLE);
 			break;
 		case R.id.recover_text:
 			findViewById(R.id.recover_text).setVisibility(View.GONE);

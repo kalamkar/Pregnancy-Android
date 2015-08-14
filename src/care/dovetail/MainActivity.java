@@ -74,7 +74,7 @@ public class MainActivity extends FragmentActivity {
         }
 
 		if (app.getUserUUID() == null || app.getUserAuth() == null) {
-			startActivity(new Intent(this, SignUpActivity.class));
+			startActivityForResult(new Intent(this, SignUpActivity.class), Config.ACTIVITY_SIGNUP);
 		} else {
 			new UserGet(app).execute();
 			new GroupsGet(app).execute();
@@ -154,6 +154,7 @@ public class MainActivity extends FragmentActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -165,6 +166,9 @@ public class MainActivity extends FragmentActivity {
 	            	app.apiClient.connect();
 	            }
 	        }
+	    } else if (requestCode == Config.ACTIVITY_SIGNUP) {
+	    	new UserGet(app).execute();
+			new GroupsGet(app).execute();
 	    }
 	}
 
