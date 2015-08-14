@@ -177,6 +177,10 @@ public class FitnessPollTask extends TimerTask {
 						Log.i(TAG, "Google API Client Connected!!!");
 						// Now you can make calls to the Fitness APIs.
 						// Put application specific code here.
+						if (app.getGoogleFitAccount() == null) {
+							// TODO(abhi): Set this to real account name
+							app.setGoogleFitAccount("CONNECTED");
+						}
 						new Timer().schedule(new FitnessPollTask(app), 10);
 					}
 
