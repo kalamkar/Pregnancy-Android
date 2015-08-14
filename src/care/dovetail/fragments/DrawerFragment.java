@@ -207,7 +207,13 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 
 		@Override
 		public Pair<String, Integer> getItem(int position) {
-			return Pair.create(getResources().getString(TITLES[position]), ICONS[position]);
+			int titleResId = TITLES[position];
+			if (titleResId == R.string.pair_google_fit && app.getGoogleFitAccount() != null) {
+				titleResId = R.string.google_fit_paired;
+			} else if (titleResId == R.string.pair_scale && app.getWeightScaleAddress() != null) {
+				titleResId = R.string.scale_paired;
+			}
+			return Pair.create(getResources().getString(titleResId), ICONS[position]);
 		}
 
 		@Override
@@ -248,6 +254,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			case R.string.history:
 				((MainActivity) getActivity()).setContentFragment(new HistoryFragment());
 				break;
+			case R.string.scale_paired:
 			case R.string.pair_scale:
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 					startActivity(new Intent(getActivity(), PairingActivity.class));
@@ -259,6 +266,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 							Toast.LENGTH_SHORT).show();
 				}
 				break;
+			case R.string.google_fit_paired:
 			case R.string.pair_google_fit:
 				FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
 				break;

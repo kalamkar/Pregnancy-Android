@@ -71,7 +71,4 @@
     <color name="secondary_text_gray">#9E9E9E</color>
     <color name="primary_text_gray">#212121</color>
     
-    <color name="graph_bar">#D2AEE8</color>
-    <color name="graph_text">#9E67BF</color>
-    
 </resources>

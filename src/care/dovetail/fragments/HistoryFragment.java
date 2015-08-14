@@ -103,13 +103,14 @@ public class HistoryFragment extends Fragment {
 	private void updateGraph(Event[] events) {
 		long maxY = 0;
 		List<DataPoint> dataPoints = new ArrayList<DataPoint>();
+		List<Long> eventKeys = new ArrayList<Long>();
 		for (Event event : events) {
 			try {
 				Measurement steps = Config.GSON.fromJson(event.data, Measurement.class);
-				DataPoint data = new DataPoint(event.time, steps.value);
-				if (!dataPoints.contains(data)) {
+				if (!eventKeys.contains(event.time)) {
+					eventKeys.add(event.time);
 					// Add at the beginning as events are sorted descending
-					dataPoints.add(0, data);
+					dataPoints.add(0, new DataPoint(event.time, steps.value));
 					maxY = steps.value > maxY ? steps.value : maxY;
 				}
 			} catch(Exception ex) {
@@ -131,8 +132,8 @@ public class HistoryFragment extends Fragment {
 	}
 
 	private void customizeGraphUI() {
-		int barColor = getResources().getColor(R.color.graph_bar);
-		int graphTextColor = getResources().getColor(R.color.graph_text);
+		int barColor = getResources().getColor(R.color.primary);
+		int graphTextColor = getResources().getColor(R.color.primary_dark);
 
 		dataSeries.setSpacing(50); // Spacing in percentage of bar width
 		dataSeries.setDrawValuesOnTop(true);
