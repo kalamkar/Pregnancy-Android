@@ -115,6 +115,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 				(int) app.getResources().getDimension(R.dimen.photo_width),
 				(int) (Math.random() * 10000));
 		((NetworkImageView) view.findViewById(R.id.photo)).setImageUrl(photoUrl, app.imageLoader);
+
+		((BaseAdapter) ((ListView) view.findViewById(R.id.menu)).getAdapter())
+				.notifyDataSetChanged();
 	}
 
 	@Override
@@ -269,6 +272,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			case R.string.google_fit_paired:
 			case R.string.pair_google_fit:
 				FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
+				if (app.apiClient != null && !app.apiClient.isConnected()) {
+	            	app.apiClient.connect();
+	            }
 				break;
 			case R.string.about:
 				break;
