@@ -123,7 +123,8 @@ public class FitnessPollTask extends TimerTask {
 		steps.endMillis = data.getEndTime(TimeUnit.MILLISECONDS);
 		Log.v(TAG, String.format("Steps on %s is %d",
 				Config.MESSAGE_DATE_FORMAT.format(steps.endMillis), steps.value));
-		return new Event(Event.Type.STEPS.name(), steps.endMillis, Config.GSON.toJson(steps));
+		return new Event(new String[] {Event.Type.STEPS.name()}, steps.endMillis,
+				Config.GSON.toJson(steps));
 	}
 
 	private static Event getWeightEvent(DataSet dataSet) throws Exception {
@@ -135,7 +136,8 @@ public class FitnessPollTask extends TimerTask {
 		weight.endMillis = data.getEndTime(TimeUnit.MILLISECONDS);
 		Log.v(TAG, String.format("Weight on %s is %d",
 				Config.MESSAGE_DATE_FORMAT.format(weight.endMillis), weight.value));
-		return new Event(Event.Type.WEIGHT.name(), weight.endMillis, Config.GSON.toJson(weight));
+		return new Event(new String[] {Event.Type.WEIGHT.name()}, weight.endMillis,
+				Config.GSON.toJson(weight));
 	}
 
 	@SuppressWarnings("unused")

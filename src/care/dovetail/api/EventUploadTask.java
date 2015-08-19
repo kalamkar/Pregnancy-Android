@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.Pair;
 import care.dovetail.App;
 import care.dovetail.Config;
+import care.dovetail.Utils;
 import care.dovetail.common.ApiResponseTask;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.Event;
@@ -33,7 +34,7 @@ public class EventUploadTask extends TimerTask {
 	public void run() {
 		for (Event event : app.events.getLatest(app.getEventSyncTime())) {
 			new AddEvent(event).execute();
-			Log.i(TAG, String.format("Adding event %s %d", event.type, event.time));
+			Log.i(TAG, String.format("Adding event %s %d", event.tags, event.time));
 		}
 	}
 
@@ -50,7 +51,7 @@ public class EventUploadTask extends TimerTask {
 		protected HttpRequestBase makeRequest(Pair<String, String>... params)
 				throws UnsupportedEncodingException {
 			List<NameValuePair> queryParams = new ArrayList<NameValuePair>();
-			queryParams.add(new BasicNameValuePair("type", event.type));
+			queryParams.add(new BasicNameValuePair("tags", Utils.join(event.tags)));
 			queryParams.add(new BasicNameValuePair("time", Long.toString(event.time)));
 			if (event.data != null) {
 				queryParams.add(new BasicNameValuePair("data", event.data));
@@ -70,7 +71,7 @@ public class EventUploadTask extends TimerTask {
 					&& app.getEventSyncTime() < event.time) {
 				app.setEventSyncTime(event.time);
 			} else if (result != null && !"OK".equalsIgnoreCase(result.code)) {
-				Log.e(TAG, String.format("Failed to add %s %s", event.type, result.message));
+				Log.e(TAG, String.format("Failed to add %s %s", event.tags, result.message));
 			}
 		}
 	}

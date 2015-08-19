@@ -68,8 +68,8 @@ public class SamicoScalesClient extends BluetoothGattCallback {
         		weight.endMillis = System.currentTimeMillis();
         		Log.v(TAG, String.format("Weight on %s is %d",
         				Config.MESSAGE_DATE_FORMAT.format(weight.endMillis), weight.value));
-        		app.events.add(new Event(
-        				Event.Type.WEIGHT.name(), weight.endMillis, Config.GSON.toJson(weight)));
+        		app.events.add(new Event(new String[] {Event.Type.WEIGHT.name()}, weight.endMillis,
+        				Config.GSON.toJson(weight)));
         		int pounds = Math.round(lastStableWeightInGrams / 453.592f);
         		Utils.sendNotification(app, String.format(
         				app.getResources().getString(R.string.weight_message), pounds),

@@ -47,7 +47,7 @@ public class EventDB extends SQLiteOpenHelper {
 	public void add(Event event) {
 	    ContentValues contentValues = new ContentValues();
 	    contentValues.put(EVENTS_TIME, event.time);
-	    contentValues.put(EVENTS_TYPE, event.type);
+	    contentValues.put(EVENTS_TYPE, Utils.join(event.tags));
 	    if (event.data != null) {
 	    	contentValues.put(EVENTS_DATA, event.data);
 	    }
@@ -86,7 +86,7 @@ public class EventDB extends SQLiteOpenHelper {
 	}
 
 	private static Event makeEventFromCursor(Cursor cursor) {
-		Event event = new Event(cursor.getString(cursor.getColumnIndex(EVENTS_TYPE)),
+		Event event = new Event(cursor.getString(cursor.getColumnIndex(EVENTS_TYPE)).split(","),
 				cursor.getLong(cursor.getColumnIndex(EVENTS_TIME)));
 		if (cursor.getColumnIndex(EVENTS_DATA) >= 0) {
 			event.data = cursor.getString(cursor.getColumnIndex(EVENTS_DATA));

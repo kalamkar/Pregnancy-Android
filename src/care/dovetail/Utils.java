@@ -83,4 +83,15 @@ public class Utils {
     public static int getRandom(int items[], long seed) {
     	return items[(int) (seed % items.length)];
     }
+
+    public static String join(String[] tags) {
+    	StringBuilder builder = new StringBuilder();
+    	if (tags == null) {
+    		return "";
+    	}
+    	for (String tag : tags) {
+    		builder.append(tag).append(',');
+    	}
+    	return builder.toString().replaceFirst(",$", "");
+    }
 }

@@ -48,7 +48,7 @@ public class NoteFragment extends DialogFragment implements OnClickListener {
 		if (view.getId() == R.id.ok) {
 			String text = ((TextView) getView().findViewById(R.id.text)).getText().toString();
 			// TODO(abhi): Add extra data in event to set the note text.
-			app.events.add(new Event("", System.currentTimeMillis()));
+			app.events.add(new Event(new String[] {""}, System.currentTimeMillis()));
 		} else if (view.getId() == R.id.cancel) {
 			dismiss();
 		}
