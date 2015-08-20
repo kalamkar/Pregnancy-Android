@@ -34,7 +34,7 @@ public class EventUploadTask extends TimerTask {
 	public void run() {
 		for (Event event : app.events.getLatest(app.getEventSyncTime())) {
 			new AddEvent(event).execute();
-			Log.i(TAG, String.format("Adding event %s %d", event.tags, event.time));
+			Log.i(TAG, String.format("Adding event %s %d", Utils.join(event.tags), event.time));
 		}
 	}
 
@@ -71,7 +71,7 @@ public class EventUploadTask extends TimerTask {
 					&& app.getEventSyncTime() < event.time) {
 				app.setEventSyncTime(event.time);
 			} else if (result != null && !"OK".equalsIgnoreCase(result.code)) {
-				Log.e(TAG, String.format("Failed to add %s %s", event.tags, result.message));
+				Log.e(TAG, String.format("Failed to add %s %s", Utils.join(event.tags), result.message));
 			}
 		}
 	}

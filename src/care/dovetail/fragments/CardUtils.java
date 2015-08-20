@@ -198,6 +198,7 @@ public class CardUtils {
 		case SIZE:
 			return Pair.create(R.layout.card_size,
 					Utils.getRandom(Config.BOTTOM_LEFT_DECOR, card.hashCode()));
+		case VOTE:
 		case TIP:
 		case MILESTONE:
 			return Pair.create(R.layout.card_tip, -1);

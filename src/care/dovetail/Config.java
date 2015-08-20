@@ -35,6 +35,7 @@ public class Config extends care.dovetail.common.Config {
 	public static final String CARD_URL = USER_URL + "/card";
 	public static final String APPOINTMENT_URL = API_URL + "/appointment";
 	public static final String EVENT_URL  = API_URL + "/event";
+	public static final String EVENT_CHART_URL  = API_URL + "/event/chart";
 	public static final String GROUP_URL = API_URL + "/group";
 	public static final String MESSAGE_URL  = API_URL + "/message";
 	public static final String SEARCH_URL = API_URL + "/search";

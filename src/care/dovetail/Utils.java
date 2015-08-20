@@ -1,5 +1,7 @@
 package care.dovetail;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -8,11 +10,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.util.Pair;
 
 import com.google.android.gms.analytics.HitBuilders;
 
 public class Utils {
+	private static final String TAG = "Utils";
 
 	public static String getMessageDisplayTime(long messageTime) {
 		long currentTime = System.currentTimeMillis();
@@ -93,5 +97,26 @@ public class Utils {
     		builder.append(tag).append(',');
     	}
     	return builder.toString().replaceFirst(",$", "");
+    }
+
+    public static String digest(String message) {
+		StringBuffer hexString = new StringBuffer();
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			Log.w(TAG, e);
+			return null;
+		}
+		byte[] hash = md.digest(message.getBytes());
+
+		for (int i = 0; i < hash.length; i++) {
+			if ((0xff & hash[i]) < 0x10) {
+				hexString.append("0" + Integer.toHexString((0xFF & hash[i])));
+			} else {
+				hexString.append(Integer.toHexString(0xFF & hash[i]));
+			}
+		}
+		return hexString.toString();
     }
 }

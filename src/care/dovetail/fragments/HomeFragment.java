@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,9 +31,12 @@ import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
 import care.dovetail.Utils;
+import care.dovetail.api.CardAdd;
+import care.dovetail.api.CardUpdate;
 import care.dovetail.api.UserGet;
 import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.Card;
+import care.dovetail.common.model.Event;
 import care.dovetail.fragments.CardUtils.Action;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -175,10 +179,6 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 					getResources().getString(R.string.action_settings));
 			return;
 		}
-		if (view instanceof TextView) {
-			Toast.makeText(app, ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
-		}
 	}
 
 	private class CardsAdapter extends BaseAdapter {
@@ -199,8 +199,42 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			return CardUtils.getViewForCard(getItem(position), HomeFragment.this, HomeFragment.this,
+			Card card = getItem(position);
+			return CardUtils.getViewForCard(card, HomeFragment.this, new OptionClickListener(card),
 					getActivity().getLayoutInflater(), actions, getResources(), app.imageLoader);
 		}
 	}
+
+	private class OptionClickListener implements OnClickListener {
+		private final Card card;
+		private OptionClickListener(Card card) {
+			this.card = card;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void onClick(View view) {
+			Toast.makeText(app, ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+			String pollId = Utils.digest(card.text);
+			String tags = Event.Type.VOTE.name().toLowerCase() + "," + Utils.join(card.tags) +
+					"," + pollId;
+
+			// Add an event recording the vote
+			app.events.add(new Event(tags.split(","), System.currentTimeMillis(),
+					((TextView) view).getText().toString()));
+
+			// Create a card for results of the poll votes
+			new CardAdd(app).execute(Pair.create(CardAdd.PARAM_TAGS, tags),
+					Pair.create(CardAdd.PARAM_TEXT, card.text),
+					Pair.create(CardAdd.PARAM_IMAGE, String.format("%s?tags=%s",
+							Config.EVENT_CHART_URL, pollId)),
+					Pair.create(CardAdd.PARAM_PRIORITY, Integer.toString(card.priority)));
+
+
+			// Archive the poll / symptom card
+			new CardUpdate(app).execute(Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
+					Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.ARCHIVED.name()));
+			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
+		}
+	};
 }
