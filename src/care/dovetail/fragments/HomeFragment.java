@@ -235,6 +235,13 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			new CardUpdate(app).execute(Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
 					Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.ARCHIVED.name()));
 			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
+
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					onRefresh();
+				}
+			}, Config.REFRESH_TIMEOUT_MILLIS);
 		}
 	};
 }
