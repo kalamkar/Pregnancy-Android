@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    tools:context="care.dovetail.MainActivity" >
+    tools:context="care.dovetail.MainActivity"
+    style="@style/Card" >
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:padding="@dimen/small_margin"
+        android:layout_alignParentLeft="true"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
@@ -21,8 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/picture_card_height"
         android:layout_below="@+id/title"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:scaleType="fitCenter" />
 
     <TextView
@@ -32,11 +29,9 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/title"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/medium_margin"
-        android:background="#30000000"
+        android:background="@android:color/white"
         android:padding="@dimen/small_margin"
         android:text="more text explaining stuff"
-        android:textColor="@android:color/white"
         android:visibility="gone" />
 </RelativeLayout>
 
