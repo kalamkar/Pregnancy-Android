@@ -8,10 +8,13 @@ import java.util.Date;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -118,5 +121,14 @@ public class Utils {
 			}
 		}
 		return hexString.toString();
+    }
+
+    public static Bitmap getSnapshot(View view) {
+        Bitmap bitmap =
+        		Bitmap.createBitmap(view.getWidth() , view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.layout(0, 0, view.getLayoutParams().width, view.getLayoutParams().height);
+        view.draw(canvas);
+        return bitmap;
     }
 }

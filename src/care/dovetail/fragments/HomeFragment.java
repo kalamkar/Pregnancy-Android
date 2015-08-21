@@ -14,6 +14,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -41,7 +42,7 @@ import care.dovetail.fragments.CardUtils.CardProcessor;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-public class HomeFragment extends Fragment implements OnRefreshListener, OnClickListener {
+public class HomeFragment extends Fragment implements OnRefreshListener {
 	private static final String TAG = "HomeFragment";
 
 	private App app;
@@ -167,19 +168,6 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		}, Config.REFRESH_TIMEOUT_MILLIS);
 	}
 
-	@Override
-	public void onClick(View view) {
-		Card card = (Card) view.getTag();
-		if (view.getId() == R.id.menu_button) {
-			CardMenuFragment fragment = new CardMenuFragment();
-			fragment.setCard(card);
-			fragment.show(getChildFragmentManager(), null);
-			Utils.trackEvent(app, "Card", "Click",
-					getResources().getString(R.string.action_settings));
-			return;
-		}
-	}
-
 	private class CardsAdapter extends BaseAdapter {
 		@Override
 		public int getCount() {
@@ -199,10 +187,47 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Card card = getItem(position);
-			return CardUtils.getViewForCard(card, HomeFragment.this, new OptionClickListener(card),
-					getActivity().getLayoutInflater(), actions, getResources(), app.imageLoader);
+			return CardUtils.getViewForCard(card, new MenuClickListener(card),
+					new OptionClickListener(card), getActivity().getLayoutInflater(), actions, app);
 		}
 	}
+
+	private class MenuClickListener implements OnClickListener {
+		private final Card card;
+		private MenuClickListener(Card card) {
+			this.card = card;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void onClick(View view) {
+			switch(view.getId()) {
+			case R.id.archive:
+				List<Card> cards = new ArrayList<Card>();
+				for (Card cardToAdd : app.getMother().cards) {
+					if (!cardToAdd.equals(card)) {
+						cards.add(cardToAdd);
+					}
+				}
+				app.getMother().cards = cards.toArray(new Card[0]);
+				app.setUser(app.getMother());
+				new CardUpdate(app).execute(Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
+						Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.ARCHIVED.name()));
+				break;
+			case R.id.like:
+				new CardUpdate(app).execute(Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
+						Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.LIKED.name()));
+				break;
+			case R.id.share:
+				break;
+			case R.id.info:
+				if (card.url != null && !card.url.isEmpty()) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(card.url)));
+				}
+				break;
+			}
+		}
+	};
 
 	private class OptionClickListener implements OnClickListener {
 		private final Card card;

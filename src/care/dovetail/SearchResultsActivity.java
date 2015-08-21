@@ -200,7 +200,7 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 			} else if (result.card != null) {
 				left = top = right = bottom = 0;
 				view = CardUtils.getViewForCard(result.card, null, null, getLayoutInflater(),
-						null, getResources(), app.imageLoader);
+						null, app);
 			} else {
 				view = new View(app);
 			}

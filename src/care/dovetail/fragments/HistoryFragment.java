@@ -174,7 +174,7 @@ public class HistoryFragment extends Fragment {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			return CardUtils.getViewForCard(getItem(position), null, null,
-					getActivity().getLayoutInflater(), null, getResources(), app.imageLoader);
+					getActivity().getLayoutInflater(), null, app);
 		}
 	}
 }

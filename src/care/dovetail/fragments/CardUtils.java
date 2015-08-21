@@ -2,7 +2,6 @@ package care.dovetail.fragments;
 
 import java.util.Map;
 
-import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -15,12 +14,12 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
 import care.dovetail.Utils;
 import care.dovetail.common.model.Card;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 public class CardUtils {
@@ -41,9 +40,8 @@ public class CardUtils {
 	}
 
 	public static View getViewForCard(final Card card, OnClickListener menuListener,
-			OnClickListener optionListener,
-			LayoutInflater inflater, Map<Card.Action, Action> actions, Resources resources,
-			ImageLoader imageLoader) {
+			OnClickListener optionListener, LayoutInflater inflater,
+			Map<Card.Action, Action> actions, App app) {
 		String title = card.getTitle();
 		String text = card.getText();
 		Card.Action actionType = card.getAction();
@@ -52,8 +50,10 @@ public class CardUtils {
 			title = text;
 		}
 
+		View cardView = inflater.inflate(R.layout.list_item_card, null);
 		Pair<Integer,Integer> layout = getCardLayout(card);
 		View view = inflater.inflate(layout.first, null);
+		view.setTag(card);
 		TextView titleView = (TextView) view.findViewById(R.id.title);
 		final TextView textView = (TextView) view.findViewById(R.id.text);
 		ImageView iconView = (ImageView) view.findViewById(R.id.icon);
@@ -84,28 +84,18 @@ public class CardUtils {
 		}
 
 		if (iconView != null && card.icon != null && iconView instanceof NetworkImageView) {
-			((NetworkImageView) iconView).setImageUrl(card.icon, imageLoader);
+			((NetworkImageView) iconView).setImageUrl(card.icon, app.imageLoader);
 		} else if (iconView != null) {
 			iconView.setVisibility(View.GONE);
 		}
 
 		if (photoView != null && photoView instanceof NetworkImageView) {
-			if (card.image != null && imageLoader != null) {
-				((NetworkImageView) photoView).setImageUrl(card.image, imageLoader);
+			if (card.image != null && app.imageLoader != null) {
+				((NetworkImageView) photoView).setImageUrl(card.image, app.imageLoader);
 			} else {
 				int index = card.hashCode() % Config.BACKGROUND_IMAGES.length;
-				((NetworkImageView) photoView).setImageUrl(Config.BACKGROUND_IMAGES[index], imageLoader);
-			}
-
-			// For cards with photo backgrounds make the text collapsible
-			if (textView != null && text != null && !text.trim().isEmpty()) {
-				view.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						int visibility = textView.getVisibility();
-						textView.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
-					}
-				});
+				((NetworkImageView) photoView).setImageUrl(
+						Config.BACKGROUND_IMAGES[index], app.imageLoader);
 			}
 		}
 
@@ -120,7 +110,7 @@ public class CardUtils {
 					}
 				});
 				if (actionIconView != null) {
-					actionIconView.setImageDrawable(resources.getDrawable(action.icon));
+					actionIconView.setImageDrawable(app.getResources().getDrawable(action.icon));
 				}
 			}
 		} else if (actionView != null) {
@@ -137,7 +127,7 @@ public class CardUtils {
 						(MarginLayoutParams) optionView.getLayoutParams();
 				params.width = params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 				params.rightMargin = params.topMargin =
-						resources.getDimensionPixelOffset(R.dimen.medium_margin);
+						app.getResources().getDimensionPixelOffset(R.dimen.medium_margin);
 			}
 		}
 
@@ -172,8 +162,8 @@ public class CardUtils {
 				if (weekNumber > 0) {
 					int trimesterNumber = weekNumber / 13;
 					week.setText(Integer.toString(weekNumber));
-					trimester.setText(
-							resources.getStringArray(R.array.trimester_options)[trimesterNumber]);
+					trimester.setText(app.getResources()
+							.getStringArray(R.array.trimester_options)[trimesterNumber]);
 					weekBar.setProgress(Math.min(weekNumber, weekBar.getMax()));
 				}
 			} catch(Exception ex) {
@@ -185,16 +175,44 @@ public class CardUtils {
 			}
 		}
 
-		View cardView = inflater.inflate(R.layout.list_item_card, null);
 		((CardView) cardView.findViewById(R.id.card)).addView(view);
-		cardView.setTag(card);
-		if (menuListener != null) {
-			cardView.findViewById(R.id.menu_button).setTag(card);
-			cardView.findViewById(R.id.menu_button).setOnClickListener(menuListener);
+		ViewGroup menuView = (ViewGroup) cardView.findViewById(R.id.menu);
+
+		// For cards with photo backgrounds make the text colapsible
+		if (photoView != null && textView != null && text != null && !text.trim().isEmpty()) {
+			cardView.setOnClickListener(new CardClickListener(app, textView));
 		} else {
-			cardView.findViewById(R.id.menu_button).setVisibility(View.GONE);
+			cardView.setOnClickListener(new CardClickListener(app, null));
 		}
+
+		for (int i = 0; i < menuView.getChildCount(); i++) {
+			menuView.getChildAt(i).setOnClickListener(menuListener);
+		}
+		menuView.setVisibility(View.GONE);
 		return cardView;
+	}
+
+	private static class CardClickListener implements OnClickListener {
+		private final App app;
+		private final TextView textView;
+
+		private CardClickListener(App app, TextView textView) {
+			this.app = app;
+			this.textView = textView;
+		}
+
+		@Override
+		public void onClick(View v) {
+			Utils.trackEvent(app, "Card", "Click",
+					app.getResources().getString(R.string.action_settings));
+			if (textView != null) {
+				int visibility = textView.getVisibility();
+				textView.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+			}
+			View menu = v.findViewById(R.id.menu);
+			int visibility = menu.getVisibility();
+			menu.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+		}
 	}
 
 	public static Pair<Integer, Integer> getCardLayout(Card card) {
