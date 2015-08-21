@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/post_it"
-    tools:context="care.dovetail.MainActivity"
-    style="@style/Card" >
+    tools:context="care.dovetail.MainActivity" >
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/icon"
-        android:layout_width="@dimen/icon_width"
-        android:layout_height="@dimen/icon_height"
+        android:layout_width="@dimen/todo_icon_width"
+        android:layout_height="@dimen/todo_icon_height"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:scaleType="fitCenter"
         android:src="@android:drawable/ic_dialog_alert" />
 
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/icon"
-        android:text="Remember to buy cottage cheese."
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:padding="@dimen/small_margin"
+        android:text="Remember to buy cottage cheese." />
 
 </RelativeLayout>
