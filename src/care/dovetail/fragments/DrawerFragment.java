@@ -277,6 +277,7 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	            }
 				break;
 			case R.string.about:
+				((MainActivity) getActivity()).setContentFragment(new AboutFragment());
 				break;
 			}
 			try {

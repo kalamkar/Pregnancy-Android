@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			if (App.USER_PROFILE.equals(key)) {
+			if (App.USER_PROFILE.equals(key) && getView() != null) {
 				updateCards();
 				((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
 						.notifyDataSetChanged();

@@ -93,5 +93,7 @@
     <string name="add_to_favorites">Add to favorites</string>
     <string name="share">Share</string>
     <string name="learn_more">Learn more</string>
+    
+    <string name="copyright">Copyright 2015. All rights reserved.</string>
 
 </resources>
