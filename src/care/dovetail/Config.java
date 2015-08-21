@@ -78,6 +78,9 @@ public class Config extends care.dovetail.common.Config {
 		"https://storage.googleapis.com/dovetail-images/baby2.png",
 		"https://storage.googleapis.com/dovetail-images/baby3.png"};
 
+	public static final String TODO_ICON =
+		"https://storage.googleapis.com/dovetail-images/ic_todo.png";
+
 	public static final int CENTER_DECOR[] = new int[] { R.drawable.back_b1, R.drawable.back_b4,
 		R.drawable.back_t_br1, R.drawable.back_t_br2, R.drawable.back_tl_br1, R.drawable.back_tr_b1 };
 	public static final int BOTTOM_DECOR[] = new int[] { R.drawable.back_b1, R.drawable.back_b2,

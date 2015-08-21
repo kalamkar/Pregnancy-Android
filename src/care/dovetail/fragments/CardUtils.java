@@ -25,14 +25,18 @@ import com.android.volley.toolbox.NetworkImageView;
 
 public class CardUtils {
 
+	public interface CardProcessor {
+		public void process(Card card);
+	}
+
 	public static class Action {
-		int title;
-		int icon;
-		Runnable runnable;
-		public Action (int title, int icon, Runnable runnable) {
+		private final int title;
+		private final int icon;
+		final CardProcessor processor;
+		public Action (int title, int icon, CardProcessor processor) {
 			this.title = title;
 			this.icon = icon;
-			this.runnable = runnable;
+			this.processor = processor;
 		}
 	}
 
@@ -112,7 +116,7 @@ public class CardUtils {
 				actionView.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						action.runnable.run();
+						action.processor.process(card);
 					}
 				});
 				if (actionIconView != null) {
@@ -198,6 +202,8 @@ public class CardUtils {
 		case SIZE:
 			return Pair.create(R.layout.card_size,
 					Utils.getRandom(Config.BOTTOM_LEFT_DECOR, card.hashCode()));
+		case TODO:
+			return Pair.create(R.layout.card_todo, -1);
 		case VOTE:
 			return Pair.create(R.layout.card_chart, -1);
 		case TIP:

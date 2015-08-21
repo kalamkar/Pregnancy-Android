@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
@@ -38,6 +37,7 @@ import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
 import care.dovetail.fragments.CardUtils.Action;
+import care.dovetail.fragments.CardUtils.CardProcessor;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -53,38 +53,37 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		super.onAttach(activity);
 		app = (App) activity.getApplication();
 		actions.put(Card.Action.DUE_DATE,
-				new Action(R.string.due_date, R.drawable.ic_date, new Runnable() {
+				new Action(R.string.due_date, R.drawable.ic_date, new CardProcessor() {
 					@Override
-					public void run() {
+					public void process(Card card) {
 						new DueDateFragment().show(getChildFragmentManager(), null);
 						Utils.trackEvent(app, "Card", "Action",
 								getResources().getString(R.string.due_date));
 					}
 				}));
 		actions.put(Card.Action.CONNECT_SCALE,
-				new Action(R.string.pair_scale, R.drawable.ic_action_pair, new Runnable() {
+				new Action(R.string.pair_scale, R.drawable.ic_action_pair, new CardProcessor() {
 					@Override
-					public void run() {
+					public void process(Card card) {
 						startActivity(new Intent(getActivity(), PairingActivity.class));
 						Utils.trackEvent(app, "Card", "Action",
 								getResources().getString(R.string.pair_scale));
 					}
 				}));
 		actions.put(Card.Action.CONNECT_HEALTH_DATA,
-				new Action(R.string.pair_google_fit, R.drawable.ic_heart, new Runnable() {
+				new Action(R.string.pair_google_fit, R.drawable.ic_heart, new CardProcessor() {
 					@Override
-					public void run() {
+					public void process(Card card) {
 						startActivity(new Intent(getActivity(), PairingActivity.class));
 						Utils.trackEvent(app, "Card", "Action",
 								getResources().getString(R.string.pair_google_fit));
 					}
 				}));
 		actions.put(Card.Action.TO_DO,
-				new Action(R.string.action_add_to_do, R.drawable.ic_todo, new Runnable() {
+				new Action(R.string.action_add_to_do, R.drawable.ic_todo, new CardProcessor() {
 					@Override
-					public void run() {
-						// TODO(abhi): Add TO-Do Action here
-						Toast.makeText(app, "Adding to do", Toast.LENGTH_SHORT).show();
+					public void process(Card card) {
+						makeToDoCard(card);
 						Utils.trackEvent(app, "Card", "Action",
 								getResources().getString(R.string.action_add_to_do));
 					}
@@ -214,7 +213,8 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 		@SuppressWarnings("unchecked")
 		@Override
 		public void onClick(View view) {
-			Toast.makeText(app, ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
+
 			String pollId = Utils.digest(card.text);
 			String tags = Event.Type.VOTE.name().toLowerCase() + "," + Utils.join(card.tags) +
 					"," + pollId;
@@ -234,7 +234,6 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			// Archive the poll / symptom card
 			new CardUpdate(app).execute(Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
 					Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.ARCHIVED.name()));
-			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
 
 			new Timer().schedule(new TimerTask() {
 				@Override
@@ -244,4 +243,27 @@ public class HomeFragment extends Fragment implements OnRefreshListener, OnClick
 			}, Config.REFRESH_TIMEOUT_MILLIS);
 		}
 	};
+
+	@SuppressWarnings("unchecked")
+	private void makeToDoCard(Card card) {
+		String tags = Card.Type.TODO.name().toLowerCase() + "," + Utils.join(card.tags);
+
+		// Create a card for results of the poll votes
+		new CardAdd(app).execute(Pair.create(CardAdd.PARAM_TAGS, tags),
+				Pair.create(CardAdd.PARAM_TEXT, card.getTitle()),
+				Pair.create(CardAdd.PARAM_ICON, Config.TODO_ICON),
+				Pair.create(CardAdd.PARAM_PRIORITY, "1"));
+
+		// Archive the card with to-do action button
+		new CardUpdate(app).execute(
+				Pair.create(CardUpdate.PARAM_CARD_ID, card.id),
+				Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.ARCHIVED.name()));
+
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				onRefresh();
+			}
+		}, Config.REFRESH_TIMEOUT_MILLIS);
+	}
 }

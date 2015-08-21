@@ -25,6 +25,7 @@ public class CardAdd extends ApiResponseTask {
 	public static final String PARAM_TAGS = "tags";
 	public static final String PARAM_TEXT = "text";
 	public static final String PARAM_IMAGE = "image";
+	public static final String PARAM_ICON = "icon";
 	public static final String PARAM_PRIORITY = "priority";
 
 	private final App app;

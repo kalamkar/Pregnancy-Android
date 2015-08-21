@@ -64,6 +64,8 @@
     <color name="primary_dark">#C47AA3</color>
     <color name="accent">#E0A6C6</color>
     
+    <color name="post_it">#FFFED1</color>
+    
     <color name="my_message">#E0A6C6</color>
     <color name="message">#D1D2D4</color>
     
