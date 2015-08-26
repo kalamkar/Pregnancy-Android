@@ -13,10 +13,13 @@ import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+import android.util.Pair;
 import care.dovetail.App;
 import care.dovetail.Config;
 import care.dovetail.R;
 import care.dovetail.Utils;
+import care.dovetail.api.CardAdd;
+import care.dovetail.api.UserGet;
 import care.dovetail.common.model.Event;
 import care.dovetail.common.model.Measurement;
 
@@ -51,6 +54,7 @@ public class SamicoScalesClient extends BluetoothGattCallback {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
     public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
         this.gatt = gatt;
@@ -71,9 +75,15 @@ public class SamicoScalesClient extends BluetoothGattCallback {
         		app.events.add(new Event(new String[] {Event.Type.WEIGHT.name()}, weight.endMillis,
         				Config.GSON.toJson(weight)));
         		int pounds = Math.round(lastStableWeightInGrams / 453.592f);
-        		Utils.sendNotification(app, String.format(
-        				app.getResources().getString(R.string.weight_message), pounds),
-        				Config.WEIGHT_NOTIFICATION_ID);
+        		String text = String.format(
+        				app.getResources().getString(R.string.weight_message), pounds);
+        		Utils.sendNotification(app, text, Config.WEIGHT_NOTIFICATION_ID);
+        		// Create a card for weight acknowledgement
+        		new CardAdd(app).execute(Pair.create(CardAdd.PARAM_TAGS, "insight,weight,instant"),
+        				Pair.create(CardAdd.PARAM_TEXT, text),
+        				Pair.create(CardAdd.PARAM_ICON, Config.WEIGHT_ICON),
+        				Pair.create(CardAdd.PARAM_PRIORITY, "2"));
+        		new UserGet(app).execute();
         	}
         }
     }
