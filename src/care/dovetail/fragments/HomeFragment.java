@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -48,6 +49,8 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 	private App app;
 	private List<Card> cards = new ArrayList<Card>();
 	private Map<Card.Action, Action> actions = new HashMap<Card.Action, Action>();
+
+	private ProgressDialog progress;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -162,6 +165,10 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 					@Override
 					public void run() {
 						((SwipeRefreshLayout) getView()).setRefreshing(false);
+						if (progress != null && progress.isShowing()) {
+							progress.dismiss();
+							progress = null;
+						}
 					}
 				});
 			}
@@ -240,6 +247,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 		public void onClick(View view) {
 			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
 
+			progress = ProgressDialog.show(getActivity(), null,
+					getResources().getString(R.string.submitting_your_answer));
+
 			String pollId = Utils.digest(card.text);
 			String tags = Event.Type.VOTE.name().toLowerCase() + "," + Utils.join(card.tags) +
 					"," + pollId;
@@ -272,6 +282,9 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 	@SuppressWarnings("unchecked")
 	private void makeToDoCard(Card card) {
 		String tags = Card.Type.TODO.name().toLowerCase() + "," + Utils.join(card.tags);
+
+		progress = ProgressDialog.show(getActivity(), null,
+				getResources().getString(R.string.submitting_your_answer));
 
 		// Create a card for results of the poll votes
 		new CardAdd(app).execute(Pair.create(CardAdd.PARAM_TAGS, tags),

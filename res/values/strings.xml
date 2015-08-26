@@ -19,19 +19,13 @@
     <string name="create_group">Create Group</string>
     
     <string name="home">Home</string>
-    <string name="mom">Mom</string>
-    <string name="baby">Baby</string>
     <string name="sharing">Sharing</string>
     
     <string name="full_name">First &amp; Last name</string>
     <string name="email">E-Mail</string>
     <string name="group_name">Group name</string>
-    
-    <string name="hello_text">Hello %s!</string>
-    <string name="baby_text">Baby %s</string>
-    
+        
     <string name="due_date">Due Date</string>
-    <string name="add_baby">Add baby</string>
     <string name="history">History</string>
     <string name="pair_scale">Connect weighing scale</string>
     <string name="scale_paired">Weighing scale connected</string>
@@ -41,9 +35,6 @@
     
     <string name="archived_cards">Archived Cards</string>
     <string name="last_seen">Last seen</string>
-    
-    <string name="continue_booking_appointment">Continue booking this appointment?</string>
-    <string name="continue_remove_appointment">Continue removing this appointment?</string>
     
     <string name="email_justification">No spam! Email needed to recover password</string>
     <string name="recover_account">Already signed up? Tap here to recover your account</string>
@@ -55,25 +46,7 @@
     <string name="weight_message">Recorded weight %d lbs</string>
     
     <string name="search_results_not_found">No results found.</string>
-    
-    <string name="thats_how_big_baby_is">thats how big your baby is.</string>
-    
-    <string-array name="baby_genders">
-        <item>Unknown</item>
-        <item>Girl</item>
-        <item>Boy</item>
-    </string-array>
-    <string name="appointments">Appointments</string>
-    <string name="new_appt_slot">Create appointment slot</string>
-    
-    <string-array name="user_roles">
-        <item>Mom</item>
-        <item>Expectant Mom</item>
-        <item>Doula</item>
-        <item>Yoga Instructor</item>
-        <item>Nutritionist</item>
-        <item>Midwife</item>
-    </string-array>
+    <string name="submitting_your_answer">Submitting your answer&#8230;</string>        
     
     <string name="update_photo">Update photo</string>
     <string-array name="photo_options">
@@ -88,12 +61,11 @@
         <item>2nd</item>
         <item>3rd</item>
     </string-array>
-    
+
     <string name="archive">Archive</string>
     <string name="add_to_favorites">Add to favorites</string>
     <string name="share">Share</string>
     <string name="learn_more">Learn more</string>
-    
-    <string name="copyright">Copyright 2015. All rights reserved.</string>
 
+    <string name="copyright">Copyright 2015. All rights reserved.</string>
 </resources>
