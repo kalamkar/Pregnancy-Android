@@ -40,7 +40,7 @@ public class CardUtils {
 	}
 
 	public static View getViewForCard(final Card card, OnClickListener menuListener,
-			OnClickListener optionListener, LayoutInflater inflater,
+			final OnClickListener optionListener, LayoutInflater inflater,
 			Map<Card.Action, Action> actions, App app) {
 		String title = card.getTitle();
 		String text = card.getText();
@@ -48,9 +48,6 @@ public class CardUtils {
 		Card.Type type = card.getType();
 		if (type == Card.Type.POLL && title == null) {
 			title = text;
-		}
-		if (type == Card.Type.SIZE) {
-			title = card.text;
 		}
 
 		View cardView = inflater.inflate(R.layout.list_item_card, null);
@@ -66,6 +63,7 @@ public class CardUtils {
 		ViewGroup optionsView = (ViewGroup) view.findViewById(R.id.options);
 		final TextView selectionValueView = (TextView) view.findViewById(R.id.selectionValue);
 		SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+		final TextView submitButton = (TextView) view.findViewById(R.id.submit);
 		ImageView decorView = (ImageView) view.findViewById(R.id.decor);
 
 		if (layout.second > 0 && decorView != null) {
@@ -135,7 +133,7 @@ public class CardUtils {
 		}
 
 		if (seekBar != null && card.options != null && card.options.length > 0
-				&& selectionValueView != null) {
+				&& selectionValueView != null && submitButton != null) {
 			selectionValueView.setText(card.options[0]);
 			seekBar.setMax((card.options.length - 1) * 20);
 			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -144,13 +142,21 @@ public class CardUtils {
 					int index = Math.round(card.options.length * progress / bar.getMax());
 					index = Math.min(index, card.options.length - 1);
 					selectionValueView.setText(card.options[index]);
+					submitButton.setVisibility(View.VISIBLE);
 				}
 				@Override public void onStartTrackingTouch(SeekBar bar) {}
 				@Override public void onStopTrackingTouch(SeekBar bar) {}
 			});
+			submitButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					optionListener.onClick(selectionValueView);
+				}
+			});
 		}
 
 		if (type == Card.Type.SIZE) {
+			titleView.setText(card.text);
 			ProgressBar weekBar = (ProgressBar) view.findViewById(R.id.weekBar);
 			TextView week = (TextView) view.findViewById(R.id.week);
 			TextView trimester = (TextView) view.findViewById(R.id.trimester);

@@ -25,7 +25,7 @@
         android:layout_marginBottom="@dimen/medium_margin"
         android:text="more text explaining stuff"
         android:textColor="@color/secondary_text_gray" />
-    
+
     <TextView
         android:id="@+id/selectionValue"
         android:layout_width="match_parent"
@@ -40,5 +40,16 @@
         android:layout_below="@+id/selectionValue"
         android:max="100"
         android:progress="0" />
+    
+    <TextView
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBar"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/action_submit"
+        android:visibility="gone"
+        style="@style/TextButton" />
 
 </RelativeLayout>
