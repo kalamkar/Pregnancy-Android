@@ -23,18 +23,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/small_margin"
         android:layout_toLeftOf="@+id/photo"
-        android:text="Large Text"
+        android:text="Your precious bundle is now almost the size of a small cantaloupe. Sweet!"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/photo"
-        android:layout_alignLeft="@+id/title"
-        android:layout_below="@+id/title"
-        android:layout_toLeftOf="@+id/photo"
-        android:textColor="@color/secondary_text_gray" />
 
     <ProgressBar
         android:id="@+id/weekBar"

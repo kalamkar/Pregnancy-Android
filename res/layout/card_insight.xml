@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="care.dovetail.MainActivity" >
+
+    <ImageView
+        android:id="@+id/decor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="fitXY"
+        android:src="@android:drawable/ic_dialog_alert" />
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/icon_width"
+        android:layout_height="@dimen/icon_height"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:scaleType="fitCenter"
+        android:src="@android:drawable/ic_dialog_alert" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="You walked 7800 steps on average everyday last week"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

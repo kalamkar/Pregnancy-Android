@@ -49,6 +49,9 @@ public class CardUtils {
 		if (type == Card.Type.POLL && title == null) {
 			title = text;
 		}
+		if (type == Card.Type.SIZE) {
+			title = card.text;
+		}
 
 		View cardView = inflater.inflate(R.layout.list_item_card, null);
 		Pair<Integer,Integer> layout = getCardLayout(card);
@@ -236,6 +239,9 @@ public class CardUtils {
 		case POLL:
 			return Pair.create(R.layout.card_poll,
 					Utils.getRandom(Config.BOTTOM_RIGHT_DECOR, card.hashCode()));
+		case INSIGHT:
+			return Pair.create(R.layout.card_insight,
+					Utils.getRandom(Config.CENTER_DECOR, card.hashCode()));
 		default:
 			return card.getAction() == Card.Action.NONE ?
 					Pair.create(R.layout.card_basic,
