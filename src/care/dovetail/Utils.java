@@ -127,6 +127,7 @@ public class Utils {
         Bitmap bitmap =
         		Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(0xFFFFFFFF);
         view.draw(canvas);
         return bitmap;
     }
