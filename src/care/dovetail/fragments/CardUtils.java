@@ -114,8 +114,13 @@ public class CardUtils {
 					actionIconView.setImageDrawable(app.getResources().getDrawable(action.icon));
 				}
 			}
-		} else if (actionView != null) {
-			actionView.setVisibility(View.GONE);
+		} else {
+			if (actionView != null) {
+				actionView.setVisibility(View.GONE);
+			}
+			if (actionIconView != null) {
+				actionIconView.setVisibility(View.GONE);
+			}
 		}
 
 		if (optionsView != null && card.options != null) {
@@ -142,7 +147,9 @@ public class CardUtils {
 					int index = Math.round(card.options.length * progress / bar.getMax());
 					index = Math.min(index, card.options.length - 1);
 					selectionValueView.setText(card.options[index]);
-					submitButton.setVisibility(View.VISIBLE);
+					if (optionListener != null) {
+						submitButton.setVisibility(View.VISIBLE);
+					}
 				}
 				@Override public void onStartTrackingTouch(SeekBar bar) {}
 				@Override public void onStopTrackingTouch(SeekBar bar) {}
@@ -150,7 +157,9 @@ public class CardUtils {
 			submitButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					optionListener.onClick(selectionValueView);
+					if (optionListener != null) {
+						optionListener.onClick(selectionValueView);
+					}
 				}
 			});
 		}
@@ -187,11 +196,11 @@ public class CardUtils {
 		((CardView) cardView.findViewById(R.id.card)).addView(view);
 		ViewGroup menuView = (ViewGroup) cardView.findViewById(R.id.menu);
 
-		// For cards with photo backgrounds make the text colapsible
+		// For cards with photo backgrounds make the text collapsible.
 		if (photoView != null && textView != null && text != null && !text.trim().isEmpty()) {
-			cardView.setOnClickListener(new CardClickListener(app, textView));
+			cardView.setOnClickListener(new CardClickListener(app, textView, menuListener != null));
 		} else {
-			cardView.setOnClickListener(new CardClickListener(app, null));
+			cardView.setOnClickListener(new CardClickListener(app, null, menuListener != null));
 		}
 
 		for (int i = 0; i < menuView.getChildCount(); i++) {
@@ -205,10 +214,12 @@ public class CardUtils {
 	private static class CardClickListener implements OnClickListener {
 		private final App app;
 		private final TextView textView;
+		private final boolean showMenu;
 
-		private CardClickListener(App app, TextView textView) {
+		private CardClickListener(App app, TextView textView, boolean showMenu) {
 			this.app = app;
 			this.textView = textView;
+			this.showMenu = showMenu;
 		}
 
 		@Override
@@ -219,9 +230,11 @@ public class CardUtils {
 				int visibility = textView.getVisibility();
 				textView.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
 			}
-			View menu = v.findViewById(R.id.menu);
-			int visibility = menu.getVisibility();
-			menu.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+			if (showMenu) {
+				View menu = v.findViewById(R.id.menu);
+				int visibility = menu.getVisibility();
+				menu.setVisibility(visibility == View.VISIBLE ? View.GONE : View.VISIBLE);
+			}
 		}
 	}
 

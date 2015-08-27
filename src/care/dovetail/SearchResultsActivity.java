@@ -159,6 +159,7 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 						result.user.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
 						photoUrl, app.imageLoader);
+				view.setOnClickListener(SearchResultsActivity.this);
 			} else if (result.group != null) {
 				view = getLayoutInflater().inflate(R.layout.list_item_contact, null);
 				((TextView) view.findViewById(R.id.title)).setText(result.group.toString());
@@ -168,6 +169,7 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 						result.group.uuid, (int) app.getResources().getDimension(R.dimen.icon_width));
 				((NetworkImageView) view.findViewById(R.id.icon)).setImageUrl(
 						photoUrl, app.imageLoader);
+				view.setOnClickListener(SearchResultsActivity.this);
 			} else if (result.message != null) {
 				top = 0;
 				view = getLayoutInflater().inflate(R.layout.list_item_message, null);
@@ -205,7 +207,6 @@ public class SearchResultsActivity extends FragmentActivity implements OnClickLi
 				view = new View(app);
 			}
 			view.setPadding(left, top, right, bottom);
-			view.setOnClickListener(SearchResultsActivity.this);
 			view.setTag(result);
 			return view;
 		}
