@@ -125,9 +125,8 @@ public class Utils {
 
     public static Bitmap getSnapshot(View view) {
         Bitmap bitmap =
-        		Bitmap.createBitmap(view.getWidth() , view.getHeight(), Bitmap.Config.ARGB_8888);
+        		Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        view.layout(0, 0, view.getLayoutParams().width, view.getLayoutParams().height);
         view.draw(canvas);
         return bitmap;
     }

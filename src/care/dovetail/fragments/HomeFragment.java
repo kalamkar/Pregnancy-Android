@@ -15,8 +15,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -226,6 +228,16 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 						Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.LIKED.name()));
 				break;
 			case R.id.share:
+				Bitmap bitmap = Utils.getSnapshot((View) view.getTag());
+				String url = MediaStore.Images.Media.insertImage(app.getContentResolver(), bitmap,
+						card.getTitle(), card.getText());
+				final Intent sendIntent = new Intent();
+				sendIntent.setAction(Intent.ACTION_SEND);
+				sendIntent.putExtra(Intent.EXTRA_TEXT, card.text);
+				sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
+				sendIntent.setType("*/*");
+				startActivity(
+						Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 				break;
 			case R.id.info:
 				if (card.url != null && !card.url.isEmpty()) {

@@ -196,6 +196,7 @@ public class CardUtils {
 
 		for (int i = 0; i < menuView.getChildCount(); i++) {
 			menuView.getChildAt(i).setOnClickListener(menuListener);
+			menuView.getChildAt(i).setTag(cardView);
 		}
 		menuView.setVisibility(View.GONE);
 		return cardView;
