@@ -44,6 +44,7 @@
     </string>
     <string name="stand_on_scale">Stand on the weighing scale to connect.</string>
     <string name="weight_message">Recorded weight %d lbs</string>
+    <string name="weight_message_with_date" formatted="false">Recorded weight %d lbs on %s</string>
     
     <string name="search_results_not_found">No results found.</string>
     <string name="submitting_your_answer">Submitting your answer&#8230;</string>        

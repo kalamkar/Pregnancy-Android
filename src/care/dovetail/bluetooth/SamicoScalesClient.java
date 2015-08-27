@@ -1,5 +1,7 @@
 package care.dovetail.bluetooth;
 
+import java.util.Calendar;
+
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -79,8 +81,11 @@ public class SamicoScalesClient extends BluetoothGattCallback {
         				app.getResources().getString(R.string.weight_message), pounds);
         		Utils.sendNotification(app, text, Config.WEIGHT_NOTIFICATION_ID);
         		// Create a card for weight acknowledgement
+        		String cardText = String.format(app.getResources().getString(
+        				R.string.weight_message_with_date), pounds,
+        				Config.MESSAGE_DATE_FORMAT.format(Calendar.getInstance().getTime()));
         		new CardAdd(app).execute(Pair.create(CardAdd.PARAM_TAGS, "insight,weight,instant"),
-        				Pair.create(CardAdd.PARAM_TEXT, text),
+        				Pair.create(CardAdd.PARAM_TEXT, cardText),
         				Pair.create(CardAdd.PARAM_ICON, Config.WEIGHT_ICON),
         				Pair.create(CardAdd.PARAM_PRIORITY, "2"));
         		new UserGet(app).execute();
