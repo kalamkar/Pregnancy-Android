@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -257,14 +258,18 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void onClick(View view) {
+			String pollId = Utils.getStringWithPrefix("qid:", card.tags);
+			if (pollId == null) {
+				Log.w(TAG, String.format("Poll Id is null for card %s", card.id));
+				return;
+			}
+
 			Utils.trackEvent(app, "Card", "Option", ((TextView) view).getText().toString());
 
 			progress = ProgressDialog.show(getActivity(), null,
 					getResources().getString(R.string.submitting_your_answer));
 
-			String pollId = Utils.digest(card.text);
-			String tags = Event.Type.VOTE.name().toLowerCase() + "," + Utils.join(card.tags) +
-					"," + pollId;
+			String tags = Event.Type.VOTE.name().toLowerCase() + "," + Utils.join(card.tags);
 
 			// Add an event recording the vote
 			app.events.add(new Event(tags.split(","), System.currentTimeMillis(),

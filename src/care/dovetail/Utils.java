@@ -123,6 +123,18 @@ public class Utils {
 		return hexString.toString();
     }
 
+    public static String getStringWithPrefix(String prefix, String[] array) {
+    	if (array == null) {
+    		return null;
+    	}
+    	for (String item : array) {
+    		if (item != null && item.startsWith(prefix)) {
+    			return item;
+    		}
+    	}
+    	return null;
+    }
+
     public static Bitmap getSnapshot(View view) {
         Bitmap bitmap =
         		Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
