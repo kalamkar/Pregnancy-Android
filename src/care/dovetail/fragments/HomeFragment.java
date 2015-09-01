@@ -229,16 +229,12 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 						Pair.create(CardUpdate.PARAM_TAG, Card.TAGS.LIKED.name()));
 				break;
 			case R.id.share:
-				Bitmap bitmap = Utils.getSnapshot((View) view.getTag());
-				String url = MediaStore.Images.Media.insertImage(app.getContentResolver(), bitmap,
-						card.getTitle(), card.getText());
-				final Intent sendIntent = new Intent();
-				sendIntent.setAction(Intent.ACTION_SEND);
-				sendIntent.putExtra(Intent.EXTRA_TEXT, card.text);
-				sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
-				sendIntent.setType("*/*");
-				startActivity(
-						Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
+				String pollId = Utils.getStringWithPrefix("qid:", card.tags);
+				if (pollId != null) {
+					shareUrl(Config.POLL_URL + pollId, card);
+				} else {
+					shareBitmap(Utils.getSnapshot((View) view.getTag()), card);
+				}
 				break;
 			case R.id.info:
 				if (card.url != null && !card.url.isEmpty()) {
@@ -320,5 +316,28 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 				onRefresh();
 			}
 		}, Config.REFRESH_TIMEOUT_MILLIS);
+	}
+
+	private void shareBitmap(Bitmap bitmap, Card card) {
+		String url = MediaStore.Images.Media.insertImage(app.getContentResolver(), bitmap,
+				card.getTitle(), card.getText());
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, card.text);
+		sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
+		sendIntent.setType("*/*");
+		startActivity(
+				Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
+	}
+
+	private void shareUrl(String url, Card card) {
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+		sendIntent.putExtra(android.content.Intent.EXTRA_TITLE, card.getTitle());
+		sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, card.getText());
+		sendIntent.setType("text/plain");
+		startActivity(
+				Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 	}
 }

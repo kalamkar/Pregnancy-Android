@@ -39,6 +39,7 @@ public class Config extends care.dovetail.common.Config {
 	public static final String GROUP_URL = API_URL + "/group";
 	public static final String MESSAGE_URL  = API_URL + "/message";
 	public static final String SEARCH_URL = API_URL + "/search";
+	public static final String POLL_URL = API_URL + "/poll/";
 
 	public static final String USER_PHOTO_URL = PHOTO_UPLOAD_URL + "?uuid=";
 	public static final String GROUP_PHOTO_URL = GROUP_URL + "/photo?group_uuid=";
