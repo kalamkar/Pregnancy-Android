@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -31,16 +30,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import care.dovetail.App;
 import care.dovetail.Config;
-import care.dovetail.FitnessPollTask;
 import care.dovetail.MainActivity;
 import care.dovetail.R;
 import care.dovetail.Utils;
 import care.dovetail.api.PhotoUpdate;
-import care.dovetail.bluetooth.JellyBeanPairingActivity;
-import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.User;
 
 import com.android.volley.toolbox.NetworkImageView;
@@ -50,11 +45,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "DrawerFragment";
 
 	private static final int TITLES[] = new int[] {R.string.home, /* R.string.sharing, */
-		R.string.history, R.string.due_date, R.string.pair_google_fit, R.string.pair_scale,
-		R.string.about};
+		R.string.insights, R.string.due_date, R.string.about};
 	private static final int ICONS[] = new int[] {R.drawable.ic_home, /* R.drawable.ic_group, */
-		R.drawable.ic_history, R.drawable.ic_date, R.drawable.ic_heart, R.drawable.ic_action_pair,
-		R.drawable.ic_info};
+		R.drawable.ic_history, R.drawable.ic_date, R.drawable.ic_info};
 
 	private App app;
 
@@ -211,11 +204,6 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 		@Override
 		public Pair<String, Integer> getItem(int position) {
 			int titleResId = TITLES[position];
-			if (titleResId == R.string.pair_google_fit && app.getGoogleFitAccount() != null) {
-				titleResId = R.string.google_fit_paired;
-			} else if (titleResId == R.string.pair_scale && app.getWeightScaleAddress() != null) {
-				titleResId = R.string.scale_paired;
-			}
 			return Pair.create(getResources().getString(titleResId), ICONS[position]);
 		}
 
@@ -254,27 +242,8 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 			case R.string.home:
 				((MainActivity) getActivity()).setContentFragment(new HomeFragment());
 				break;
-			case R.string.history:
-				((MainActivity) getActivity()).setContentFragment(new HistoryFragment());
-				break;
-			case R.string.scale_paired:
-			case R.string.pair_scale:
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-					startActivity(new Intent(getActivity(), PairingActivity.class));
-				} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-					startActivity(new Intent(getActivity(), JellyBeanPairingActivity.class));
-				} else {
-					Toast.makeText(app,
-							getResources().getString(R.string.weight_scale_not_supported),
-							Toast.LENGTH_SHORT).show();
-				}
-				break;
-			case R.string.google_fit_paired:
-			case R.string.pair_google_fit:
-				FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
-				if (app.apiClient != null && !app.apiClient.isConnected()) {
-	            	app.apiClient.connect();
-	            }
+			case R.string.insights:
+				((MainActivity) getActivity()).setContentFragment(new InsightsFragment());
 				break;
 			case R.string.about:
 				((MainActivity) getActivity()).setContentFragment(new AboutFragment());

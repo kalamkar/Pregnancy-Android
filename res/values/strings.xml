@@ -26,7 +26,8 @@
     <string name="group_name">Group name</string>
         
     <string name="due_date">Due Date</string>
-    <string name="history">History</string>
+    <string name="insights">Insights</string>
+    <string name="whats_next">What\'s next?</string>
     <string name="pair_scale">Connect weighing scale</string>
     <string name="scale_paired">Weighing scale connected</string>
     <string name="pair_google_fit">Connect Google Fit</string>

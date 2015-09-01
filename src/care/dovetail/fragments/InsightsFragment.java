@@ -6,21 +6,33 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Application;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import care.dovetail.App;
 import care.dovetail.Config;
+import care.dovetail.FitnessPollTask;
+import care.dovetail.MainActivity;
 import care.dovetail.R;
 import care.dovetail.Utils;
 import care.dovetail.api.CardsGet;
 import care.dovetail.api.EventsGet;
+import care.dovetail.bluetooth.JellyBeanPairingActivity;
+import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
@@ -33,8 +45,8 @@ import com.jjoe64.graphview.GridLabelRenderer.GridStyle;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 
-public class HistoryFragment extends Fragment {
-	private static final String TAG = "HistoryFragment";
+public class InsightsFragment extends Fragment implements OnClickListener {
+	private static final String TAG = "InsightsFragment";
 	private static final SimpleDateFormat DAY_OF_WEEK = new SimpleDateFormat("EE");
 	private static final SimpleDateFormat MONTH_DAY = new SimpleDateFormat("MMM dd");
 
@@ -54,13 +66,17 @@ public class HistoryFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_history, container, false);
+		return inflater.inflate(R.layout.fragment_insights, container, false);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+
+		view.findViewById(R.id.connect_health).setOnClickListener(this);
+		view.findViewById(R.id.connect_scale).setOnClickListener(this);
+		updateUi();
 
 		graph = ((GraphView) view.findViewById(R.id.graph));
 		graph.addSeries(dataSeries);
@@ -88,16 +104,67 @@ public class HistoryFragment extends Fragment {
 					cards = result.cards;
 					((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
 							.notifyDataSetChanged();
+					if (cards.length > 0) {
+						getView().findViewById(R.id.insights_label).setVisibility(View.VISIBLE);
+					}
 				}
 			}
-		}.execute(Pair.create(CardsGet.PARAM_TAGS, Card.TAGS.ARCHIVED.name()));
+		}.execute(Pair.create(CardsGet.PARAM_TAGS, Card.TAGS.INSIGHT.name()));
 	}
 
 	@Override
 	public void onResume() {
 		app.tracker.setScreenName(TAG);
 		app.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.registerOnSharedPreferenceChangeListener(listener);
 		super.onResume();
+	}
+
+	@Override
+	public void onPause() {
+		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
+				.unregisterOnSharedPreferenceChangeListener(listener);
+		super.onPause();
+	}
+
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+			updateUi();
+		}
+	};
+
+	@Override
+	public void onClick(View view) {
+		switch(view.getId()) {
+		case R.id.connect_scale:
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				startActivity(new Intent(getActivity(), PairingActivity.class));
+			} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+				startActivity(new Intent(getActivity(), JellyBeanPairingActivity.class));
+			} else {
+				Toast.makeText(app,
+						getResources().getString(R.string.weight_scale_not_supported),
+						Toast.LENGTH_SHORT).show();
+			}
+			break;
+		case R.id.connect_health:
+			FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
+			if (app.apiClient != null && !app.apiClient.isConnected()) {
+            	app.apiClient.connect();
+            }
+			break;
+		}
+	}
+
+	private void updateUi() {
+		if (app.getGoogleFitAccount() != null) {
+			((TextView) getView().findViewById(R.id.connect_health)).setText(R.string.google_fit_paired);
+		}
+		if (app.getWeightScaleAddress() != null) {
+			((TextView) getView().findViewById(R.id.connect_scale)).setText(R.string.scale_paired);
+		}
 	}
 
 	private void updateGraph(Event[] events) {
