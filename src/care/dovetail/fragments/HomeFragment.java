@@ -1,5 +1,7 @@
 package care.dovetail.fragments;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -16,9 +18,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -319,13 +322,23 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 	}
 
 	private void shareBitmap(Bitmap bitmap, Card card) {
-		String url = MediaStore.Images.Media.insertImage(app.getContentResolver(), bitmap,
-				card.getTitle(), card.getText());
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);
 		sendIntent.putExtra(Intent.EXTRA_TEXT, card.text);
-		sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(url));
-		sendIntent.setType("*/*");
+		File file = new File(
+				Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+				"screenshot.jpg");
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			bitmap.compress(CompressFormat.JPEG, 95, fos);
+			fos.flush();
+			fos.close();
+		} catch (Exception ex) {
+			Log.w(TAG, ex);
+			return;
+		}
+		sendIntent.setType("image/jpeg");
+		sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
 		startActivity(
 				Intent.createChooser(sendIntent, getResources().getText(R.string.share)));
 	}
