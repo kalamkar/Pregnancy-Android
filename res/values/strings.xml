@@ -28,11 +28,17 @@
     <string name="due_date">Due Date</string>
     <string name="insights">Insights</string>
     <string name="whats_next">What\'s next?</string>
+    <string name="help">Help</string>
+    <string name="about">About</string>
+    
+    <string name="prev">Prev</string>
+    <string name="week_number">Week %d</string>
+    <string name="next">Next</string>
+    
     <string name="pair_scale">Connect weighing scale</string>
     <string name="scale_paired">Weighing scale connected</string>
     <string name="pair_google_fit">Connect Google Fit</string>
     <string name="google_fit_paired">Google Fit connected</string>
-    <string name="about">About</string>
     
     <string name="archived_cards">Archived Cards</string>
     <string name="last_seen">Last seen</string>

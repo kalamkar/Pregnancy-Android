@@ -45,9 +45,10 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "DrawerFragment";
 
 	private static final int TITLES[] = new int[] {R.string.home, /* R.string.sharing, */
-		R.string.insights, R.string.due_date, R.string.about};
+		R.string.insights, R.string.whats_next, R.string.due_date, R.string.help, R.string.about};
 	private static final int ICONS[] = new int[] {R.drawable.ic_home, /* R.drawable.ic_group, */
-		R.drawable.ic_history, R.drawable.ic_date, R.drawable.ic_info};
+		R.drawable.ic_history, R.drawable.ic_next, R.drawable.ic_date, R.drawable.ic_help,
+		R.drawable.ic_info};
 
 	private App app;
 
@@ -244,6 +245,12 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 				break;
 			case R.string.insights:
 				((MainActivity) getActivity()).setContentFragment(new InsightsFragment());
+				break;
+			case R.string.whats_next:
+				((MainActivity) getActivity()).setContentFragment(new BrowseFragment());
+				break;
+			case R.string.help:
+				((MainActivity) getActivity()).setContentFragment(new HelpFragment());
 				break;
 			case R.string.about:
 				((MainActivity) getActivity()).setContentFragment(new AboutFragment());
