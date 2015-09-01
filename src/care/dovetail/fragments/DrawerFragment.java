@@ -49,10 +49,10 @@ import com.android.volley.toolbox.NetworkImageView;
 public class DrawerFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "DrawerFragment";
 
-	private static final int TITLES[] = new int[] {R.string.home, R.string.sharing,
+	private static final int TITLES[] = new int[] {R.string.home, /* R.string.sharing, */
 		R.string.history, R.string.due_date, R.string.pair_google_fit, R.string.pair_scale,
 		R.string.about};
-	private static final int ICONS[] = new int[] {R.drawable.ic_home, R.drawable.ic_group,
+	private static final int ICONS[] = new int[] {R.drawable.ic_home, /* R.drawable.ic_group, */
 		R.drawable.ic_history, R.drawable.ic_date, R.drawable.ic_heart, R.drawable.ic_action_pair,
 		R.drawable.ic_info};
 
