@@ -69,47 +69,19 @@ public class InsightsFragment extends Fragment implements OnClickListener {
 		return inflater.inflate(R.layout.fragment_insights, container, false);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
 		view.findViewById(R.id.connect_health).setOnClickListener(this);
 		view.findViewById(R.id.connect_scale).setOnClickListener(this);
-		updateUi();
 
 		graph = ((GraphView) view.findViewById(R.id.graph));
 		graph.addSeries(dataSeries);
 		customizeGraphUI();
 
 		((ListView) view.findViewById(R.id.cards)).setAdapter(new CardsAdapter());
-
-		long endTime = System.currentTimeMillis();
-		long startTime = Utils.getMidnightMillis() - Config.GRAPH_DAYS * 24L * 60L * 60L * 1000L;
-		new EventsGet(app, Event.Type.STEPS.name(), startTime, endTime) {
-			@Override
-			protected void onPostExecute(ApiResponse result) {
-				super.onPostExecute(result);
-				if (result != null && result.events != null) {
-					updateGraph(result.events);
-				}
-			}
-		}.execute();
-
-		new CardsGet(app) {
-			@Override
-			protected void onPostExecute(ApiResponse result) {
-				super.onPostExecute(result);
-				if (result != null && result.cards != null) {
-					cards = result.cards;
-					((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
-							.notifyDataSetChanged();
-					if (cards.length > 0) {
-						getView().findViewById(R.id.insights_label).setVisibility(View.VISIBLE);
-					}
-				}
-			}
-		}.execute(Pair.create(CardsGet.PARAM_TAGS, Card.TAGS.INSIGHT.name()));
+		updateUi();
 	}
 
 	@Override
@@ -131,7 +103,9 @@ public class InsightsFragment extends Fragment implements OnClickListener {
 	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			updateUi();
+			if (App.WEIGHT_SCALE_MAC.equals(key) || App.GOOGLE_FIT_ACCOUNT.equals(key)) {
+				updateUi();
+			}
 		}
 	};
 
@@ -158,12 +132,52 @@ public class InsightsFragment extends Fragment implements OnClickListener {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private void requestGraphData() {
+		long endTime = System.currentTimeMillis();
+		long startTime = Utils.getMidnightMillis() - Config.GRAPH_DAYS * 24L * 60L * 60L * 1000L;
+		new EventsGet(app, Event.Type.STEPS.name(), startTime, endTime) {
+			@Override
+			protected void onPostExecute(ApiResponse result) {
+				super.onPostExecute(result);
+				if (result != null && result.events != null) {
+					updateGraph(result.events);
+				}
+			}
+		}.execute();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void requestInsightCards() {
+		new CardsGet(app) {
+			@Override
+			protected void onPostExecute(ApiResponse result) {
+				super.onPostExecute(result);
+				if (result != null && result.cards != null) {
+					cards = result.cards;
+					((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
+							.notifyDataSetChanged();
+					if (cards.length > 0) {
+						getView().findViewById(R.id.insights_label).setVisibility(View.VISIBLE);
+					}
+				}
+			}
+		}.execute(Pair.create(CardsGet.PARAM_TAGS, Card.TAGS.INSIGHT.name()));
+	}
+
 	private void updateUi() {
+		boolean hasHealthData = false;
 		if (app.getGoogleFitAccount() != null) {
 			((TextView) getView().findViewById(R.id.connect_health)).setText(R.string.google_fit_paired);
+			hasHealthData = true;
 		}
 		if (app.getWeightScaleAddress() != null) {
 			((TextView) getView().findViewById(R.id.connect_scale)).setText(R.string.scale_paired);
+			hasHealthData = true;
+		}
+		if (hasHealthData) {
+			requestGraphData();
+			requestInsightCards();
 		}
 	}
 
