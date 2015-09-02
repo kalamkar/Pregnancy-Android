@@ -21,16 +21,16 @@ public class EventsGet extends ApiResponseTask {
 	private final App app;
 	private final long startTime;
 	private final long endTime;
-	private final String type;
+	private final String tags;
 
 	public EventsGet(App app, String type) {
 		this(app, type, -1, -1);
 	}
 
-	public EventsGet(App app, String type, long startTime, long endTime) {
+	public EventsGet(App app, String tags, long startTime, long endTime) {
 		super(app.getUserUUID(), app.getUserAuth());
 		this.app = app;
-		this.type = type;
+		this.tags = tags;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
@@ -48,9 +48,7 @@ public class EventsGet extends ApiResponseTask {
 		if (endTime >= 0) {
 			builder.appendQueryParameter("end_time", Long.toString(endTime));
 		}
-		if (type != null) {
-			builder.appendQueryParameter("type", type);
-		}
+		builder.appendQueryParameter("tags", tags);
 		return new HttpGet(builder.build().toString());
 	}
 

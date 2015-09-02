@@ -96,7 +96,9 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			updateUi(getView());
+			if (App.USER_PROFILE.equals(key)) {
+				updateUi(getView());
+			}
 		}
 	};
 
@@ -109,9 +111,6 @@ public class DrawerFragment extends Fragment implements OnClickListener {
 				(int) app.getResources().getDimension(R.dimen.photo_width),
 				(int) (Math.random() * 10000));
 		((NetworkImageView) view.findViewById(R.id.photo)).setImageUrl(photoUrl, app.imageLoader);
-
-		((BaseAdapter) ((ListView) view.findViewById(R.id.menu)).getAdapter())
-				.notifyDataSetChanged();
 	}
 
 	@Override

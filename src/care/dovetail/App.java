@@ -20,8 +20,6 @@ import care.dovetail.api.EventUploadTask;
 import care.dovetail.api.UserUpdate;
 import care.dovetail.common.ApiResponseTask;
 import care.dovetail.common.model.ApiResponse.Message;
-import care.dovetail.common.model.Goal;
-import care.dovetail.common.model.Goal.Aggregation;
 import care.dovetail.common.model.Group;
 import care.dovetail.common.model.User;
 import care.dovetail.messaging.GCMUtils;
@@ -133,6 +131,8 @@ public class App extends Application {
 	}
 
 	public void setEventSyncTime(long timeMillis) {
+		Log.i(TAG, String.format("Synced up events upto %s",
+				Config.MESSAGE_TIME_FORMAT.format(timeMillis)));
 		setLongPref(EVENT_SYNC_TIME, timeMillis);
 	}
 
@@ -188,11 +188,6 @@ public class App extends Application {
 			Log.i(TAG, ApiResponseTask.getAuthHeader(user.uuid, user.auth));
 		}
 		mother = Mother.fromUser(Config.GSON.toJson(user));
-
-		// TODO(abhi): remove this once we have real goals.
-		mother.goals = new ArrayList<Goal>();
-		mother.goals.add(Goal.repeated("Walk 10,000 steps everyday", 1430505891000L, 86400000L)
-				.aggregate(Aggregation.SUM).target(10000, "STEP"));
 		setStringPref(USER_PROFILE, Config.GSON.toJson(user));
 	}
 
