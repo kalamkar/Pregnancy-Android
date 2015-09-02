@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="care.dovetail.MainActivity"
-    style="@style/Card" >
+    tools:context="care.dovetail.MainActivity" >
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/medium_margin"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -26,30 +26,39 @@
         android:text="more text explaining stuff"
         android:textColor="@color/secondary_text_gray" />
 
-    <TextView
-        android:id="@+id/selectionValue"
+    <RelativeLayout
+        android:id="@+id/r1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text"
-        android:gravity="center" />
+        android:layout_marginTop="@dimen/activity_vertical_margin" >
+
+        <TextView
+            android:id="@+id/submit"
+            style="@style/TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/action_submit"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/selectionValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/submit"
+            android:gravity="center" />
+
+    </RelativeLayout>
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/selectionValue"
+        android:layout_below="@+id/r1"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:max="100"
         android:progress="0" />
-    
-    <TextView
-        android:id="@+id/submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBar"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/action_submit"
-        android:visibility="gone"
-        style="@style/TextButton" />
 
 </RelativeLayout>

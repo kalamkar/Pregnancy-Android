@@ -28,7 +28,7 @@ public class Config extends care.dovetail.common.Config {
 
 	public static final String BT_SENSOR_DATA_CHAR_PREFIX = "1902";
 
-	public static final String API_URL = "https://dovetail-api1.appspot.com";
+	public static final String API_URL = "http://api.pregnansi.com";
 	public static final String USER_URL = API_URL + "/user";
 	public static final String RECOVERY_URL = USER_URL + "/recover";
 	public static final String PHOTO_UPLOAD_URL = USER_URL + "/photo";
