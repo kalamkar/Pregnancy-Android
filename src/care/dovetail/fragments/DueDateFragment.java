@@ -5,12 +5,15 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Pair;
 import android.widget.DatePicker;
 import care.dovetail.App;
+import care.dovetail.R;
 import care.dovetail.api.UserUpdate;
+import care.dovetail.common.model.ApiResponse;
 import care.dovetail.model.Mother;
 
 public class DueDateFragment extends DialogFragment
@@ -44,8 +47,17 @@ public class DueDateFragment extends DialogFragment
 		dueDate.set(Calendar.YEAR, year);
 		dueDate.set(Calendar.MONTH, month);
 		dueDate.set(Calendar.DAY_OF_MONTH, day);
-		new UserUpdate(app).execute(Pair.create(UserUpdate.PARAM_FEATURE,
-				String.format("%s=%s", Mother.FEATURE_DUE_DATE_MILLIS,
-						Long.toString(dueDate.getTimeInMillis()))));
+
+		final ProgressDialog progress = ProgressDialog.show(getActivity(), null,
+				getResources().getString(R.string.submitting_your_answer));
+		String feature = String.format("%s=%s", Mother.FEATURE_DUE_DATE_MILLIS,
+				Long.toString(dueDate.getTimeInMillis()));
+		new UserUpdate(app){
+			@Override
+			protected void onPostExecute(ApiResponse result) {
+				progress.dismiss();
+				super.onPostExecute(result);
+			}
+		}.execute(Pair.create(UserUpdate.PARAM_FEATURE, feature));
     }
 }
