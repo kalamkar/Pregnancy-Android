@@ -22,12 +22,13 @@ public class BrowseFragment extends Fragment implements OnClickListener {
 
 	private App app;
 	private Card cards[] = new Card[0];
-	private int week = 20;
+	private int week;
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		app = (App) activity.getApplication();
+		week = app.getMother().getPregnancyWeek() + 1;
 	}
 
 	@Override
@@ -61,6 +62,9 @@ public class BrowseFragment extends Fragment implements OnClickListener {
 
 	@SuppressWarnings("unchecked")
 	private void requestCards(int week) {
+		week = week < 0 ? 1 : week > 40 ? 40 : week;
+		// We don't have content for week 2, 3 and 4 so skip them
+		week = week > 1 && week < 5 ? 5 : week;
 		((TextView) getView().findViewById(R.id.title)).setText(
 				String.format(getResources().getString(R.string.week_number), week));
 		new CardsGet(app) {

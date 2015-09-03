@@ -10,6 +10,8 @@ import care.dovetail.common.model.User;
 
 public class Mother extends User {
 	private static final String TAG = "Mother";
+	public static final long  WEEK_MILLIS = 7L * 24L * 60L * 60L * 1000L;
+
 	public static final String  FEATURE_DUE_DATE_MILLIS = "DUE_DATE_MILLIS";
 
 	public long dueDateMillis;
@@ -25,6 +27,10 @@ public class Mother extends User {
 			this.name = name;
 			this.gender = gender;
 		}
+	}
+
+	public int getPregnancyWeek() {
+		return (int)(40L - ((dueDateMillis - System.currentTimeMillis()) / WEEK_MILLIS));
 	}
 
 	public User toUser() {
