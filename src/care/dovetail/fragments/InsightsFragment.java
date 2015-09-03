@@ -157,9 +157,9 @@ public class InsightsFragment extends Fragment implements OnClickListener {
 					cards = result.cards;
 					((BaseAdapter) ((ListView) getView().findViewById(R.id.cards)).getAdapter())
 							.notifyDataSetChanged();
-					if (cards.length > 0) {
-						getView().findViewById(R.id.insights_label).setVisibility(View.VISIBLE);
-					}
+//					if (cards.length > 0) {
+//						getView().findViewById(R.id.insights_label).setVisibility(View.VISIBLE);
+//					}
 				}
 			}
 		}.execute(Pair.create(CardsGet.PARAM_TAGS, Card.TAGS.INSIGHT.name()));

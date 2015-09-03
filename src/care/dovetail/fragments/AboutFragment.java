@@ -1,12 +1,16 @@
 package care.dovetail.fragments;
 
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
 
@@ -39,6 +43,13 @@ public class AboutFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		try {
+			PackageInfo info = app.getPackageManager().getPackageInfo(app.getPackageName(), 0);
+			((TextView) view.findViewById(R.id.version)).setText(
+					String.format("Version: %s.%d", info.versionName, info.versionCode));
+		} catch (NameNotFoundException e) {
+			Log.w(TAG, e);
+		}
 	}
 
 	@Override
