@@ -73,7 +73,8 @@ public class BrowseFragment extends Fragment implements OnClickListener {
 							.notifyDataSetChanged();
 				}
 			}
-		}.execute(Pair.create(CardsGet.PARAM_TAGS, String.format("week:%d", week)));
+		}.execute(Pair.create(CardsGet.PARAM_TAGS, String.format("week:%d", week)),
+				  Pair.create(CardsGet.PARAM_PUBLIC, "true"));
 	}
 
 	private class CardsAdapter extends BaseAdapter {

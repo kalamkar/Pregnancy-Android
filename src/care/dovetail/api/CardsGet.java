@@ -18,6 +18,7 @@ public class CardsGet extends ApiResponseTask {
 	private static final String TAG = "CardsGet";
 
 	public static final String PARAM_TAGS = "tags";
+	public static final String PARAM_PUBLIC = "public";
 
 	private final App app;
 
