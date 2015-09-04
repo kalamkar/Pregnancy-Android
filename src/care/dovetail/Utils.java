@@ -2,8 +2,12 @@ package care.dovetail;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -142,5 +146,11 @@ public class Utils {
         canvas.drawColor(0xFFFFFFFF);
         view.draw(canvas);
         return bitmap;
+    }
+
+    public static String getTimezoneOffset() {
+    	Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+		DateFormat formatter = new SimpleDateFormat("Z");
+		return formatter.format(calendar.getTime());
     }
 }
