@@ -21,7 +21,7 @@
     <string name="home">Home</string>
     <string name="sharing">Sharing</string>
     
-    <string name="full_name">First &amp; Last name</string>
+    <string name="full_name">First &amp; Last Name</string>
     <string name="email">E-Mail</string>
     <string name="group_name">Group name</string>
         
@@ -43,8 +43,20 @@
     <string name="archived_cards">Archived Cards</string>
     <string name="last_seen">Last seen</string>
     
-    <string name="email_justification">No spam! Email needed to recover password</string>
+    <string name="email_justification">Needed for account recovery. No spam, we promise!</string>
     <string name="recover_account">Already signed up? Tap here to recover your account</string>
+    <string name="recovery_email_code_explanation">
+        We have sent a recovery code to your inbox. Enter that above to log in.
+        It may take a few minutes for the email to arrive. Interweb gets clogged sometimes!
+    </string>
+    <string name="user_not_found_explanation">
+        Sorry we can\'t find an account with that info. Are you sure you are entering the email 
+        you signed up with? If you continue having trouble, send an email to support@pregnansi.com.
+    </string>
+    <string name="expired_recovery_code">
+        Hmm. The recovery code you just entered seems to have expired.
+        Try submitting recovery request again.
+    </string>
     
     <string name="weight_scale_not_supported">
         Connecting to weighing scale not supported on your phone.
