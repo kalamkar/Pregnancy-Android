@@ -36,6 +36,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.Config;
+import care.dovetail.FitnessPollTask;
+import care.dovetail.MainActivity;
 import care.dovetail.R;
 import care.dovetail.Utils;
 import care.dovetail.api.CardAdd;
@@ -84,7 +86,10 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 				new Action(R.string.pair_google_fit, R.drawable.ic_heart, new CardProcessor() {
 					@Override
 					public void process(Card card) {
-						startActivity(new Intent(getActivity(), PairingActivity.class));
+						FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
+						if (app.apiClient != null && !app.apiClient.isConnected()) {
+			            	app.apiClient.connect();
+			            }
 						Utils.trackEvent(app, "Card", "Action",
 								getResources().getString(R.string.pair_google_fit));
 					}
