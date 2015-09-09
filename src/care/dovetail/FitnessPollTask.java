@@ -201,7 +201,8 @@ public class FitnessPollTask extends TimerTask {
 						// Called whenever the API client fails to connect.
 						@Override
 						public void onConnectionFailed(ConnectionResult result) {
-							Log.i(TAG, "Connection failed. Cause: " + result.toString());
+							Utils.trackEvent(app, "Fitness", "Error", result.toString());
+							Log.w(TAG, "Connection failed. Cause: " + result.toString());
 							if (!result.hasResolution()) {
 								// Show the localized error dialog
 								GooglePlayServicesUtil.getErrorDialog(

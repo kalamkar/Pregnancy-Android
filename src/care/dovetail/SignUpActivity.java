@@ -1,6 +1,7 @@
 package care.dovetail;
 
 import android.app.Application;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import care.dovetail.api.UserCreate;
 import care.dovetail.api.UserRecovery;
 import care.dovetail.common.model.ApiResponse;
 import care.dovetail.common.model.User;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class SignUpActivity extends FragmentActivity implements OnClickListener {
 	private static final String TAG = "SignUpActivity";
@@ -37,6 +41,21 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 	public void onResume() {
 		app.getSharedPreferences(app.getPackageName(), Application.MODE_PRIVATE)
 				.registerOnSharedPreferenceChangeListener(listener);
+		int playServicesAvailability = GooglePlayServicesUtil.isGooglePlayServicesAvailable(app);
+		switch(playServicesAvailability) {
+		case ConnectionResult.SUCCESS:
+			break;
+		default:
+			GooglePlayServicesUtil.getErrorDialog(playServicesAvailability, this, 0,
+					new DialogInterface.OnCancelListener() {
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							Utils.trackEvent(app, TAG, "Error", "Update Cancelled");
+						}
+					}).show();
+			Utils.trackEvent(app, TAG, "Error",
+					GooglePlayServicesUtil.getErrorString(playServicesAvailability));
+		}
 		super.onResume();
 	}
 
@@ -82,6 +101,7 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 						finish();
 					} else  if (result != null && result.message != null) {
 						Toast.makeText(app, result.message, Toast.LENGTH_SHORT).show();
+						Utils.trackEvent(app, TAG, "Response", result.message);
 					}
 				}
 			}.execute(Pair.create(UserCreate.PARAM_NAME, name),
@@ -111,6 +131,7 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 					} else  if (result != null && !"OK".equalsIgnoreCase(result.code) &&
 							result.message != null) {
 						Toast.makeText(app, result.message, Toast.LENGTH_SHORT).show();
+						Utils.trackEvent(app, TAG, "Response", result.message);
 					}
 				}
 			}.execute(
@@ -137,8 +158,10 @@ public class SignUpActivity extends FragmentActivity implements OnClickListener 
 						finish();
 					} else  if (result != null && result.message != null) {
 						Toast.makeText(app, result.message, Toast.LENGTH_SHORT).show();
+						Utils.trackEvent(app, TAG, "Response", result.message);
 					} else {
 						Log.w(TAG, String.format("Could not recover  user"));
+						Utils.trackEvent(app, TAG, "Response", "Could not recover  user");
 					}
 				}
 			}.execute(
