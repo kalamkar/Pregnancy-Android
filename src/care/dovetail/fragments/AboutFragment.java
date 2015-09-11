@@ -1,7 +1,6 @@
 package care.dovetail.fragments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -14,11 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
-import care.dovetail.Utils;
 
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class AboutFragment extends Fragment implements OnClickListener {
 	private static final String TAG = "AboutFragment";
@@ -35,23 +31,6 @@ public class AboutFragment extends Fragment implements OnClickListener {
 	public void onResume() {
 		app.tracker.setScreenName(TAG);
 		app.tracker.send(new HitBuilders.ScreenViewBuilder().build());
-
-		int playServicesAvailability = GooglePlayServicesUtil.isGooglePlayServicesAvailable(app);
-		switch(playServicesAvailability) {
-		case ConnectionResult.SUCCESS:
-			Log.i(TAG, "Phone has latest Google Play Services.");
-			break;
-		default:
-			GooglePlayServicesUtil.getErrorDialog(playServicesAvailability, getActivity(), 0,
-					new DialogInterface.OnCancelListener() {
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							Utils.trackEvent(app, TAG, "Error", "Update Cancelled");
-						}
-					}).show();
-			Utils.trackEvent(app, TAG, "Error",
-					GooglePlayServicesUtil.getErrorString(playServicesAvailability));
-		}
 		super.onResume();
 	}
 
