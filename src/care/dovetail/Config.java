@@ -77,7 +77,18 @@ public class Config extends care.dovetail.common.Config {
 	public static final String BACKGROUND_IMAGES[] = new String[] {
 		"https://storage.googleapis.com/dovetail-images/baby1.png",
 		"https://storage.googleapis.com/dovetail-images/baby2.png",
-		"https://storage.googleapis.com/dovetail-images/baby3.png"};
+		"https://storage.googleapis.com/dovetail-images/baby3.png",
+		"https://storage.googleapis.com/dovetail-images/Generic/baby-200760_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/baby-84627_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/brothers-457234_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/cat-649164_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/children-817365_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/flowers-164754_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/friends-640096_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/hands-634866_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/pregnancy-806989_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/summerfield-336672_640.jpg",
+		"https://storage.googleapis.com/dovetail-images/Generic/twins-775506_640.jpg" };
 
 	public static final String TODO_ICON =
 		"https://storage.googleapis.com/dovetail-images/ic_todo.png";
