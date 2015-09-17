@@ -113,15 +113,7 @@ public class InsightsFragment extends Fragment implements OnClickListener {
 	public void onClick(View view) {
 		switch(view.getId()) {
 		case R.id.connect_scale:
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				startActivity(new Intent(getActivity(), PairingActivity.class));
-			} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-				startActivity(new Intent(getActivity(), JellyBeanPairingActivity.class));
-			} else {
-				Toast.makeText(app,
-						getResources().getString(R.string.weight_scale_not_supported),
-						Toast.LENGTH_SHORT).show();
-			}
+			connectScale(getActivity());
 			break;
 		case R.id.connect_health:
 			FitnessPollTask.buildFitnessClient((MainActivity) getActivity(), app);
@@ -256,6 +248,18 @@ public class InsightsFragment extends Fragment implements OnClickListener {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			return CardUtils.getViewForCard(getItem(position), null, null,
 					getActivity().getLayoutInflater(), null, app);
+		}
+	}
+
+	public static void connectScale(Activity activity) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			activity.startActivity(new Intent(activity, PairingActivity.class));
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			activity.startActivity(new Intent(activity, JellyBeanPairingActivity.class));
+		} else {
+			Toast.makeText(activity,
+					activity.getResources().getString(R.string.weight_scale_not_supported),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 }

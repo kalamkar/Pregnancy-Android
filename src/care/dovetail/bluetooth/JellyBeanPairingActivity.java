@@ -25,7 +25,6 @@ public class JellyBeanPairingActivity extends Activity {
 
 	private BluetoothAdapter bluetooth;
 
-	// Stops scanning after 10 seconds.
 	private static final int REQUEST_ENABLE_BT = 0;
 
 	@Override

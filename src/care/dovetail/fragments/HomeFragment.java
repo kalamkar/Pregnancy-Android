@@ -43,7 +43,6 @@ import care.dovetail.Utils;
 import care.dovetail.api.CardAdd;
 import care.dovetail.api.CardUpdate;
 import care.dovetail.api.UserGet;
-import care.dovetail.bluetooth.PairingActivity;
 import care.dovetail.common.model.Card;
 import care.dovetail.common.model.Event;
 import care.dovetail.fragments.CardUtils.Action;
@@ -77,7 +76,7 @@ public class HomeFragment extends Fragment implements OnRefreshListener {
 				new Action(R.string.pair_scale, R.drawable.ic_action_pair, new CardProcessor() {
 					@Override
 					public void process(Card card) {
-						startActivity(new Intent(getActivity(), PairingActivity.class));
+						InsightsFragment.connectScale(getActivity());
 						Utils.trackEvent(app, "Card", "Action",
 								getResources().getString(R.string.pair_scale));
 					}
