@@ -21,9 +21,9 @@ import care.dovetail.api.UserUpdate;
 import care.dovetail.common.ApiResponseTask;
 import care.dovetail.common.model.ApiResponse.Message;
 import care.dovetail.common.model.Group;
+import care.dovetail.common.model.Mother;
 import care.dovetail.common.model.User;
 import care.dovetail.messaging.GCMUtils;
-import care.dovetail.model.Mother;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;

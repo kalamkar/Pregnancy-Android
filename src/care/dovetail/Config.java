@@ -5,8 +5,11 @@ import java.util.Locale;
 
 import android.annotation.SuppressLint;
 
+import com.google.gson.Gson;
+
 @SuppressLint("SimpleDateFormat")
-public class Config extends care.dovetail.common.Config {
+public class Config {
+	public static final Gson GSON = new Gson();
 
 	// Activity Request IDs
 	public static final int ACTIVITY_REQUEST_OAUTH = 0;

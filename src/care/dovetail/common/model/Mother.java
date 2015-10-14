@@ -1,12 +1,11 @@
-package care.dovetail.model;
+package care.dovetail.common.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import android.util.Log;
-import care.dovetail.common.Config;
-import care.dovetail.common.model.User;
+import care.dovetail.Config;
 
 public class Mother extends User {
 	private static final String TAG = "Mother";

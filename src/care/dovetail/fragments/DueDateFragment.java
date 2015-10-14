@@ -14,7 +14,7 @@ import care.dovetail.App;
 import care.dovetail.R;
 import care.dovetail.api.UserUpdate;
 import care.dovetail.common.model.ApiResponse;
-import care.dovetail.model.Mother;
+import care.dovetail.common.model.Mother;
 
 public class DueDateFragment extends DialogFragment
 		implements DatePickerDialog.OnDateSetListener {

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import care.dovetail.App;
 import care.dovetail.R;
 import care.dovetail.api.UserUpdate;
-import care.dovetail.model.Mother;
+import care.dovetail.common.model.Mother;
 
 public class NameEmailFragment extends DialogFragment {
 	private App app;
